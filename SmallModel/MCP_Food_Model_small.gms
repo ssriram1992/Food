@@ -1,23 +1,13 @@
-*******************************************************************************
-*                        FILE CHANGE HISTORY:
-*******************************************************************************
-
-* MCP Food Model small 1.0, Craig Bakker [insert date here]
-*        Original model
-
-*******************************************************************************
-*                            MODEL CODE:
-*******************************************************************************
-
+option solvelink=5;
 * please look at Excel file 'Parameters and Variables' for parameter/variable descriptions
-$include "Set Declarations small"
+$include "Set_Declarations_small"
 
 * watch out for parameters that show up here and in GAMS
-$include "Parameter Declarations small"
-$include "Table Declarations small"
-$include "Parameter Calculations small"
-$include "Scenario Parameters small"
-$include "Variable Declarations small"
+$include "Parameter_Declarations_small"
+$include "Table_Declarations_small"
+$include "Parameter_Calculations_small"
+$include "Scenario_Parameters_small"
+$include "Variable_Declarations_small"
 
 parameters
 * node/year specific parameters
@@ -52,8 +42,8 @@ A_crop_rec(c,s_active,n_active,y_active) = 0;
 q_food_transp_rec(f,n_from,n_to,m,y_active,adv) = 0;
 q_cattle_transp_rec(n_from,n_to,m,y_active,adv) = 0;
 
-$include "Equation Calculations small"
-$include "MCP Definition small"
+$include "Equation_Calculations_small"
+$include "MCP_Definition_small"
 
 
 OPTION RESLIM = 1e5;
