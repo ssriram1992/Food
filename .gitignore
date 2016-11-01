@@ -2,6 +2,10 @@
 *.log
 *.lst
 *.lxi
+<<<<<<< HEAD
 *.sublime*
 *.swp
 .DS_Store
+=======
+*.~*
+>>>>>>> refs/remotes/origin/master
