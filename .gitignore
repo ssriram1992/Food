@@ -1,6 +1,7 @@
-.DS_Store
-*.sublime*
 *.gpr
 *.log
 *.lst
 *.lxi
+*.sublime*
+*.swp
+.DS_Store
