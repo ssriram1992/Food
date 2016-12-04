@@ -20,7 +20,7 @@ nut      "nutrients" /protein, calories, micronutrients/
 y        "year" /2001*2009/
 
 * the nodes that the model will actually be solved for
-y_active(y)      "years of interest" /2001*2006/
+y_active(y)      "years of interest" /2007*2009/
 
 s_q      "soil quality" /1*3/
 s_f      "soil fertility" /1*3/

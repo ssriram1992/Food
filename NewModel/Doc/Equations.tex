@@ -1,0 +1,236 @@
+%!TEX spellcheck
+\documentclass[one column,a4paper]{article}
+\usepackage{amsmath,amssymb,amsthm,xcolor,soul,enumerate,fullpage,mathrsfs,graphicx}
+
+
+\def \mytitle {Food Model}
+
+
+\theoremstyle{definition}
+
+\DeclareMathOperator* {\Max}{Maximize}
+\DeclareMathOperator* {\Min}{Minimize}
+\newcommand{\such}			{\intertext{such that }}
+
+\newcommand{\I}[1]			{\scalebox{1.5}{1}_{#1}}
+
+\definecolor{dgreen}{HTML}{00CC00}
+
+
+\newcommand{\DiscFact}			{\mathsf{df}_y}
+\newcommand{\Cost}			{\mathscr{C}}
+\newcommand{\Area}			{{A}}
+\newcommand{\pr}			{\pi}
+\newcommand{\Q}			{\mathcal{Q}}
+
+% \renewcommand{\P}						{P}
+% \renewcommand{\L}						{L}
+\newcommand{\Y}			{Y}
+\renewcommand{\S}			{S} % Storage
+\newcommand{\D}			{D} % Distribution
+\newcommand{\U}			{U} % Utility maximizer
+\newcommand{\C}			{C} % Crops
+\newcommand{\F}			{F} % Food item
+\newcommand{\M}			{M} % Milk
+\newcommand{\R}			{R} % Road
+\newcommand{\B}			{B} % Beef
+\renewcommand{\H}			{H} % Hide
+\newcommand{\N}			{N} % Nodes
+\newcommand{\cow}			{\mathcal{B}}
+\newcommand{\Yld}			{\mathcal{Y}_{ynf}}
+\newcommand{\YldH}			{\mathcal{Y}_{yn}^{\H}}
+
+\newcommand{\CAP}			{\textcolor{black} {\text{CAP}}}
+\newcommand{\RCap}			{\textcolor{black} {\Q_{yrf}^{\R,\CAP}}}
+\newcommand{\SCap}			{\textcolor{black} {\Q_{ynf}^{\S,\CAP}}}
+
+\newcommand{\QFf}			{\textcolor{blue} {\Q^{\F}_{ynf}}}
+\newcommand{\QH}			{\textcolor{blue} {\Q^{\H}_{yn}}}
+\newcommand{\QDr}			{\textcolor{blue} {\Q^{\D}_{yrf}}}
+\newcommand{\QDbf}			{\textcolor{blue} {\Q^{\D_b}_{ynf}}}
+\newcommand{\QDsf}			{\textcolor{blue} {\Q^{\D_s}_{ynf}}}
+\newcommand{\QSf}			{\textcolor{blue} {\Q^{\S}_{ynf}}}
+\newcommand{\QUf}			{\textcolor{blue} {\Q^{\U}_{ynf}}}
+
+
+\newcommand{\Qcow}[1][y]		{\textcolor{blue} {\cow_{#1n}}}
+\newcommand{\Qcowsl}			{\textcolor{blue}{\cow_{yn}^{\text{slg}}}}
+\newcommand{\Qcowbuy}[1][in]	{\textcolor{blue} {\cow_{y#1}^{\text{buy}}}}
+\newcommand{\picow}[1][yn]		{\textcolor{dgreen}{\pr^{\text{cow}}_{#1}}}
+
+
+\newcommand{\piF}		{\textcolor{dgreen} {\pr^{\F}_{ynf}}}
+\newcommand{\piU}[1][f]			{\textcolor{dgreen} {\pr^{\U}_{yn#1}}}
+\newcommand{\piH}			{\textcolor{dgreen} {p^{\H}_{yn}}}
+
+\newcommand{\CsF}			{\textcolor{red} {\Cost^{\F}_{ynf}}}
+\newcommand{\CsR}			{\textcolor{red} {\Cost^{\R}_{yrf}}}
+\newcommand{\CsConv}[1][y]		{\textcolor{red} {\Cost^{\text{conv}}_{#1n}}}
+\newcommand{\CsChg}[1][y]			{\textcolor{red} {\Cost^{\text{change}}_{#1n}}}
+\newcommand{\CsCow}			{\textcolor{red} {\Cost^{\text{cow}}_{yn} }}
+\newcommand{\Cscowtrans}[1][i]	{\textcolor{red}{\Cost^{\text{cow,trans}}_{y#1n}}}
+\newcommand{\CsSq}			{\textcolor{red} {\Cost^{\S q}_{ynf}}}
+\newcommand{\CsSl}			{\textcolor{red} {\Cost^{\S l}_{ynf}}}
+
+\newcommand{\AF}[1][y]		{\textcolor{cyan}{\Area^{\F}_{{#1}nf}}}
+\newcommand{\An}			{\textcolor{cyan} {\Area_n}}
+
+
+\newcommand{\DemInt}			{{\alpha_{ynf}}}
+\newcommand{\DemSlope}			{{\beta_{ynf}}}
+\newcommand{\DemCross}			{{\chi_{ynfi}}}
+
+\numberwithin{equation}			{section}
+
+
+\newcommand{\da}			{\textcolor{teal} {\delta^1_{yn}}}
+\newcommand{\db}			{\textcolor{teal} {\delta^2_{ynf}}}
+\newcommand{\dc}			{\textcolor{teal} {\delta^3_{yn}}}
+\newcommand{\dd}			{\textcolor{teal} {\delta^4_{yn}}}
+\newcommand{\de}			{\textcolor{teal} {\delta^5_{yn}}}
+\newcommand{\df}[1][n]		{\textcolor{teal} {\delta^6_{y#1f}}}
+\newcommand{\dg}			{\textcolor{teal} {\delta^7_{yrf}}}
+\renewcommand{\dh}			{\textcolor{teal} {\delta^8_{ynf}}}
+
+%% Heading information
+\title{\mytitle}
+\date{}
+\author{Sriram Sankaranarayanan}
+
+\begin{document}
+\maketitle
+\section{Crop Producer} % (fold)
+\subsection{Problem} % (fold)
+\begin{align}
+\Max \quad &: \quad  \sum_{y\in\Y} \DiscFact \left \{ \sum_{f\in \C}\left (
+	\piF\QFf - \CsF\AF - \frac{1}{2}\CsChg \left( \AF - \AF[(y-1)] \right) 
+ \right)^2\right .\nonumber\\
+ \quad &\quad \quad \qquad \qquad \left .- \CsConv  \sum_{f\in \C} \left(\AF - \AF[(y-1)]\right) \right \}
+\end{align} 
+such that for $f\in \C$
+\begin{subequations}
+	\begin{align}
+\QFf,\,\AF \quad &\geq \quad 0\\
+\An \quad &\geq \quad  \sum_{f\in\C}\AF & (\da)\\
+\QFf \quad &\leq \quad \Yld\AF &(\db)
+\end{align} 
+\end{subequations}
+\subsection{KKT Conditions} % (fold)
+These KKT conditions hold for $f\in \C$
+\begin{subequations}
+\begin{align}
+\db - \DiscFact\piF \quad &\geq \quad 0&(\QFf)\\
+\left .
+\begin{aligned}
+	  \da+\DiscFact \left( \CsF+\CsConv[y] - \CsConv[(y+1)] + \CsChg\AF + \CsChg[(y+1)]\AF \right)  \\
+	-\db\Yld  - \DiscFact\left( \CsChg\AF[(y-1)] + \CsChg[(y+1)]\AF[(y+1)]  \right) 
+\end{aligned}
+\right \} \quad &\geq \quad 0 &(\AF)
+\end{align} 	
+\end{subequations}
+\pagebreak
+
+
+
+
+\section{Livestock producer} % (fold)
+\subsection{Problem} % (fold)
+\begin{align}
+\Max \quad &: \quad \sum_{\substack{y\in Y\\ f\not\in \C}} \DiscFact \left( 
+\piF\QFf + \piH \QH - \sum_{i\in \N} (\Cscowtrans + \picow[yi])\Qcowbuy - \Qcow\CsCow
+ \right) 
+\end{align} 
+such that for $f\not\in \C$
+\begin{subequations}
+	\begin{align}
+\Qcow,\, \Qcowbuy,\, \QFf,\, \QH,\, \Qcowsl \quad &\geq \quad 0\\
+\QFf \quad &\leq \quad \Yld\Qcow \qquad \qquad(f=\text{Milk})&(\db)\nonumber\\
+\QFf \quad &\leq \quad \Yld\Qcowsl \qquad \qquad(f=\text{Beef})&(\db)\nonumber\\
+\QH \quad &\leq \quad \YldH\Qcowsl&(\dc)\\
+\Qcowsl \quad &\leq \quad \Qcow&(\dd)\\
+\Qcow[(y+1)] \quad &\leq \quad (1+k-\kappa)\Qcow - \Qcowsl + \sum_{i\in\N}\left( \Qcowbuy - \Qcowbuy[ni] \right) &(\picow[yn])
+\end{align} 
+\end{subequations}
+\subsection{KKT Conditions} % (fold)
+\begin{subequations}
+\begin{align}
+ \left .
+\begin{aligned}
+\DiscFact\CsCow - \db\Yld-\dd &\\	
++\picow[(y-1)n] - (1+k-\kappa)\picow &
+\end{aligned} \right \}
+\quad &\geq \quad 0
+\qquad (f=\text{Milk})&(\Qcow)\\
+\DiscFact\left( \Cscowtrans+\picow[yi] \right)  +\left( \picow[yi]-\picow \right)
+\quad &\geq \quad 0&(\Qcowbuy)\\
+\db-\DiscFact\piF  \quad &\geq \quad 0 &(\QFf) \nonumber\\
+\dc-\DiscFact\piH\quad &\geq \quad 0&(\QH)\\
+\dd-\db\Yld - \dc\YldH +\picow \quad &\geq \quad 0 \qquad (f=\text{Beef})&(\Qcowsl)
+\end{align} 
+\end{subequations}
+\pagebreak
+
+
+\section{Distribution} 
+\subsection{Problem} 
+\begin{align}
+\Max \quad &: \quad \sum_{\substack{y\in \Y\\ f\in\F}} \DiscFact \left\{ 
+	\sum_{n\in \N}\left( 
+		\piF \left( \QDsf - \QDbf \right) 	
+	 \right) - \sum_{r\in \R}\CsR\QDr
+ \right\}
+\end{align}
+such that
+\begin{subequations}
+	\begin{align}
+\QDbf,\, \QDr,\, \QDsf \quad &\geq \quad 0\\
+\QDbf+ \sum_{r\in \R_{\text{in}}} \QDr \quad &\geq \quad \QDsf + \sum_{r\in \R_{\text{out}}} \QDr&(\df)\\
+\QDr \quad &\leq \quad \RCap&(\dg)
+\end{align} 
+\end{subequations}
+\subsection{KKT Conditions} 
+Representing $s_r$ and $d_r$ as the source and destination nodes of the transport system $r\in\R$, we have the following KKT conditions.
+\begin{subequations}
+\begin{align}
+\DiscFact \piF -\df \quad &\geq \quad 0 &(\QDbf)  \\
+\dg+\DiscFact\CsR + \df[s_r] - \df[d_r]  \quad &\geq \quad 0&(\QDr) 	\\
+\df-\DiscFact \piF \quad &\geq \quad 0&(\QDsf)
+\end{align}
+\end{subequations}
+\pagebreak
+
+
+
+
+
+\section{Storage} 
+\subsection{Problem} 
+\begin{align}
+\Max \quad &: \quad \sum_{\substack{y\in\Y\\ f\in \F}} \left( \piU-\piF -\frac{1}{2}\CsSq\QSf  - \CsSl \right)  \QSf  
+\end{align} 
+such that
+\begin{subequations}
+	\begin{align}
+\QSf \quad &\geq \quad 0\\
+\QSf \quad &\leq \quad \SCap&(\dh)
+\end{align} 
+\end{subequations}
+\subsection{KKT Conditions} 
+\begin{subequations}
+\begin{align}
+\piF - \piU +\CsSq\QSf + \CsSl +\dh \quad &\geq \quad 0&(\QSf)
+\end{align} 
+\end{subequations}
+\pagebreak
+
+
+
+
+\section{Market Clearing} 
+\begin{subequations}
+\begin{align}
+\QFf \quad &= \quad  \QDbf&(\piF)\\
+\piU \quad &= \quad \DemInt - \DemSlope\QSf + \sum_{i\in\F}\DemCross \piU[i]&(\piU)
+\end{align} 
+\end{subequations}
+\end{document}

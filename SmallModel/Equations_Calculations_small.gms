@@ -1,4 +1,4 @@
-equations
+Equations
 
 * Analysis equations
 * health
