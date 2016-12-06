@@ -57,9 +57,12 @@
 \newcommand{\Qcowsl}			{\textcolor{blue}{\cow_{yn}^{\text{slg}}}}
 \newcommand{\Qcowbuy}[1][in]	{\textcolor{blue} {\cow_{y#1}^{\text{buy}}}}
 \newcommand{\picow}[1][yn]		{\textcolor{dgreen}{\pr^{\text{cow}}_{#1}}}
+\newcommand{\CowDeath}			{{\kappa^{\text{death}}_{yn}}}
+\newcommand{\Herdsize}			{\textcolor{black} {\cow_{n}^{\text{herd}}}}
 
 
 \newcommand{\piF}		{\textcolor{dgreen} {\pr^{\F}_{ynf}}}
+\newcommand{\piS}		{\textcolor{dgreen} {\pr^{\S}_{ynf}}}
 \newcommand{\piU}[1][f]			{\textcolor{dgreen} {\pr^{\U}_{yn#1}}}
 \newcommand{\piH}			{\textcolor{dgreen} {p^{\H}_{yn}}}
 
@@ -91,6 +94,8 @@
 \newcommand{\df}[1][n]		{\textcolor{teal} {\delta^6_{y#1f}}}
 \newcommand{\dg}			{\textcolor{teal} {\delta^7_{yrf}}}
 \renewcommand{\dh}			{\textcolor{teal} {\delta^8_{ynf}}}
+\newcommand{\di}			{\textcolor{teal} {\delta^9_{yn}}}
+\renewcommand{\dj}			{\textcolor{teal} {\delta^{10}_{yn}}}
 
 %% Heading information
 \title{\mytitle}
@@ -148,7 +153,9 @@ such that for $f\not\in \C$
 \QFf \quad &\leq \quad \Yld\Qcowsl \qquad \qquad(f=\text{Beef})&(\db)\nonumber\\
 \QH \quad &\leq \quad \YldH\Qcowsl&(\dc)\\
 \Qcowsl \quad &\leq \quad \Qcow&(\dd)\\
-\Qcow[(y+1)] \quad &\leq \quad (1+k-\kappa)\Qcow - \Qcowsl + \sum_{i\in\N}\left( \Qcowbuy - \Qcowbuy[ni] \right) &(\picow[yn])
+\Qcow[y] \quad &\leq \quad (1+k-\kappa)\Qcow[(y-1)] - \Qcowsl + \sum_{i\in\N}\left( \Qcowbuy - \Qcowbuy[ni] \right) &(\picow[yn])\\
+\Qcowsl \quad &\geq \quad \CowDeath\Qcow&({\di})\\
+\Qcow \quad &\geq \quad \Herdsize&(\dj)
 \end{align} 
 \end{subequations}
 \subsection{KKT Conditions} % (fold)
@@ -156,8 +163,8 @@ such that for $f\not\in \C$
 \begin{align}
  \left .
 \begin{aligned}
-\DiscFact\CsCow - \db\Yld-\dd &\\	
-+\picow[(y-1)n] - (1+k-\kappa)\picow &
+\DiscFact\CsCow - \db\Yld-\dd + \CowDeath\di &\\	
+- \dj+\picow[yn] - (1+k-\kappa)\picow[(y+1)n] &
 \end{aligned} \right \}
 \quad &\geq \quad 0
 \qquad (f=\text{Milk})&(\Qcow)\\
@@ -165,7 +172,7 @@ such that for $f\not\in \C$
 \quad &\geq \quad 0&(\Qcowbuy)\\
 \db-\DiscFact\piF  \quad &\geq \quad 0 &(\QFf) \nonumber\\
 \dc-\DiscFact\piH\quad &\geq \quad 0&(\QH)\\
-\dd-\db\Yld - \dc\YldH +\picow \quad &\geq \quad 0 \qquad (f=\text{Beef})&(\Qcowsl)
+\dd-\dj-\db\Yld - \dc\YldH +\picow \quad &\geq \quad 0 \qquad (f=\text{Beef})&(\Qcowsl)
 \end{align} 
 \end{subequations}
 \pagebreak
@@ -176,7 +183,7 @@ such that for $f\not\in \C$
 \begin{align}
 \Max \quad &: \quad \sum_{\substack{y\in \Y\\ f\in\F}} \DiscFact \left\{ 
 	\sum_{n\in \N}\left( 
-		\piF \left( \QDsf - \QDbf \right) 	
+		 \QDsf\piS - \QDbf\piF 
 	 \right) - \sum_{r\in \R}\CsR\QDr
  \right\}
 \end{align}
@@ -194,7 +201,7 @@ Representing $s_r$ and $d_r$ as the source and destination nodes of the transpor
 \begin{align}
 \DiscFact \piF -\df \quad &\geq \quad 0 &(\QDbf)  \\
 \dg+\DiscFact\CsR + \df[s_r] - \df[d_r]  \quad &\geq \quad 0&(\QDr) 	\\
-\df-\DiscFact \piF \quad &\geq \quad 0&(\QDsf)
+\df-\DiscFact \piS \quad &\geq \quad 0&(\QDsf)
 \end{align}
 \end{subequations}
 \pagebreak
@@ -206,7 +213,7 @@ Representing $s_r$ and $d_r$ as the source and destination nodes of the transpor
 \section{Storage} 
 \subsection{Problem} 
 \begin{align}
-\Max \quad &: \quad \sum_{\substack{y\in\Y\\ f\in \F}} \left( \piU-\piF -\frac{1}{2}\CsSq\QSf  - \CsSl \right)  \QSf  
+\Max \quad &: \quad \sum_{\substack{y\in\Y\\ f\in \F}} \left( \piU-\piS -\frac{1}{2}\CsSq\QSf  - \CsSl \right)  \QSf  
 \end{align} 
 such that
 \begin{subequations}
@@ -218,7 +225,7 @@ such that
 \subsection{KKT Conditions} 
 \begin{subequations}
 \begin{align}
-\piF - \piU +\CsSq\QSf + \CsSl +\dh \quad &\geq \quad 0&(\QSf)
+\piS - \piU +\CsSq\QSf + \CsSl +\dh \quad &\geq \quad 0&(\QSf)
 \end{align} 
 \end{subequations}
 \pagebreak
@@ -230,7 +237,8 @@ such that
 \begin{subequations}
 \begin{align}
 \QFf \quad &= \quad  \QDbf&(\piF)\\
-\piU \quad &= \quad \DemInt - \DemSlope\QSf + \sum_{i\in\F}\DemCross \piU[i]&(\piU)
+\piU \quad &= \quad \DemInt - \DemSlope\QSf + \sum_{i\in\F}\DemCross \piU[i]&(\piU)\\
+\QSf \quad &= \quad \QDsf&(\piS)
 \end{align} 
 \end{subequations}
 \end{document}
