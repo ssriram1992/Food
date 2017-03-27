@@ -42,13 +42,65 @@ A_crop_rec(c,s_active,n_active,y_active) = 0;
 q_food_transp_rec(f,n_from,n_to,m,y_active,adv) = 0;
 q_cattle_transp_rec(n_from,n_to,m,y_active,adv) = 0;
 
-$include "Equation_Calculations_small"
+$include "Equations_Calculations_small"
 $include "MCP_Definition_small"
 
 
 OPTION RESLIM = 1e5;
 Ethiopia_MCP.tolInfRep = 1e-6;
 OPTION mcp = path;
+
+
+**** Sriram's modifications to fix months - delete this
+
+
+
+
+Set mfix(m) /2*11/;
+r_labour.fx(n_active,mfix,adv) = 0;
+q_crop_store_C.fx(c,n_active,mfix,adv)=0;
+q_milk_store_L.fx(n_active,mfix,adv)=0;
+q_beef_store_L.fx(n_active,mfix,adv)=0;
+q_cattle_transp_buy_L.fx(n_from,n_to,mfix,adv)=0;
+q_cattle_transp_sell_L.fx(n_from,n_to,mfix,adv)=0;
+N_cattle.fx(n_active,mfix,adv)=0;
+q_food_transp_sell_D.fx(f,n_from,n_to,mfix,adv)=0;
+C_labour.fx(n_from,n_to,mfix,adv)=0;
+q_cattle_transp_sell_D.fx(n_from,n_to,mfix,adv)=0;
+q_food_store_S.fx(f,n_active,mfix,adv)=0;
+q_food_transfer_buy_S.fx(f,n_from,n_to,mfix,adv)=0;
+q_food_transp_sell_S.fx(f,n_from,n_to,mfix,adv)=0;
+q_food_market_S.fx(f,n_active,mfix,adv)=0;
+Q_food.fx(f,n,mfix,adv)=0;
+nu_working.fx(nut,n_active,mfix,adv)=0;
+p_cattle_transp_buy.fx(n_from,n_to,mfix,adv)=0;
+p_cattle_transp_sell.fx(n_from,n_to,mfix,adv)=0;
+p_food_store.fx(f,n_active,mfix,adv)=0;
+p_food_market.fx(f,n_active,mfix,adv)=0;
+p_food_transp_sell.fx(f,n_from,n_to,mfix,adv)=0;
+p_food_transfer_buy.fx(f,n_from,n_to,mfix,adv)=0;
+q_cattle_transp_buy_D.fx(n_from,n_to,mfix,adv)=0;
+q_food_transfer_buy_D.fx(f,n_from,n_to,mfix,adv)=0;
+q_food_market_A.fx(f,n_active,I,mfix,adv)=0;
+p_crop.fx(c,n_active,mfix,adv)=0;
+p_milk.fx(n_active,mfix,adv)=0;
+p_herd.fx(n_active,mfix,adv)=0;
+p_cattle.fx(n_active,mfix,adv)=0;
+p_transp_eff.fx(f,n_from,n_to,mfix,adv)=0;
+p_transp.fx(n_from,n_to,mfix,adv)=0;
+p_transp_cattle.fx(n_from,n_to,mfix,adv)=0;
+p_storage_food.fx(f,n_active,mfix,adv)=0;
+p_storage_empty.fx(f,n,mfix,adv)=0;
+p_storage_food_eff.fx(f,n_active,mfix,adv)=0;
+
+
+
+**** Sriram's modifications end
+
+
+
+
+
 
 loop(y_active,
 

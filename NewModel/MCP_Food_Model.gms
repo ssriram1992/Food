@@ -7,9 +7,10 @@ Sets
     Node "Nodes" /N1*N3/
     Livestock "Livestock growers" /L1*L10/
     Season "seasons" /belg,kremt/
-	FoodItem "FoodItem" /wheat, potato, lentils, Milk, beef/;
-    Crop(FoodItems) "Crops" /wheat, potato, lentils/
+	FoodItem "FoodItem" /wheat, potato, lentils, Milk, beef/
+    Crop(FoodItem) "Crops" /wheat, potato, lentils/
 	Road(Node, Node) "Transport connectivity"
+	adv "Advisory Variables" /1*3/
 ;
 alias(Node, NodeFrom);
 * Connecting roads in one direction only. 
@@ -22,7 +23,7 @@ Road(NodeFrom, Node)$(Ord(NodeFrom)<Ord(Node))=yes;
 **********************       CROP PRODDUCER       **********************
 ************************************************************************
 Parameter
-    df(y) "Discount factor"
+    df(Year) "Discount factor"
 ;
 
 
@@ -65,13 +66,13 @@ Parameters
 Variables
 	qF_DS(FoodItem, Node, Year) "Quantity of Food bought by stores from distributor"
 	qF_D(FoodItem, Node, Year) "Quantity of Food bought by distributor"
-	qF_Road(FoodItem, Road, Year) "Quantity of Food transported"
-	qN_Road(Road, Year) "Number of cattle transported"
+	qF_Road(FoodItem, NodeFrom, Node, Year) "Quantity of Food transported"
+	qN_Road(NodeFrom, Node, Year) "Number of cattle transported"
 ;
 
 Parameters
-	CF_Road(FoodItem, Road, Year) "Cost of transporting food item"
-	CN_Road(Road, Year) "Cost of transporting cattle"
+	CF_Road(FoodItem, NodeFrom, Node, Year) "Cost of transporting food item"
+	CN_Road(NodeFrom, Node, Year) "Cost of transporting cattle"
 ;
 
 

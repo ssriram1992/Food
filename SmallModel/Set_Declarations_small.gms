@@ -7,7 +7,7 @@ fc(f,c)   /#f:#c/
 n        "total nodes" /1*10/
 
 * the nodes that the model will actually be solved for
-n_active(n)      active nodes /1,3,6,7,8/
+n_active(n)      active nodes /1,3,6,7/
 
 m        "month" /1*12/
 * the year starts in February and ends in January, so February = 1
@@ -20,7 +20,7 @@ nut      "nutrients" /protein, calories, micronutrients/
 y        "year" /2001*2009/
 
 * the nodes that the model will actually be solved for
-y_active(y)      "years of interest" /2001*2006/
+y_active(y)      "years of interest" /2004*2006/
 
 s_q      "soil quality" /1*3/
 s_f      "soil fertility" /1*3/
@@ -65,6 +65,7 @@ advlast(adv)
 iscrop(f)
 ismilk(f)
 isbeef(f)
+;
 
 alias(n_active,n_from,n_to);
 alias(n,n_from_tot,n_to_tot);
