@@ -1,15 +1,4 @@
-$ontext
-*******************************************************************************
-Author: Sriram Sankaranarayanan
-File: MCP_Food_Model.gms
-Institution: Johns Hopkins University
-Contact: ssankar5@jhu.edu
-
-All rights reserved.
-You are free to distribute this code for non-profit purposes
-as long as this header is kept intact
-*******************************************************************************
-$offtext
+$TITLE "INFEWS FOOD MODEL"
 $offlisting
 option dispwidth=60;
 option savepoint=2;
@@ -290,8 +279,19 @@ E5_1c(FoodItem, Node, Year).. q_S(FoodItem, Node, Year) =e= qF_Ds(FoodItem, Node
 ************************************************************************
 **********************       POST-PROCESSING       *********************
 ************************************************************************
+$ontext
+* Remove the ontext/offtext when the excel file is ready
+* Call from Excel to GDX
+$CALL 'GDXXRW Input/DataXL.xls se=0 index=Index!A1'
 
-$INCLUDE Data.gms
+* Call from GDX to here
+$GDXIN DataXL
+$LOAD 
+$GDXIN
+$offtext
+
+* Load from gams data - temporary
+$INCLUDE ./Data/Data.gms
 
 Model FoodModel /
 E1_2b.d1
