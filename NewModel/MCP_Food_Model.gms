@@ -33,10 +33,6 @@ alias(FoodItem, FoodItem2);
 * Negative flow implies flow in other direction
 Road(NodeFrom, Node)$(Ord(NodeFrom)<Ord(Node))=yes;
 
-Parameter
-    df(Year) "Discount factor"
-;
-
 
 
 ************************************************************************
@@ -44,7 +40,7 @@ Parameter
 ************************************************************************
 Parameter
     df(Year) "Discount factor"
-=======
+
 *For farmers
 alias(Node, Farmer);
 
@@ -318,7 +314,7 @@ E5_1a.pi_Food
 E5_1b.pi_U
 E5_1c.pi_S
 /;
-execute_loadpoint 'Food';
+execute_loadpoint 'FoodModel_p1';
 
 Solve FoodModel using MCP;
 execute_unload 'Food';
