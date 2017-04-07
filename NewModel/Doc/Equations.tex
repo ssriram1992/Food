@@ -75,13 +75,19 @@
 \newcommand{\CsSq}			{\textcolor{red} {\Cost^{\S q}_{ynf}}}
 \newcommand{\CsSl}			{\textcolor{red} {\Cost^{\S l}_{ynf}}}
 
-\newcommand{\AF}[1][y]		{\textcolor{cyan}{\Area^{\F}_{{#1}nf}}}
+\newcommand{\AF}[1][ynf]		{\textcolor{cyan}{\Area^{\F}_{{#1}}}}
 \newcommand{\An}			{\textcolor{cyan} {\Area_n}}
 
 
 \newcommand{\DemInt}			{{\alpha_{ynf}}}
 \newcommand{\DemSlope}			{{\beta_{ynf}}}
 \newcommand{\DemCross}			{{\chi_{ynfi}}}
+
+
+\newcommand{\CYF}			{\textcolor{red} {\mathsf{CYF}}}
+\newcommand{\elasticity}	{\textcolor{red} {\mathsf{e}}}
+\newcommand{\aInCYF}		{\textcolor{red} {\mathsf{a}}}
+\newcommand{\YieldBoost}	{\textcolor{dgreen} {\Yld^{\text{Inc}}}}
 
 \numberwithin{equation}			{section}
 
@@ -97,6 +103,15 @@
 \newcommand{\di}			{\textcolor{teal} {\delta^9_{yn}}}
 \renewcommand{\dj}			{\textcolor{teal} {\delta^{10}_{yn}}}
 
+
+% Settings Information
+\newcommand{\Opt}			{\textcolor{orange} {\mathscr{O}}}
+\newcommand{\OCr}			{{}_{\text{Rot}}\Opt}
+\newcommand{\OCrDur}[1][ff']{\OCr_{#1}^\text{Dur}}
+\newcommand{\OFal}			{{}_{\text{Fal}}\Opt}
+\newcommand{\OFalDur}		{\OFal^{\text{Dur}}}
+
+
 %% Heading information
 \title{\mytitle}
 \date{}
@@ -105,35 +120,45 @@
 \begin{document}
 \maketitle
 \section{Crop Producer} % (fold)
+The crop producer makes decisions on the land allotted for various crops. He has an ``expectation'' for the price of crops and their yield.
 \subsection{Problem} % (fold)
 \begin{align}
 \Max \quad &: \quad  \sum_{y\in\Y} \DiscFact \left \{ \sum_{f\in \C}\left (
-	\piF\QFf - \CsF\AF - \frac{1}{2}\CsChg \left( \AF - \AF[(y-1)] \right) 
+	\widehat{\piF}\widehat{\QFf} - \CsF\AF - \frac{1}{2}\CsChg \left( \AF - \AF[(y-1)nf] \right) 
  \right)^2\right .\nonumber\\
- \quad &\quad \quad \qquad \qquad \left .- \CsConv  \sum_{f\in \C} \left(\AF - \AF[(y-1)]\right) \right \}
+ \quad &\quad \quad \qquad \qquad \left .- \CsConv  \sum_{f\in \C} \left(\AF - \AF[(y-1)nf]\right) \right \}
 \end{align} 
 such that for $f\in \C$
 \begin{subequations}
 	\begin{align}
 \QFf,\,\AF \quad &\geq \quad 0\\
+\intertext{Total area used for crops is less than land available:}
 \An \quad &\geq \quad  \sum_{f\in\C}\AF & (\da)\\
-\QFf \quad &\leq \quad \Yld\AF &(\db)
+\intertext{Total Quantity is yield times area for that crop, both in real terms and expected terms:}
+\QFf \quad &\leq \quad \Yld\AF &(\db)\\
+\widehat{\QFf} \quad &\leq \quad \widehat{\Yld}\AF &(\db)\\
+\intertext{Linking yield with climate yield factor and any other enhancements:}
+\Yld \quad &= \quad \aInCYF\CYF\widehat{\piF}^{\elasticity}\left( 1+\YieldBoost \right) \\
+\intertext{Fallow constraint where $\OFal$ is a number between 0 and 1 indicating the fraction of land that gets fallowed. $\OFalDur$ is the duration of fallow cycle:}
+\sum_{f\in\C}\sum_{y'=y}^{y+\OFalDur}\AF[y'nf] \quad &\leq \quad \sum_{y'=y}^{y+\OFalDur}\An - \OFal\An\\
+\intertext{Crop rotation constraint where $f$ is the primary crop rotated with $f'$:}
+\OCr\sum_{y'=y}^{y+\OCrDur}\AF[y'nf] \quad &\leq \quad \OCrDur\sum_{y'=y}^{y+\OCrDur}\AF[y'nf']
 \end{align} 
 \end{subequations}
-\subsection{KKT Conditions} % (fold)
-These KKT conditions hold for $f\in \C$
-\begin{subequations}
-\begin{align}
-\db - \DiscFact\piF \quad &\geq \quad 0&(\QFf)\\
-\left .
-\begin{aligned}
-	  \da+\DiscFact \left( \CsF+\CsConv[y] - \CsConv[(y+1)] + \CsChg\AF + \CsChg[(y+1)]\AF \right)  \\
-	-\db\Yld  - \DiscFact\left( \CsChg\AF[(y-1)] + \CsChg[(y+1)]\AF[(y+1)]  \right) 
-\end{aligned}
-\right \} \quad &\geq \quad 0 &(\AF)
-\end{align} 	
-\end{subequations}
-\pagebreak
+% \subsection{KKT Conditions} % (fold)
+% These KKT conditions hold for $f\in \C$
+% \begin{subequations}
+% \begin{align}
+% \db - \DiscFact\piF \quad &\geq \quad 0&(\QFf)\\
+% \left .
+% \begin{aligned}
+% 	  \da+\DiscFact \left( \CsF+\CsConv[y] - \CsConv[(y+1)] + \CsChg\AF + \CsChg[(y+1)]\AF \right)  \\
+% 	-\db\Yld  - \DiscFact\left( \CsChg\AF[(y-1)nf] + \CsChg[(y+1)]\AF[(y+1)nf]  \right) 
+% \end{aligned}
+% \right \} \quad &\geq \quad 0 &(\AF)
+% \end{align} 	
+% \end{subequations}
+% \pagebreak
 
 
 
@@ -158,24 +183,24 @@ such that for $f\not\in \C$
 \Qcow \quad &\geq \quad \Herdsize&(\dj)
 \end{align} 
 \end{subequations}
-\subsection{KKT Conditions} % (fold)
-\begin{subequations}
-\begin{align}
- \left .
-\begin{aligned}
-\DiscFact\CsCow - \db\Yld-\dd + \CowDeath\di &\\	
-- \dj+\picow[yn] - (1+k-\kappa)\picow[(y+1)n] &
-\end{aligned} \right \}
-\quad &\geq \quad 0
-\qquad (f=\text{Milk})&(\Qcow)\\
-\DiscFact\left( \Cscowtrans+\picow[yi] \right)  +\left( \picow[yi]-\picow \right)
-\quad &\geq \quad 0&(\Qcowbuy)\\
-\db-\DiscFact\piF  \quad &\geq \quad 0 &(\QFf) \nonumber\\
-\dc-\DiscFact\piH\quad &\geq \quad 0&(\QH)\\
-\dd-\dj-\db\Yld - \dc\YldH +\picow \quad &\geq \quad 0 \qquad (f=\text{Beef})&(\Qcowsl)
-\end{align} 
-\end{subequations}
-\pagebreak
+% \subsection{KKT Conditions} % (fold)
+% \begin{subequations}
+% \begin{align}
+%  \left .
+% \begin{aligned}
+% \DiscFact\CsCow - \db\Yld-\dd + \CowDeath\di &\\	
+% - \dj+\picow[yn] - (1+k-\kappa)\picow[(y+1)n] &
+% \end{aligned} \right \}
+% \quad &\geq \quad 0
+% \qquad (f=\text{Milk})&(\Qcow)\\
+% \DiscFact\left( \Cscowtrans+\picow[yi] \right)  +\left( \picow[yi]-\picow \right)
+% \quad &\geq \quad 0&(\Qcowbuy)\\
+% \db-\DiscFact\piF  \quad &\geq \quad 0 &(\QFf) \nonumber\\
+% \dc-\DiscFact\piH\quad &\geq \quad 0&(\QH)\\
+% \dd-\dj-\db\Yld - \dc\YldH +\picow \quad &\geq \quad 0 \qquad (f=\text{Beef})&(\Qcowsl)
+% \end{align} 
+% \end{subequations}
+% \pagebreak
 
 
 \section{Distribution} 
@@ -195,16 +220,16 @@ such that
 \QDr \quad &\leq \quad \RCap&(\dg)
 \end{align} 
 \end{subequations}
-\subsection{KKT Conditions} 
-Representing $s_r$ and $d_r$ as the source and destination nodes of the transport system $r\in\R$, we have the following KKT conditions.
-\begin{subequations}
-\begin{align}
-\DiscFact \piF -\df \quad &\geq \quad 0 &(\QDbf)  \\
-\dg+\DiscFact\CsR + \df[s_r] - \df[d_r]  \quad &\geq \quad 0&(\QDr) 	\\
-\df-\DiscFact \piS \quad &\geq \quad 0&(\QDsf)
-\end{align}
-\end{subequations}
-\pagebreak
+% \subsection{KKT Conditions} 
+% Representing $s_r$ and $d_r$ as the source and destination nodes of the transport system $r\in\R$, we have the following KKT conditions.
+% \begin{subequations}
+% \begin{align}
+% \DiscFact \piF -\df \quad &\geq \quad 0 &(\QDbf)  \\
+% \dg+\DiscFact\CsR + \df[s_r] - \df[d_r]  \quad &\geq \quad 0&(\QDr) 	\\
+% \df-\DiscFact \piS \quad &\geq \quad 0&(\QDsf)
+% \end{align}
+% \end{subequations}
+% \pagebreak
 
 
 
@@ -222,13 +247,13 @@ such that
 \QSf \quad &\leq \quad \SCap&(\dh)
 \end{align} 
 \end{subequations}
-\subsection{KKT Conditions} 
-\begin{subequations}
-\begin{align}
-\piS - \piU +\CsSq\QSf + \CsSl +\dh \quad &\geq \quad 0&(\QSf)
-\end{align} 
-\end{subequations}
-\pagebreak
+% \subsection{KKT Conditions} 
+% \begin{subequations}
+% \begin{align}
+% \piS - \piU +\CsSq\QSf + \CsSl +\dh \quad &\geq \quad 0&(\QSf)
+% \end{align} 
+% \end{subequations}
+% \pagebreak
 
 
 
@@ -241,4 +266,12 @@ such that
 \QSf \quad &= \quad \QDsf&(\piS)
 \end{align} 
 \end{subequations}
+
+
+
+\section{Electricity}
+\subsection{Problem} 
+\begin{align}
+	a=b
+\end{align}
 \end{document}
