@@ -30,12 +30,14 @@
 \newcommand{\D}			{D} % Distribution
 \newcommand{\U}			{U} % Utility maximizer
 \newcommand{\C}			{C} % Crops
+\newcommand{\E}			{E} % Electricity
 \newcommand{\F}			{F} % Food item
 \newcommand{\M}			{M} % Milk
 \newcommand{\R}			{R} % Road
 \newcommand{\B}			{B} % Beef
-\renewcommand{\H}			{H} % Hide
+\renewcommand{\H}		{H} % Hide
 \newcommand{\N}			{N} % Nodes
+
 \newcommand{\cow}			{\mathcal{B}}
 \newcommand{\Yld}			{\mathcal{Y}_{ynf}}
 \newcommand{\YldH}			{\mathcal{Y}_{yn}^{\H}}
@@ -51,6 +53,9 @@
 \newcommand{\QDsf}			{\textcolor{blue} {\Q^{\D_s}_{ynf}}}
 \newcommand{\QSf}			{\textcolor{blue} {\Q^{\S}_{ynf}}}
 \newcommand{\QUf}			{\textcolor{blue} {\Q^{\U}_{ynf}}}
+\newcommand{\QE}			{\textcolor{blue} {\Q^{\E-gen}_{yn}}}
+\newcommand{\QEDem}			{\textcolor{blue} {\Q^{\E-dem}_{yn}}}
+\newcommand{\QEr}			{\textcolor{blue} {\Q^{\E}_{yr}}}
 
 
 \newcommand{\Qcow}[1][y]		{\textcolor{blue} {\cow_{#1n}}}
@@ -60,24 +65,35 @@
 \newcommand{\CowDeath}			{{\kappa^{\text{death}}_{yn}}}
 \newcommand{\Herdsize}			{\textcolor{black} {\cow_{n}^{\text{herd}}}}
 
+\newcommand{\QEmin}				{\textcolor{black} {\underline{\Q}^{\E}_{yn}}}
+\newcommand{\QEmax}				{\textcolor{black} {\overline{\Q}^{\E}_{yn}}}
+\newcommand{\QErmax}			{\textcolor{black} {\overline{\Q}^{\E}_{yr}}}
 
-\newcommand{\piF}		{\textcolor{dgreen} {\pr^{\F}_{ynf}}}
-\newcommand{\piS}		{\textcolor{dgreen} {\pr^{\S}_{ynf}}}
+
+\newcommand{\piF}				{\textcolor{dgreen} {\pr^{\F}_{ynf}}}
+\newcommand{\piS}				{\textcolor{dgreen} {\pr^{\S}_{ynf}}}
 \newcommand{\piU}[1][f]			{\textcolor{dgreen} {\pr^{\U}_{yn#1}}}
-\newcommand{\piH}			{\textcolor{dgreen} {p^{\H}_{yn}}}
+\newcommand{\piH}				{\textcolor{dgreen} {p^{\H}_{yn}}}
 
-\newcommand{\CsF}			{\textcolor{red} {\Cost^{\F}_{ynf}}}
-\newcommand{\CsR}			{\textcolor{red} {\Cost^{\R}_{yrf}}}
+
+\newcommand{\CsF}				{\textcolor{red} {\Cost^{\F}_{ynf}}}
+\newcommand{\CsR}				{\textcolor{red} {\Cost^{\R}_{yrf}}}
 \newcommand{\CsConv}[1][y]		{\textcolor{red} {\Cost^{\text{conv}}_{#1n}}}
-\newcommand{\CsChg}[1][y]			{\textcolor{red} {\Cost^{\text{change}}_{#1n}}}
-\newcommand{\CsCow}			{\textcolor{red} {\Cost^{\text{cow}}_{yn} }}
+\newcommand{\CsChg}[1][y]		{\textcolor{red} {\Cost^{\text{change}}_{#1n}}}
+\newcommand{\CsCow}				{\textcolor{red} {\Cost^{\text{cow}}_{yn} }}
 \newcommand{\Cscowtrans}[1][i]	{\textcolor{red}{\Cost^{\text{cow,trans}}_{y#1n}}}
-\newcommand{\CsSq}			{\textcolor{red} {\Cost^{\S q}_{ynf}}}
-\newcommand{\CsSl}			{\textcolor{red} {\Cost^{\S l}_{ynf}}}
+\newcommand{\CsSq}				{\textcolor{red} {\Cost^{\S q}_{ynf}}}
+\newcommand{\CsSl}				{\textcolor{red} {\Cost^{\S l}_{ynf}}}
+\newcommand{\CsEl}				{\textcolor{red} {\Cost^{\E l}_{yn}}}
+\newcommand{\CsEq}				{\textcolor{red} {\Cost^{\E q}_{yn}}}
+\newcommand{\CsER}				{\textcolor{red} {\Cost^{\E \R}_{yr}}}
 
 \newcommand{\AF}[1][ynf]		{\textcolor{cyan}{\Area^{\F}_{{#1}}}}
-\newcommand{\An}			{\textcolor{cyan} {\Area_n}}
+\newcommand{\An}				{\textcolor{cyan} {\Area_n}}
 
+% Losses
+\newcommand{\Loss}				{\textcolor{cyan} {\mathscr{L}}}
+\newcommand{\LEr}				{\textcolor{cyan} {\Loss^{\E}_{yr}}}
 
 \newcommand{\DemInt}			{{\alpha_{ynf}}}
 \newcommand{\DemSlope}			{{\beta_{ynf}}}
@@ -112,6 +128,9 @@
 \newcommand{\OFalDur}		{\OFal^{\text{Dur}}}
 
 
+
+
+
 %% Heading information
 \title{\mytitle}
 \date{}
@@ -124,8 +143,8 @@ The crop producer makes decisions on the land allotted for various crops. He has
 \subsection{Problem} % (fold)
 \begin{align}
 \Max \quad &: \quad  \sum_{y\in\Y} \DiscFact \left \{ \sum_{f\in \C}\left (
-	\widehat{\piF}\widehat{\QFf} - \CsF\AF - \frac{1}{2}\CsChg \left( \AF - \AF[(y-1)nf] \right) 
- \right)^2\right .\nonumber\\
+	{\piF}{\QFf} - \CsF\AF - \frac{1}{2}\CsChg \left( \AF - \AF[(y-1)nf] \right)^2
+ \right)\right .\nonumber\\
  \quad &\quad \quad \qquad \qquad \left .- \CsConv  \sum_{f\in \C} \left(\AF - \AF[(y-1)nf]\right) \right \}
 \end{align} 
 such that for $f\in \C$
@@ -136,9 +155,8 @@ such that for $f\in \C$
 \An \quad &\geq \quad  \sum_{f\in\C}\AF & (\da)\\
 \intertext{Total Quantity is yield times area for that crop, both in real terms and expected terms:}
 \QFf \quad &\leq \quad \Yld\AF &(\db)\\
-\widehat{\QFf} \quad &\leq \quad \widehat{\Yld}\AF &(\db)\\
-\intertext{Linking yield with climate yield factor and any other enhancements:}
-\Yld \quad &= \quad \aInCYF\CYF\widehat{\piF}^{\elasticity}\left( 1+\YieldBoost \right) \\
+\intertext{Linking yield with climate yield factor:}
+\Yld \quad &= \quad \aInCYF\CYF \left( \piF \right)  ^{\elasticity}%\left( 1+\YieldBoost \right) \\
 \intertext{Fallow constraint where $\OFal$ is a number between 0 and 1 indicating the fraction of land that gets fallowed. $\OFalDur$ is the duration of fallow cycle:}
 \sum_{f\in\C}\sum_{y'=y}^{y+\OFalDur}\AF[y'nf] \quad &\leq \quad \sum_{y'=y}^{y+\OFalDur}\An - \OFal\An\\
 \intertext{Crop rotation constraint where $f$ is the primary crop rotated with $f'$:}
@@ -271,7 +289,21 @@ such that
 
 \section{Electricity}
 \subsection{Problem} 
+We model electricity with a single operator. A subset of nodes can have production facilities. The production facilities have a minimum and maximum production capabilities. All nodes are connected by transmission lines, with a cost of transmission along each line. They have transmission capacities too. There is currently no possibility of expansion. The cost is minimized in the model. 
 \begin{align}
-	a=b
+	\Min \quad &: \quad  \sum_{\substack{y\in\Y\\n\in\N}} \left( \CsEl\QE+\frac{1}{2}\CsEq\QE^2 \right) + \sum_{\substack{y\in\Y\\ r\in\R}}\CsER\QEr
 \end{align}
+such that
+\begin{subequations}
+\begin{align}
+\QE \quad &\geq \quad 0\\
+\intertext{Generator limits}
+\QE \quad &\geq \quad \QEmin\\
+\QE \quad &\leq \quad \QEmax\\
+\intertext{The Kirchoff Current Law in each node. This also ensures that the demand is met in each node. $\LEr$ is the transmission loss.}
+\QE+ \sum_{r\in \R_{\text{in}}} \QEr \left( 1-\LEr \right)  \quad &\geq \quad \QEDem + \sum_{r\in \R_{\text{out}}} \QEr\\
+\intertext{Transmission capacity}
+\QEr \quad &\leq \quad \QErmax
+\end{align} 
+\end{subequations}
 \end{document}
