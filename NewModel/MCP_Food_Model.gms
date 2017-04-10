@@ -11,7 +11,6 @@ Option Solprint = off;
 Option limrow = 0;
 Option limcol = 0;
 
-
 ************************************************************************
 ***********************       COMMON INIT       ************************
 ************************************************************************
@@ -29,17 +28,14 @@ Sets
 
 alias(Node, NodeFrom);
 alias(FoodItem, FoodItem2);
-* Connecting roads in one direction only.
-* Negative flow implies flow in other direction
 Road(NodeFrom, Node)$(Ord(NodeFrom)<Ord(Node))=yes;
-
-
 
 ************************************************************************
 ***********************       CROP PRODUCER       **********************
 ************************************************************************
 Parameter
     df(Year) "Discount factor"
+;
 
 *For farmers
 alias(Node, Farmer);
@@ -104,7 +100,8 @@ Positive Variables
     Q_cattle_sl(Node, Year) "Number of cattle slaughtered"
     Q_cattle_buy(Node, NodeFrom, Year) "Number of cattle bought from a certain node"
 ;
-* DUal Variables
+
+* Dual Variables
 Positive Variables
     d3(Node, Year)
     d4(Node, Year)
