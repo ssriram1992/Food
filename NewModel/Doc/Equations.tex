@@ -36,7 +36,7 @@
 \newcommand{\M}			{M} % Milk
 \newcommand{\R}			{R} % Road
 \newcommand{\B}			{B} % Beef
-\renewcommand{\H}		{H} % Hide
+\renewcommand{\H}		{L} % Hide
 \newcommand{\N}			{N} % Nodes
 
 \newcommand{\cow}			{\mathcal{B}}
@@ -146,33 +146,40 @@
 \begin{document}
 \maketitle
 \section{Crop Producer} % (fold)
-The crop producer makes decisions on the land allotted for various crops. He has an ``expectation'' for the price of crops and their yield.
+A crop producer makes decisions on the land allotted for various crops. He has an ``expectation'' for the price of crops under equilibrium condition. Yield function is now is based on the Climate Yield Factor (CYF).
 \subsection{Problem} % (fold)
+A farmer maximizes his net benefit, which is the profit given production and unit price minus the cost of cropping area, expanding area, and converting cropping area for different crop types.
 \begin{align}
 \Max \quad &: \quad  \sum_{\substack{y\in\Y\\h\in\Se}} \DiscFact \left \{ \sum_{f\in \C}\left (
 	{\piF}{\QFf} - \CsF\AF - \frac{1}{2}\CsChg \left( \AF - \AF[(y-1)snf] \right)^2
  \right)\right .\nonumber\\
  \quad &\quad \quad \qquad \qquad \left .- \CsConv  \sum_{f\in \C} \left(\AF - \AF[(y-1)snf]\right) \right \}
 \end{align} 
+where $\Y$ is year; $\H$ is crop season; $\C$ is crop type; $n$ is node/region; $\F$ in superscript stands for food products; $\DiscFact$ is a discount factor for year $y$'s present value; $\pi$ is unit price of production; $\Q$ is production quantity; $\C$ is cost; $A$ is cropping area.\\\\
+\textit{Note: the parameters and variables are color coded (black - fixed parameter from input; red - calibrated parameter; other colors - variables)} \\\\
 such that for $f\in \C$
 \begin{subequations}
 	\begin{align}
 \QFf,\,\AF \quad &\geq \quad 0\\
 \intertext{Total area used for crops is less than land available:}
 \An \quad &\geq \quad  \sum_{\substack{f\in\C\\h\in\Se}}\AF & (\da)\\
-\intertext{Total Quantity is yield times area for that crop, both in real terms and expected terms:}
+\intertext{\textit{Note: variable in the parenthesis is the dual variable for the corresponding constraint, same for the rest of the document.}} 
+\intertext{Total Quantity is yield times area for that crop:}
 \QFf \quad &\leq \quad \Yld\AF &(\db)\\
 \intertext{Linking yield with climate yield factor:}
 \Yld \quad &= \quad \aInCYF\CYF \left( \piF \right)  ^{\elasticity}%\left( 1+\YieldBoost \right) \\
 &(\Yld)
-\intertext{Fallow constraint where $\OFal$ is a number between 0 and 1 indicating the fraction of land that gets fallowed. $\OFalDur$ is the duration of fallow cycle:}
+\intertext{where $\Yld$ is yield; $\aInCYF$ is a adjustment factor; $\CYF$ is Climate Yield Factor; $\elasticity$ is crop own elasticity.}
+\intertext{Fallow constraint:}
 \sum_{\substack{f\in\C\\h\in\Se}}\sum_{y'=y}^{y+\OFalDur}\AF[y'snf] \quad &\leq \quad {\OFalDur}\An - \OFal\An&(\dk)\\
-\intertext{Crop rotation constraint where $f$ is the primary crop rotated with $f'$:}
+\intertext{where $\OFal$ is a number between 0 and 1 indicating the fraction of land that gets fallowed. $\OFalDur$ is the duration of fallow cycle}
+\intertext{Crop rotation constraint:}
 \OCr\sum_{y'=y}^{y+\OCrDur}\sum_{h\in\Se}\AF[y'snf] \quad &\leq \quad \OCrDur\sum_{y'=y}^{y+\OCrDur}\sum_{h\in\Se}\AF[y'snf']&(\dl)
+\intertext{where $f$ is the primary crop rotated with $f'$}
 \end{align} 
 \end{subequations}
 \subsection{KKT Conditions} % (fold)
-These KKT conditions hold for $f\in \C$
+These KKT conditions for this problem hold for $f\in \C$
 \begin{subequations}
 \begin{align}
 \db - \DiscFact\piF \quad &\geq \quad 0&(\QFf)\\
@@ -188,28 +195,39 @@ These KKT conditions hold for $f\in \C$
 where the sign of the last term depends upon whether $f$ is the main crop or the secondary crop used for rotation.
 \end{subequations}
 % \pagebreak
-
+\\
 
 
 
 \section{Livestock producer} % (fold)
+A livestock producer produces and manages livestock. He makes decisions on selling/purchasing livestock, selling milk, and slaughtering livestock for selling leather and meat. 
 \subsection{Problem} % (fold)
+A livestock producer maximizes the net benefit, which is the profit given the production (food and leather) and corresponding unit prices, minus the cost of buying and shipping the livestocks himself, plus the income from selling the livestocks, and minus the cost of managing the livestocks he owns.  
 \begin{align}
 \Max \quad &: \quad \sum_{\substack{y\in Y\\h\in\Se\\ f\not\in \C}} \DiscFact \left( 
-\piF\QFf + \piH \QH - \sum_{i\in \N} (\Cscowtrans + \picow[yhi])\Qcowbuy - \Qcow\CsCow
+\piF\QFf + \piH \QH - \sum_{i\in \N} (\Cscowtrans + \picow[yhi])\Qcowbuy \right . \nonumber\\
+& \qquad+\left . \sum_{i\in \N}  \picow[yhn]\Qcowbuy[ni] - \Qcow\CsCow
  \right) 
 \end{align} 
+where $\H$ in superscript stands for leather; $\Qcowbuy$ is the number of Bovine (cow) he buys from node $i$ and transports to his location at node $n$; $\Cscowtrans$ is the cost of transporting the livestock from node $i$ to node $n$; $\picow[yhi]$ is the price of cow at node $i$; $\CsCow$ is the general management cost of cow.\\\\
 such that for $f\not\in \C$
 \begin{subequations}
 	\begin{align}
 \Qcowbuy,\, \Qcow,\,  \Qcowsl \quad &\geq \quad 0\\
 \QFf,\, \QH \quad &\geq \quad 0\\
+\intertext{Production quantity is yield of milk, beef, or leather per Bovine times the number of Bovine owned or slaughtered:}
 \QFf \quad &\leq \quad \Yld\Qcow \qquad \qquad(f=\text{Milk})&(\db)\nonumber\\
 \QFf \quad &\leq \quad \Yld\Qcowsl \qquad \qquad(f=\text{Beef})&(\db)\nonumber\\
 \QH \quad &\leq \quad \YldH\Qcowsl&(\dc)\\
+\intertext{Number of Bovine slaughtered should not exceed the number owned:}
 \Qcowsl \quad &\leq \quad \Qcow&(\dd)\\
-\Qcow \quad &\leq \quad (1+k-\kappa)\Qcow[(y-1)h] - \Qcowsl + \sum_{i\in\N}\left( \Qcowbuy - \Qcowbuy[ni] \right) &(\picow[yn])\\
+\intertext{Quantity balance of the Bovine:}
+\Qcow \quad &\leq \quad (1+k-\kappa)\Qcow[(y-1)h] - \Qcowsl + \sum_{i\in\N}\left( \Qcowbuy - 
+\Qcowbuy[ni] \right) &(\picow[yn])\\
+\intertext{where $k$ is the birth rate; $\kappa$ is the death rate.}
+\intertext{Number of Bovine should not be fewer than the natural deaths:}
 \Qcowsl \quad &\geq \quad \CowDeath\Qcow&({\di})\\
+\intertext{Number of Bovine owned should be above certain level for reproduction (cannot slaughter all the livestocks):}
 \Qcow \quad &\geq \quad \Herdsize&(\dj)
 \end{align} 
 \end{subequations}
@@ -223,7 +241,7 @@ such that for $f\not\in \C$
 \end{aligned} \right \}
 \quad &\geq \quad 0
 \qquad (f=\text{Milk})&(\Qcow)\\
-\DiscFact\left( \Cscowtrans+\picow[yhi] \right)  +\left( \picow[yhi]-\picow \right)
+\DiscFact\left( \Cscowtrans+\picow[yhi]-\picow[yhn] \right)  +\left( \picow[yhi]-\picow \right)
 \quad &\geq \quad 0&(\Qcowbuy)\\
 \db-\DiscFact\piF  \quad &\geq \quad 0 &(\QFf) \nonumber\\
 \dc-\DiscFact\piH\quad &\geq \quad 0&(\QH)\\
@@ -231,10 +249,14 @@ such that for $f\not\in \C$
 \end{align} 
 \end{subequations}
 % \pagebreak
+\\
+
 
 
 \section{Distribution} 
+A distributor distributes food products from node to node. He makes decisions on the quantity to distribute and from where to where.
 \subsection{Problem} 
+A distributer maximizes the net profit, which is the quantity of food products he sells times the unit price, minus the cost he paid to purchase the quantity, and minus the total transportation/distribution cost of the quantity.
 \begin{align}
 \Max \quad &: \quad \sum_{\substack{y\in \Y\\h\in\Se\\ f\in\F}} \DiscFact \left\{ 
 	\sum_{n\in \N}\left( 
@@ -242,11 +264,14 @@ such that for $f\not\in \C$
 	 \right) - \sum_{r\in \R}\CsR\QDr
  \right\}
 \end{align}
+where $\D$ in superscript stands for distributor; $W$ in superscript stands for warehouse (storage manager); $R$ stands for road and represents the linkages between nodes; $\CsR$ is the transportation cost per unit of quantity distributed.\\\\ 
 such that
 \begin{subequations}
 	\begin{align}
 \QDbf,\, \QDr,\, \QDsf \quad &\geq \quad 0\\
+\intertext{The quantity purchased at one node $n$ plus the quantity being distributed into $n$ should be greater than total quantity sold and shipped out at $n$:}
 \QDbf+ \sum_{r\in \R_{\text{in}}} \QDr \quad &\geq \quad \QDsf + \sum_{r\in \R_{\text{out}}} \QDr&(\df)\\
+\intertext{Road capacity constraint:}
 \QDr \quad &\leq \quad \RCap&(\dg)
 \end{align} 
 \end{subequations}
@@ -260,12 +285,16 @@ Representing $s_r$ and $d_r$ as the source and destination nodes of the transpor
 \end{align}
 \end{subequations}
 % \pagebreak
-
+\\
 
 
 
 
 \section{Storage} 
+A storage manager % TO BE CONTINUTED....
+
+
+
 \subsection{Problem} 
 \begin{align}
 \Max \quad &: \quad \sum_{\substack{y\in\Y\\h\in\Se\\ f\in \F}}  \piU\QSfsel-\piS\QSfbuy -\left( \frac{1}{2}\CsSq\QSf  + \CsSl \right)  \QSf  
