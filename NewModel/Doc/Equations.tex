@@ -146,14 +146,14 @@
 \begin{document}
 \maketitle
 \section{Crop Producer} % (fold)
-A crop producer makes decisions on the land allotted for various crops. He has an ``expectation'' for the price of crops under equilibrium condition. Yield function is now is based on the Climate Yield Factor (CYF).
+A crop producer makes decisions on the land allotted for various crops. He has an ``expectation'' for the price of crops under equilibrium condition. Yield function is now is based on the Climate Yield Factor (CYF). Note that the model assumes perfect insight for all the roles (crop producer, livestock producer, distributor, and storage manager), i.e. each role optimizes the summation of all years' profit/utility function. The model setup includes two growing seasons, which can be switch on and off if needed. Under assumptions of the model design, the area is \textit{not} convertible between seasons within one year; i.e. one can only convert unused land to farm land from yearly. Change of crop type to grow for the same cropping area also only occur yearly, as the land used in the first season is assumed not to be used in the second season within a year.   
 \subsection{Problem} % (fold)
-A farmer maximizes his net benefit, which is the profit given production and unit price minus the cost of cropping area, expanding area, and converting cropping area for different crop types.
+A farmer maximizes his profit, which is the benefit given production and unit price minus the cost of cropping area, expanding area, and converting cropping area for different crop types.
 \begin{align}
 \Max \quad &: \quad  \sum_{\substack{y\in\Y\\h\in\Se}} \DiscFact \left \{ \sum_{f\in \C}\left (
-	{\piF}{\QFf} - \CsF\AF - \frac{1}{2}\CsChg \left( \AF - \AF[(y-1)snf] \right)^2
+	{\piF}{\QFf} - \CsF\AF - \frac{1}{2}\CsChg \left( \AF - \AF[(y-1)hnf] \right)^2
  \right)\right .\nonumber\\
- \quad &\quad \quad \qquad \qquad \left .- \CsConv  \sum_{f\in \C} \left(\AF - \AF[(y-1)snf]\right) \right \}
+ \quad &\quad \quad \qquad \qquad \left .- \CsConv  \sum_{\substack{f\in\C}} \left(\AF - \AF[(y-1)hnf]\right) \right \}
 \end{align} 
 where $\Y$ is year; $\H$ is crop season; $\C$ is crop type; $n$ is node/region; $\F$ in superscript stands for food products; $\DiscFact$ is a discount factor for year $y$'s present value; $\pi$ is unit price of production; $\Q$ is production quantity; $\C$ is cost; $A$ is cropping area.\\\\
 \textit{Note: the parameters and variables are color coded (black - fixed parameter from input; red - calibrated parameter; other colors - variables)} \\\\
@@ -170,12 +170,12 @@ such that for $f\in \C$
 \Yld \quad &= \quad \aInCYF\CYF \left( \piF \right)  ^{\elasticity}%\left( 1+\YieldBoost \right) \\
 &(\Yld)
 \intertext{where $\Yld$ is yield; $\aInCYF$ is a adjustment factor; $\CYF$ is Climate Yield Factor; $\elasticity$ is crop own elasticity.}
-\intertext{Fallow constraint:}
+\intertext{Fallow constraint (farmers put a land to rest after a period of usage before reusing it):}
 \sum_{\substack{f\in\C\\h\in\Se}}\sum_{y'=y}^{y+\OFalDur}\AF[y'snf] \quad &\leq \quad {\OFalDur}\An - \OFal\An&(\dk)\\
-\intertext{where $\OFal$ is a number between 0 and 1 indicating the fraction of land that gets fallowed. $\OFalDur$ is the duration of fallow cycle}
-\intertext{Crop rotation constraint:}
+\intertext{where $\OFal$ is a number between 0 and 1 indicating the fraction of land that gets fallowed. $\OFalDur$ is the duration of fallow cycle.}
+\intertext{Crop rotation constraint (total area put into rotation using crop $f'$ after a period should be smaller than the total area of $f'$ as some $f'$ is not planted for rotation):}
 \OCr\sum_{y'=y}^{y+\OCrDur}\sum_{h\in\Se}\AF[y'snf] \quad &\leq \quad \OCrDur\sum_{y'=y}^{y+\OCrDur}\sum_{h\in\Se}\AF[y'snf']&(\dl)
-\intertext{where $f$ is the primary crop rotated with $f'$}
+\intertext{where $f$ is the primary crop rotated with $f'$.}
 \end{align} 
 \end{subequations}
 \subsection{KKT Conditions} % (fold)
@@ -202,7 +202,7 @@ where the sign of the last term depends upon whether $f$ is the main crop or the
 \section{Livestock producer} % (fold)
 A livestock producer produces and manages livestock. He makes decisions on selling/purchasing livestock, selling milk, and slaughtering livestock for selling leather and meat. 
 \subsection{Problem} % (fold)
-A livestock producer maximizes the net benefit, which is the profit given the production (food and leather) and corresponding unit prices, minus the cost of buying and shipping the livestocks himself, plus the income from selling the livestocks, and minus the cost of managing the livestocks he owns.  
+A livestock producer maximizes his profit, which is the benefit given the production (food and leather) and corresponding unit prices, minus the cost of buying and shipping the livestocks himself, plus the income from selling the livestocks, and minus the cost of managing the livestocks he owns.  
 \begin{align}
 \Max \quad &: \quad \sum_{\substack{y\in Y\\h\in\Se\\ f\not\in \C}} \DiscFact \left( 
 \piF\QFf + \piH \QH - \sum_{i\in \N} (\Cscowtrans + \picow[yhi])\Qcowbuy \right . \nonumber\\
@@ -221,7 +221,7 @@ such that for $f\not\in \C$
 \QH \quad &\leq \quad \YldH\Qcowsl&(\dc)\\
 \intertext{Number of Bovine slaughtered should not exceed the number owned:}
 \Qcowsl \quad &\leq \quad \Qcow&(\dd)\\
-\intertext{Quantity balance of the Bovine:}
+\intertext{Quantity balance of Bovine:}
 \Qcow \quad &\leq \quad (1+k-\kappa)\Qcow[(y-1)h] - \Qcowsl + \sum_{i\in\N}\left( \Qcowbuy - 
 \Qcowbuy[ni] \right) &(\picow[yn])\\
 \intertext{where $k$ is the birth rate; $\kappa$ is the death rate.}
@@ -253,10 +253,13 @@ such that for $f\not\in \C$
 
 
 
+
+
+
 \section{Distribution} 
-A distributor distributes food products from node to node. He makes decisions on the quantity to distribute and from where to where.
+A distributor distributes food products from node to node. He buys food from crop producer and livestock producer (milk and beef, not leather) and sell it to storage manager. Therefore, he makes decisions on the quantity to distribute and from where to where.
 \subsection{Problem} 
-A distributer maximizes the net profit, which is the quantity of food products he sells times the unit price, minus the cost he paid to purchase the quantity, and minus the total transportation/distribution cost of the quantity.
+A distributer maximizes his profit, which is the benefit given the quantity of food products he sells to storage manager times the unit price, minus the cost he paid to purchase the quantity of food products, and minus the total transportation/distribution cost of the quantity.
 \begin{align}
 \Max \quad &: \quad \sum_{\substack{y\in \Y\\h\in\Se\\ f\in\F}} \DiscFact \left\{ 
 	\sum_{n\in \N}\left( 
@@ -291,22 +294,23 @@ Representing $s_r$ and $d_r$ as the source and destination nodes of the transpor
 
 
 \section{Storage} 
-A storage manager % TO BE CONTINUTED....
-
-
-
+A storage manager buys food products from distributor and sells them to customers. He can also store food over years. Therefore, he makes decision on the quantity to buy, sell, and store.
 \subsection{Problem} 
+A storage manager maximize his profit, which is the quantity of food products he sells to customers times the corresponding unit price, minus the quantity he buys from distributor times the corresponding unit price (cost), minus a quadratic and linear cost function times the quantity stored.  
 \begin{align}
 \Max \quad &: \quad \sum_{\substack{y\in\Y\\h\in\Se\\ f\in \F}}  \piU\QSfsel-\piS\QSfbuy -\left( \frac{1}{2}\CsSq\QSf  + \CsSl \right)  \QSf  
 \end{align} 
+where $U$ in superscript stands for ultimate or utility price selling to the customers;$W_s$ in superscript stands for the quantity sell out from the warehouse and $W_b$ stands for the quantity buy into the warehouse; $W q$ and $W l$ stand for the quadratic and linear storage cost factors; $\QSf$ is the quantity of food $f$ stored in year $y$ season $h$ at node $n$.\\\\
 such that
 \begin{subequations}
 	\begin{align}
 \QSfbuy,\,\QSfsel,\,\QSf \quad &\geq \quad 0\\
+\intertext{Storage capacity constraint:}
 \QSf \quad &\leq \quad \SCap&(\dh)\\
-\intertext{For the first season $h$, if $h'$ is the last season}
+\intertext{Balance constraint of storage over years:} 
+\intertext{For the first season $h$, if $h'$ is the last season:}
 \QSf \quad &= \quad \QSf[(y-1)h'] + \QSfbuy-\QSfsel&(\dm)
-\intertext{For other seasons}
+\intertext{For other seasons:}
 \QSf \quad &= \quad \QSf[y(h-1)] + \QSfbuy-\QSfsel&(\dm)
 \end{align} 
 \end{subequations}
@@ -315,9 +319,9 @@ such that
 \begin{align}
 \piS-\dm \quad &\geq \quad 0&(\QSfbuy)\\
 \dm-\piU \quad &\geq \quad 0&(\QSfsel)
-\intertext{For last season $h$, where $h'$ is the first season}
+\intertext{For last season $h$, where $h'$ is the first season:}
 \CsSq\QSf + \CsSl +\dh +\dm -\dm[(y+1)h'] \quad &\geq \quad 0&(\QSf) 
-\intertext{For other seasons}
+\intertext{For other seasons:}
 \CsSq\QSf + \CsSl +\dh +\dm -\dm[y(h+1)] \quad &\geq \quad 0&(\QSf) 
 \end{align} 
 \end{subequations}
@@ -329,11 +333,14 @@ such that
 \section{Market Clearing} 
 \begin{subequations}
 \begin{align}
+\intertext{Food supply from crop producer and livestock producer should equal to the quantity bought by distributor (demand of distributor):}
 \QFf \quad &= \quad  \QDbf&(\piF)\\
+\intertext{Ultimate/utility price of $f$ selling to the customer is a function of supply quantity of $f$ and the price of other products $i$ (own elasticity and cross elasticity):}
 \piU \quad &= \quad \DemInt - \DemSlope\QSf + \sum_{i\in\F}\DemCross \piU[i]&(\piU)\\
+\intertext{The quantity storage manager bought in (demand) equals to the quantity sold from the distributor (supply): }
 \QSfbuy \quad &= \quad \QDsf&(\piS)
 \end{align} 
-\end{subequations}
+\end{subequations}\\
 
 
 
@@ -343,6 +350,7 @@ We model electricity with a single operator. A subset of nodes can have producti
 \begin{align}
 	\Min \quad &: \quad  \sum_{\substack{y\in\Y\\n\in\N}} \left( \CsEl\QE+\frac{1}{2}\CsEq\QE^2 \right) + \sum_{\substack{y\in\Y\\ r\in\R}}\CsER\QEr
 \end{align}
+where $E-gen$ in superscript stands for electricity generation; $\CsEl$, $\CsEq$, and $\CsER$ are linear cost of generating electricity, quadratic cost of generating electricity, and distribution cost ($R$ stands for road), respectively.\\\\  
 such that
 \begin{subequations}
 \begin{align}
