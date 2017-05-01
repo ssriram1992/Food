@@ -272,19 +272,13 @@ E5_1c(FoodItem, Node, Year).. q_S(FoodItem, Node, Year) =e= qF_Ds(FoodItem, Node
 ************************************************************************
 **********************       POST-PROCESSING       *********************
 ************************************************************************
-$ontext
-* Remove the ontext/offtext when the excel file is ready
-* Call from Excel to GDX
-$CALL 'GDXXRW Input/DataXL.xls se=0 index=Index!A1'
+* Load from gams data - temporary; switch to GDX using data import
+*$INCLUDE ./Data/Data.gms
 
 * Call from GDX to here
-$GDXIN DataXL
-$LOAD 
-$GDXIN
-$offtext
-
-* Load from gams data - temporary
-$INCLUDE ./Data/Data.gms
+*$GDXIN DataXL
+*$LOAD 
+*$GDXIN
 
 Model FoodModel /
 E1_2b.d1
