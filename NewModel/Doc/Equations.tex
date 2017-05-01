@@ -185,8 +185,8 @@ These KKT conditions for this problem hold for $f\in \C$
 \db - \DiscFact\piF \quad &\geq \quad 0&(\QFf)\\
 \left .
 \begin{aligned}
-	  \da+\DiscFact \left( \CsF+\CsConv[y] - \CsConv[(y+1)] + \CsChg\AF + \CsChg[(y+1)]\AF \right)  \\
-	-\db\Yld  - \DiscFact\left( \CsChg\AF[(y-1)nf] + \CsChg[(y+1)]\AF[(y+1)nf]  \right) \\
+	  \da+\DiscFact \left( \CsF+\CsConv[yh] - \CsConv[(y+1)h] + \CsChg\AF + \CsChg[(y+1)h]\AF \right)  \\
+	-\db\Yld  - \DiscFact\left( \CsChg\AF[(y-1)hnf] + \CsChg[(y+1)h]\AF[(y+1)hnf]  \right) \\
 	+\OFal\sum_{\substack{y'=y-\OCrDur}}^y\dk \\
 	\pm\OCr \sum_{\substack{y'=y-\OFalDur}}^y\dl 
 \end{aligned}
@@ -214,7 +214,7 @@ such that for $f\not\in \C$
 \begin{subequations}
 	\begin{align}
 \Qcowbuy,\, \Qcow,\,  \Qcowsl \quad &\geq \quad 0\\
-\QFf,\, \QH \quad &\geq \quad 0\\
+\QFf,\, \QH \quad &\geq \quad 0\nonumber\\
 \intertext{Production quantity is yield of milk, beef, or leather per Bovine times the number of Bovine owned or slaughtered:}
 \QFf \quad &\leq \quad \Yld\Qcow \qquad \qquad(f=\text{Milk})&(\db)\nonumber\\
 \QFf \quad &\leq \quad \Yld\Qcowsl \qquad \qquad(f=\text{Beef})&(\db)\nonumber\\
@@ -223,7 +223,7 @@ such that for $f\not\in \C$
 \Qcowsl \quad &\leq \quad \Qcow&(\dd)\\
 \intertext{Quantity balance of Bovine:}
 \Qcow \quad &\leq \quad (1+k-\kappa)\Qcow[(y-1)h] - \Qcowsl + \sum_{i\in\N}\left( \Qcowbuy - 
-\Qcowbuy[ni] \right) &(\picow[yn])\\
+\Qcowbuy[ni] \right) &(\picow[yhn])\\
 \intertext{where $k$ is the birth rate; $\kappa$ is the death rate.}
 \intertext{Number of Bovine should not be fewer than the natural deaths:}
 \Qcowsl \quad &\geq \quad \CowDeath\Qcow&({\di})\\
@@ -304,14 +304,14 @@ where $U$ in superscript stands for ultimate or utility price selling to the cus
 such that
 \begin{subequations}
 	\begin{align}
-\QSfbuy,\,\QSfsel,\,\QSf \quad &\geq \quad 0\\
+\QSfbuy,\,\QSfsel,\,\QSf \quad &\geq \quad 0\nonumber\\
 \intertext{Storage capacity constraint:}
 \QSf \quad &\leq \quad \SCap&(\dh)\\
 \intertext{Balance constraint of storage over years:} 
 \intertext{For the first season $h$, if $h'$ is the last season:}
 \QSf \quad &= \quad \QSf[(y-1)h'] + \QSfbuy-\QSfsel&(\dm)
 \intertext{For other seasons:}
-\QSf \quad &= \quad \QSf[y(h-1)] + \QSfbuy-\QSfsel&(\dm)
+\QSf \quad &= \quad \QSf[y(h-1)] + \QSfbuy-\QSfsel&(\dm)\nonumber
 \end{align} 
 \end{subequations}
 \subsection{KKT Conditions} 
@@ -322,7 +322,7 @@ such that
 \intertext{For last season $h$, where $h'$ is the first season:}
 \CsSq\QSf + \CsSl +\dh +\dm -\dm[(y+1)h'] \quad &\geq \quad 0&(\QSf) 
 \intertext{For other seasons:}
-\CsSq\QSf + \CsSl +\dh +\dm -\dm[y(h+1)] \quad &\geq \quad 0&(\QSf) 
+\CsSq\QSf + \CsSl +\dh +\dm -\dm[y(h+1)] \quad &\geq \quad 0&(\QSf)\nonumber 
 \end{align} 
 \end{subequations}
 % \pagebreak
@@ -336,7 +336,7 @@ such that
 \intertext{Food supply from crop producer and livestock producer should equal to the quantity bought by distributor (demand of distributor):}
 \QFf \quad &= \quad  \QDbf&(\piF)\\
 \intertext{Ultimate/utility price of $f$ selling to the customer is a function of supply quantity of $f$ and the price of other products $i$ (own elasticity and cross elasticity):}
-\piU \quad &= \quad \DemInt - \DemSlope\QSf + \sum_{i\in\F}\DemCross \piU[i]&(\piU)\\
+\piU \quad &= \quad \DemInt - \DemSlope\QSfsel + \sum_{i\in\F}\DemCross \piU[i]&(\piU)\\
 \intertext{The quantity storage manager bought in (demand) equals to the quantity sold from the distributor (supply): }
 \QSfbuy \quad &= \quad \QDsf&(\piS)
 \end{align} 
@@ -354,7 +354,7 @@ where $E-gen$ in superscript stands for electricity generation; $\CsEl$, $\CsEq$
 such that
 \begin{subequations}
 \begin{align}
-\QE \quad &\geq \quad 0\\
+\QEr,\,\QE \quad &\geq \quad 0\nonumber\\
 \intertext{Generator limits}
 \QE \quad &\geq \quad \QEmin\\
 \QE \quad &\leq \quad \QEmax\\
