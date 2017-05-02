@@ -125,6 +125,9 @@
 \newcommand{\dl}[1][ff']	{\textcolor{teal} {\delta^{\OCr}_{yn#1}}}
 \newcommand{\dm}[1][yh]		{\textcolor{teal} {\delta^{11}_{#1nf}}}
 % \newcommand{\dn}			{\textcolor{teal} {\delta^{12}_{yhnf}}}
+\newcommand{\dq}			{\textcolor{teal} {\delta^{15}_{yhr}}}
+\newcommand{\dr}			{\textcolor{teal} {\delta^{13}_{yhn}}}
+\newcommand{\ds}[1][n]		{\textcolor{teal} {\delta^{14}_{yh#1}}}
 
 
 % Settings Information
@@ -356,11 +359,19 @@ such that
 \begin{align}
 \QEr,\,\QE \quad &\geq \quad 0\nonumber\\
 \intertext{Generator limits}
-\QE \quad &\leq \quad \QEmax\\
-\intertext{The Kirchoff Current Law in each node. This also ensures that the demand is met in each node. $\LEr$ is the transmission loss.}
-\QE+ \sum_{r\in \R_{\text{in}}} \QEr \left( 1-\LEr \right)  \quad &\geq \quad \QEDem + \sum_{r\in \R_{\text{out}}} \QEr\\
+\QE \quad &\leq \quad \QEmax&(\dr)\\
+\intertext{The Kirchoff Current Law in each node. This also ensures that the demand is met in each node. $\LEr$ is the transmission loss. $\R_\text{in}$ corresponds to the transmission lines which start from the node $n$ and $\R_{\text{out}}$ corresponds to the transmission lines which end in node $n$.}
+\QE+ \sum_{r\in \R_{\text{in}}} \QEr \left( 1-\LEr \right)  \quad &\geq \quad \QEDem + \sum_{r\in \R_{\text{out}}} \QEr&(\ds)\\
 \intertext{Transmission capacity}
-\QEr \quad &\leq \quad \QErmax
+\QEr \quad &\leq \quad \QErmax&(\dq)
 \end{align} 
+\end{subequations}
+\subsection{KKT conditions}
+\begin{subequations}
+\begin{align}
+\CsEl + \CsEq\QE + \dr + \ds \quad&\geq\quad 0 &(\QE)\\
+\intertext{If $n$ and $n'$ correspond to the nodes where the transmission line $r$ begin and end respectively, then}
+\CsER + \dq + \ds[n]-\ds[n']  \quad&\geq\quad 0 &(\QEr)
+\end{align}
 \end{subequations}
 \end{document}
