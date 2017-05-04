@@ -16,19 +16,21 @@ Option limcol = 0;
 ************************************************************************
 
 Sets
-    Year "Years" 
-    Month "Months" 
-    Node "Nodes" 
-    Season "seasons" 
-    FoodItem "FoodItem" 
-    Crop(FoodItem) "Crops" 
-    NonCrop(FoodItem) "Animal products" 
+    Year "Years"
+    Month "Months"
+    Node "Nodes"
+    Season "seasons"
+    FoodItem "FoodItem"
+    Crop(FoodItem) "Crops"
+    NonCrop(FoodItem) "Animal products"
     Road(Node, Node) "Transport connectivity"
+    Eline(Node, Node) "Electricity Transmission"
 ;
 
 alias(Node, NodeFrom);
 alias(FoodItem, FoodItem2);
 Road(NodeFrom, Node)$(Ord(NodeFrom)<Ord(Node))=yes;
+Eline(NodeFrom, Node)$(Ord(NodeFrom)<Ord(Node))=yes;
 
 ************************************************************************
 ***********************       CROP PRODUCER       **********************
@@ -48,13 +50,13 @@ Positive Variables
 
 * Duals
 Positive Variables
-d1(Node, Season, Year)
-d2(FoodItem, Node, Season, Year)
+    d1(Node, Season, Year)
+    d2(FoodItem, Node, Season, Year)
 ;
 
 Variables
-Yield_CYF(FoodItem, Node, Season, Year)
-pi_Food(FoodItem, Node, Season, Year) "Price of Food item"
+    Yield_CYF(FoodItem, Node, Season, Year)
+    pi_Food(FoodItem, Node, Season, Year) "Price of Food item"
 ;
 
 Parameters
@@ -91,8 +93,8 @@ E1_3a(FoodItem, Node, Season, Year).. d2(FoodItem, Node, Season, Year) - df(Year
                             =g=
                             0;
 * Fallow and crop rotation costraints not yet added
-E1_3b(Crop, Node, Season, Year).. d1(Node, Season, Year) 
-        -d2(Crop, Node, Season, Year)*aFAO(FoodItem, Node, Season, Year)*CYF(FoodItem, Node, Season, Year)*rPower(pi_Food(FoodItem, Node, Season, Year),Elas(FoodItem, Node, Season, Year)) 
+E1_3b(Crop, Node, Season, Year).. d1(Node, Season, Year)
+        -d2(Crop, Node, Season, Year)*aFAO(FoodItem, Node, Season, Year)*CYF(FoodItem, Node, Season, Year)*rPower(pi_Food(FoodItem, Node, Season, Year),Elas(FoodItem, Node, Season, Year))
         + df(Year)*(
             C_prod(Crop, Node, Season, Year) +
             C_convert(Node, Season, Year) - C_convert(Node, Season, Year+1) +
@@ -138,15 +140,15 @@ Parameters
 ;
 
 Equations
-E2_2b(Node, Season, Year)
-E2_2c(Node, Season, Year)
-E2_2d(Node, Season, Year)
-E2_2e(Node, Season, Year)
-E2_2f(Node, Season, Year)
-E2_3a(Node, Season, Year)
-E2_3b(NodeFrom, Node, Season, Year)
-E2_3c(Node, Season, Year)
-E2_3d(Node, Season, Year)
+    E2_2b(Node, Season, Year)
+    E2_2c(Node, Season, Year)
+    E2_2d(Node, Season, Year)
+    E2_2e(Node, Season, Year)
+    E2_2f(Node, Season, Year)
+    E2_3a(Node, Season, Year)
+    E2_3b(NodeFrom, Node, Season, Year)
+    E2_3c(Node, Season, Year)
+    E2_3d(Node, Season, Year)
 ;
 
 E1_2c(FoodItem, Node, Year).. -q_Food(FoodItem, Node, Year)
@@ -197,8 +199,8 @@ Positive Variables
 ;
 * Dual variables
 Positive Variables
-d6(FoodItem, Node, Season, Year)
-d7(FoodItem, NodeFrom, Node, Season, Year)
+    d6(FoodItem, Node, Season, Year)
+    d7(FoodItem, NodeFrom, Node, Season, Year)
 ;
 Variable pi_W(FoodItem, Node, Season, Year);
 Parameters
@@ -207,23 +209,23 @@ Parameters
 ;
 
 Equations
-E3_2b(FoodItem, Node, Season, Year)
-E3_2c(FoodItem, NodeFrom, Node, Season, Year)
-E3_3a(FoodItem, Node, Season, Year)
-E3_3b(FoodItem, NodeFrom, Node, Season, Year)
-E3_3c(FoodItem, Node, Season, Year)
+    E3_2b(FoodItem, Node, Season, Year)
+    E3_2c(FoodItem, NodeFrom, Node, Season, Year)
+    E3_3a(FoodItem, Node, Season, Year)
+    E3_3b(FoodItem, NodeFrom, Node, Season, Year)
+    E3_3c(FoodItem, Node, Season, Year)
 ;
 
 E3_2b(FoodItem, Node, Season, Year).. QF_Db(FoodItem, Node, Season, Year) + sum(NodeFrom, qF_Road(FoodItem, NodeFrom, Node, Season, Year))
                                 =g=
                                 QF_Ds(FoodItem, Node, Season, Year) + sum(NodeFrom,qF_Road(FoodItem, Node, NodeFrom, Season, Year));
-E3_2c(FoodItem, NodeFrom, Node, Season, Year).. -qF_Road(FoodItem, NodeFrom, Node, Season, Year)
+E3_2c(FoodItem, NodeFrom, Node, Season, Year)$Road(NodeFrom, Node).. -qF_Road(FoodItem, NodeFrom, Node, Season, Year)
                                         =g=
                                         -Cap_Road(FoodItem, NodeFrom, Node, Season, Year);
 E3_3a(FoodItem, Node, Season, Year).. df(Year)*pi_Food(FoodItem, Node, Season, Year)
                                 =g=
                                 d6(FoodItem, Node, Season, Year);
-E3_3b(FoodItem, NodeFrom, Node, Season, Year).. d7(FoodItem, NodeFrom, Node, Season, Year) + df(Year)*CF_Road(FoodItem, NodeFrom, Node, Season, Year)
+E3_3b(FoodItem, NodeFrom, Node, Season, Year)$Road(NodeFrom, Node).. d7(FoodItem, NodeFrom, Node, Season, Year) + df(Year)*CF_Road(FoodItem, NodeFrom, Node, Season, Year)
                                         =g=
                                         d6(FoodItem, Node, Season, Year) - d6(FoodItem, NodeFrom, Season, Year) ;
 E3_3c(FoodItem, Node, Season, Year).. d6(FoodItem, Node, Season, Year)
@@ -245,7 +247,7 @@ Variables
 ;
 
 * Dual
-Positive Variable 
+Positive Variable
     d8(FoodItem, Node, Season, Year)
     d11(FoodItem, Node, Season, Year)
 ;
@@ -264,8 +266,8 @@ Equations
     E4_3c(FoodItem, Node, Season, Year)
 ;
 E4_2a(FoodItem, Node, Season, Year).. -q_W(FoodItem, Node, Season, Year) =g= -CAP_Store(FoodItem, Node, Season, Year);
-E4_2b(FoodItem, Node, Season, Year).. q_W(FoodItem, Node, Season-1, Year)$(Ord(Season)>=2) + 
-        q_W(FoodItem, Node, Season + (Card(Season)-1), Year-1)$(Ord(Season)=1) + q_Wb(FoodItem, Node, Season, Year) 
+E4_2b(FoodItem, Node, Season, Year).. q_W(FoodItem, Node, Season-1, Year)$(Ord(Season)>=2) +
+        q_W(FoodItem, Node, Season + (Card(Season)-1), Year-1)$(Ord(Season)=1) + q_Wb(FoodItem, Node, Season, Year)
         q_Ws(FoodItem, Node, Season, Year) =g= q_W(FoodItem, Node, Season, Year);
 
 E4_3a(FoodItem, Node, Season, Year).. pi_W(FoodItem, Node, Season, Year) - d11(FoodItem, Node, Season, Year)=g= 0;
@@ -273,8 +275,8 @@ E4_3b(FoodItem, Node, Season, Year).. pi_U(FoodItem, Node, Season, Year) - d11(F
 
 E4_3c(FoodItem, Node, Season, Year).. d8(FoodItem, Node, Season, Year)  + d11(FoodItem, Node, Season, Year)
             + CS_Q(FoodItem, Node, Season, Year)*q_W(FoodItem, Node, Season, Year)
-            + CS_L(FoodItem, Node, Season, Year) + d8(FoodItem, Node, Season, Year) 
-            - d11(FoodItem, Node, Season-(Card(Season)-1), Year+1)$(Ord(Season)=Card(Season)) 
+            + CS_L(FoodItem, Node, Season, Year) + d8(FoodItem, Node, Season, Year)
+            - d11(FoodItem, Node, Season-(Card(Season)-1), Year+1)$(Ord(Season)=Card(Season))
             - d11(FoodItem, Node, Season+1, Year)$(Ord(Season)<>Card(Season))
             =g= 0;
 
@@ -289,9 +291,9 @@ Parameters
 ;
 
 Equations
-E5_1a(FoodItem, Node, Season, Year)
-E5_1b(FoodItem, Node, Season, Year)
-E5_1c(FoodItem, Node, Season, Year)
+    E5_1a(FoodItem, Node, Season, Year)
+    E5_1b(FoodItem, Node, Season, Year)
+    E5_1c(FoodItem, Node, Season, Year)
 ;
 
 E5_1a(FoodItem, Node, Season, Year).. q_Food(FoodItem, Node, Season, Year) =e= qF_Db(FoodItem, Node, Season, Year);
@@ -302,6 +304,47 @@ E5_1c(FoodItem, Node, Season, Year).. q_Wb(FoodItem, Node, Season, Year) =e= qF_
 
 
 
+************************************************************************
+************************       ELECTRICITY       ***********************
+************************************************************************
+
+Parameters
+    C_Elec_L(Node, Season, Year) "Linear cost of electricity production"
+    C_Elec_Q(Node, Season, Year) "Quadratic cost of electricity production"
+    C_Elec_Trans(NodeFrom, Node, Season, Year) "Cost of Electricity transmission"
+    Cap_Elec(Node, Season, Year) "Electricity production cap"
+    Cap_Elec_Trans(NodeFrom, Node, Season, Year) "Electricity Transmission cap"
+    Base_Elec_Dem(Node, Season, Year) "Base Demand for electricity"
+;
+
+Positive Variables
+    q_Elec(Node, Season, Year)
+    q_Elec_Trans(NodeFrom, Node, Season, Year)
+    q_Elec_Dem(Node, Season, Year)
+;
+
+Equations
+    E6_2a(Node, Season, Year)
+    E6_2b(Node, Season, Year)
+    E6_2c(NodeFrom, Node, Season, Year)
+    E6_3a(Node, Season, Year)
+    E6_3b(NodeFrom, Node, Season, Year)
+    E_ElecDem(Node, Season, Year)
+;
+
+
+E6_2a(Node, Season, Year).. Cap_Elec(Node, Season, Year) =g= q_Elec(Node, Season, Year);
+E6_2b(Node, Season, Year).. q_Elec(Node, Season, Year) + sum(NodeFrom, q_Elec_Trans(Node, NodeFrom, Season, Year))
+                                 =g=
+                q_Elec_Dem(Node, Season, Year)+sum(NodeFrom, q_Elec_Trans(NodeFrom, Node, Season, Year);
+E6_2c(NodeFrom, Node, Season, Year)$Eline(Node, Node).. Cap_Elec_Trans(NodeFrom, Node, Season, Year)
+                                =g=
+                q_Elec_Trans(NodeFrom, Node, Season, Year);
+E6_3a(Node, Season, Year).. C_Elec_L(Node, Season, Year)+C_Elec_Q(Node, Season, Year)*q_Elec(Node, Season, Year)+
+                        d13(Node, Season, Year) + d14(Node, Season, Year) =g= 0;
+E6_3b(NodeFrom, Node, Season, Year)$Eline(Node, Node).. C_Elec_Trans(NodeFrom, Node, Season, Year)  +
+                d15(NodeFrom, Node, Season, Year) + d14(NodeFrom, Season, Year) - d14(Node, Season, Year) =g= 0;
+E_ElecDem(Node, Season, Year).. q_Elec_Dem(Node, Season, Year) =g= Base_Elec_Dem(Node, Season, Year);
 
 ************************************************************************
 **********************       POST-PROCESSING       *********************
@@ -311,7 +354,7 @@ E5_1c(FoodItem, Node, Season, Year).. q_Wb(FoodItem, Node, Season, Year) =e= qF_
 
 * Call from GDX to here
 *$GDXIN DataXL
-*$LOAD 
+*$LOAD
 *$GDXIN
 
 Model FoodModel /
@@ -341,6 +384,13 @@ E4_3c.q_W
 E5_1a.pi_Food
 E5_1b.pi_U
 E5_1c.pi_W
+E6_2a.d13
+E6_2b.d14
+E6_2c.d15
+E6_3a.q_Elec
+E6_3b.q_Elec_Trans
+E_ElecDem.q_Elec_Dem
+;
 /;
 execute_loadpoint 'FoodModel_p1';
 
