@@ -44,8 +44,9 @@
 \newcommand{\YldH}			{\mathcal{Y}^{\H}}
 
 \newcommand{\CAP}			{\textcolor{black} {\text{CAP}}}
-\newcommand{\RCap}			{\textcolor{black} {\Q_{yrf}^{\R,\CAP}}}
-\newcommand{\SCap}			{\textcolor{black} {\Q_{ynf}^{\S,\CAP}}}
+\newcommand{\RCap}			{\textcolor{black} {\Q_{yhrf}^{\R,\CAP}}}
+\newcommand{\RCapTot}		{\textcolor{black} {\Q_{yhr}^{\R,\CAP}}}
+\newcommand{\SCap}			{\textcolor{black} {\Q_{yhnf}^{\S,\CAP}}}
 
 \newcommand{\QFf}			{\textcolor{blue} {\Q^{\F}_{yhnf}}}
 \newcommand{\QH}			{\textcolor{blue} {\Q^{\H}_{yhn}}}
@@ -111,7 +112,7 @@
 \numberwithin{equation}			{section}
 
 
-\newcommand{\da}			{\textcolor{teal} {\delta^1_{yhn}}}
+\newcommand{\da}			{\textcolor{teal} {\delta^1_{yn}}}
 \newcommand{\db}			{\textcolor{teal} {\delta^2_{yhnf}}}
 \newcommand{\dc}			{\textcolor{teal} {\delta^3_{yhn}}}
 \newcommand{\dd}			{\textcolor{teal} {\delta^4_{yhn}}}
@@ -128,6 +129,7 @@
 \newcommand{\dq}			{\textcolor{teal} {\delta^{15}_{yhr}}}
 \newcommand{\dr}			{\textcolor{teal} {\delta^{13}_{yhn}}}
 \newcommand{\ds}[1][n]		{\textcolor{teal} {\delta^{14}_{yh#1}}}
+\newcommand{\dt}			{\textcolor{teal} {\delta^{16}_{yhr}}}
 
 
 % Settings Information
@@ -277,16 +279,19 @@ such that
 \QDbf,\, \QDr,\, \QDsf \quad &\geq \quad 0\\
 \intertext{The quantity purchased at one node $n$ plus the quantity being distributed into $n$ should be greater than total quantity sold and shipped out at $n$:}
 \QDbf+ \sum_{r\in \R_{\text{in}}} \QDr \quad &\geq \quad \QDsf + \sum_{r\in \R_{\text{out}}} \QDr&(\df)\\
-\intertext{Road capacity constraint:}
+\intertext{Road capacity constraint per food item:}
 \QDr \quad &\leq \quad \RCap&(\dg)
+\intertext{Road capacity constraint:}
+\sum_{f}\QDr \quad &\leq \quad \RCapTot&(\dt)
 \end{align} 
 \end{subequations}
+Note that equation (3.2c) will be active depending upon the \verb+FoodDistrCap+ setting.
 \subsection{KKT Conditions} 
 Representing $s_r$ and $d_r$ as the source and destination nodes of the transport system $r\in\R$, we have the following KKT conditions.
 \begin{subequations}
 \begin{align}
 \DiscFact \piF -\df \quad &\geq \quad 0 &(\QDbf)  \\
-\dg+\DiscFact\CsR + \df[s_r] - \df[d_r]  \quad &\geq \quad 0&(\QDr) 	\\
+\dg+\dt+\DiscFact\CsR + \df[s_r] - \df[d_r]  \quad &\geq \quad 0&(\QDr) 	\\
 \df-\DiscFact \piS \quad &\geq \quad 0&(\QDsf)
 \end{align}
 \end{subequations}
