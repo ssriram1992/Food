@@ -40,36 +40,11 @@ alias(FoodItem, FoodItem2);
 **********************       INITIALIZATION       **********************
 ************************************************************************
 
-
-*********************
-*** Crop Producer ***
-*********************
 Parameter
     df(Year) "Discount factor"
 ;
 
-*For farmers
-alias(Node, Farmer);
-
-Positive Variables
-    q_Food(FoodItem, Node, Season, Year) "quantity of Food produced"
-    Area_Crop(FoodItem, Node, Season, Year) "area allotted for each Crop"
-*    Area_conv(Node, Year) "area converted to become arable"
-;
-
-* Duals
-Positive Variables
-    d1(Node, Year)
-    d2(FoodItem, Node, Season, Year)
-;
-
-Variables
-    Yield_CYF(FoodItem, Node, Season, Year)
-    pi_Food(FoodItem, Node, Season, Year) "Price of Food item"
-    Q_cattle(FoodItem, Season, Year) "Number of cattle in the herd"
-    Q_cattle_sl(Node, Season, Year) "Number of cattle slaughtered"
-;
-
+*** Crop Producer ***
 Parameters
     C_prod(FoodItem, Node, Season, Year) "Cost of producing a Crop per unit area"
     C_convert(Node, Year) "Cost of converting land to make it arable"
@@ -82,28 +57,7 @@ Parameters
     Area_init(FoodItem, Node) "Initial Area"
 ;
 
-
-
-*****************
 *** Livestock ***
-*****************
-
-Positive Variables
-    q_Hide(Node, Season, Year) "Quantity of Hide produced"
-    Q_cattle_buy(Node, NodeFrom, Season, Year) "Number of cattle bought from a certain node"
-;
-
-* Dual Variables
-Positive Variables
-    d3(Node, Season, Year)
-    d4(Node, Season, Year)
-    d9(Node, Season, Year)
-    d10(Node, Season, Year)
-;
-
-Variable pi_cow(Node, Season, Year) "price of a cow";
-
-
 Parameters
     pr_Hide(Node, Season, Year) "Price of Hide"
     Yld_H(Node, Season, Year) "Hide yield per unit slaughtered cattle"
@@ -117,23 +71,7 @@ Parameters
     CowDeath(Node, Season, Year) "Rate of cowdeath to determine Minimum number cows to slaughter"
 ;
 
-
-********************
 *** Distributors ***
-********************
-
-Positive Variables
-    qF_Ds(FoodItem, Node, Season, Year) "Quantity of Food sold by distributor"
-    qF_Db(FoodItem, Node, Season, Year) "Quantity of Food bought by distributor"
-    qF_Road(FoodItem, Node, NodeFrom, Season, Year) "Quantity of Food transported"
-;
-* Dual variables
-Positive Variables
-    d6(FoodItem, Node, Season, Year)
-    d7(FoodItem, NodeFrom, Node, Season, Year)
-    d16(NodeFrom, Node, Season, Year)
-;
-Variable pi_W(FoodItem, Node, Season, Year);
 Parameters
     CF_Road(FoodItem, Node, NodeFrom, Season, Year) "Cost of transporting food item"
     CF_Road_data(FoodItem, Node, NodeFrom) "Data without temporal info"
@@ -141,10 +79,63 @@ Parameters
     Cap_Road_Tot(NodeFrom, Node)
 ;
 
-
-***************
 *** Storage ***
-***************
+Parameters
+    CS_L(FoodItem, Node, Season, Year) "Cost of food storage Linear term"
+    CS_Q(FoodItem, Node, Season, Year) "Cost of food storage Quadratic term"
+    CAP_Store(FoodItem, Node, Season, Year) "Storage Capacity"
+;
+
+*** Consumers ***
+Parameters
+    DemSlope(FoodItem, Node, Season, Year) "Slope of Demand curve"
+    DemInt(FoodItem, Node, Season, Year) "Intercept of demand curve"
+    DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year) "Cross terms in demand curve"
+;
+
+*** Electricity ***
+Parameters
+    C_Elec_L(Node, Season, Year) "Linear cost of electricity production"
+    C_Elec_Q(Node, Season, Year) "Quadratic cost of electricity production"
+    C_Elec_Trans(NodeFrom, Node, Season, Year) "Cost of Electricity transmission"
+    Cap_Elec(Node, Season, Year) "Electricity production cap"
+    Cap_Elec_Trans(NodeFrom, Node, Season, Year) "Electricity Transmission cap"
+    Base_Elec_Dem(Node, Season, Year) "Base Demand for electricity"
+;
+
+
+*********************
+***** Variables *****
+*********************
+
+*** Crop Producer ***
+Positive Variables
+    q_Food(FoodItem, Node, Season, Year) "quantity of Food produced"
+    Area_Crop(FoodItem, Node, Season, Year) "area allotted for each Crop"
+*    Area_conv(Node, Year) "area converted to become arable"
+;
+Variables
+    pi_Food(FoodItem, Node, Season, Year) "Price of Food item"
+;
+
+*** Livestock ***
+Positive Variables
+    q_Hide(Node, Season, Year) "Quantity of Hide produced"
+    Q_cattle_buy(NodeFrom, Node, Season, Year) "Number of cattle bought from a certain node"
+    Q_cattle(FoodItem, Node, Season, Year) "Number of cattle in the herd"
+    Q_cattle_sl(Node, Season, Year) "Number of cattle slaughtered"
+;
+Variable pi_cow(Node, Season, Year) "price of a cow";
+
+*** Distributors ***
+Positive Variables
+    qF_Ds(FoodItem, Node, Season, Year) "Quantity of Food sold by distributor"
+    qF_Db(FoodItem, Node, Season, Year) "Quantity of Food bought by distributor"
+    qF_Road(FoodItem, Node, NodeFrom, Season, Year) "Quantity of Food transported"
+;
+Variable pi_W(FoodItem, Node, Season, Year);
+
+*** Storage ***
 Positive Variables
     q_W(FoodItem, Node, Season, Year) "Total quantity stored"
     q_Ws(FoodItem, Node, Season, Year) "Quantity sold"
@@ -155,50 +146,32 @@ Variables
     pi_U(FoodItem, Node, Season, Year)
 ;
 
-* Dual
-Positive Variable
-    d8(FoodItem, Node, Season, Year)
-    d11(FoodItem, Node, Season, Year)
-;
 
-Parameters
-    CS_L(FoodItem, Node, Season, Year) "Cost of food storage Linear term"
-    CS_Q(FoodItem, Node, Season, Year) "Cost of food storage Quadratic term"
-    CAP_Store(FoodItem, Node, Season, Year) "Storage Capacity"
-;
-
-
-*****************
-*** Consumers ***
-*****************
-Parameters
-    DemSlope(FoodItem, Node, Season, Year) "Slope of Demand curve"
-    DemInt(FoodItem, Node, Season, Year) "Intercept of demand curve"
-    DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year) "Cross terms in demand curve"
-;
-
-
-*******************
 *** Electricity ***
-*******************
-Parameters
-    C_Elec_L(Node, Season, Year) "Linear cost of electricity production"
-    C_Elec_Q(Node, Season, Year) "Quadratic cost of electricity production"
-    C_Elec_Trans(NodeFrom, Node, Season, Year) "Cost of Electricity transmission"
-    Cap_Elec(Node, Season, Year) "Electricity production cap"
-    Cap_Elec_Trans(NodeFrom, Node, Season, Year) "Electricity Transmission cap"
-    Base_Elec_Dem(Node, Season, Year) "Base Demand for electricity"
-;
-
 Positive Variables
     q_Elec(Node, Season, Year)
     q_Elec_Trans(NodeFrom, Node, Season, Year)
     q_Elec_Dem(Node, Season, Year)
-    d15(NodeFrom, Node, Season, Year)
-    d14(Node, Season, Year)
-    d13(Node, Season, Year)
 ;
 
+
+*** Dual Variables ***
+Positive Variables
+    d1(Node, Year) "Dual to E1_2b"
+    d2(FoodItem, Node, Season, Year) "Dual to E1_2cd"
+    d3(Node, Season, Year) "Dual to E2_2b"
+    d4(Node, Season, Year) "Dual to E2_2c"
+    d6(FoodItem, Node, Season, Year) "Dual to E3_2b"
+    d7(FoodItem, NodeFrom, Node, Season, Year) "Dual to E3_2c"
+    d8(FoodItem, Node, Season, Year) "Dual to E4_2a"
+    d9(Node, Season, Year) "Dual to E2_2e"
+    d10(Node, Season, Year) "Dual to E2_2f"
+    d11(FoodItem, Node, Season, Year) "Dual to E4_2b"
+    d13(Node, Season, Year) "Dual to E6_2a"
+    d14(Node, Season, Year) "Dual to E6_2b"
+    d15(NodeFrom, Node, Season, Year) "Dual to E6_2c"
+    d16(NodeFrom, Node, Season, Year) "Dual to E3_2d"
+;
 
 ************************************************************************
 ***********************       DATA LOADING       ***********************
@@ -296,7 +269,7 @@ E1_2cd(FoodItem, Node, Season, Year).. -q_Food(FoodItem, Node, Season, Year)
             =g=
             -(aFAO(FoodItem, Node, Season, Year)*CYF(FoodItem, Node, Season, Year)*(1+(rPower(pi_Food(FoodItem, Node, Season, Year),Elas(FoodItem, Node, Season, Year))-1)$(Elas(FoodItem, Node, Season, Year)))*Area_Crop(FoodItem, Node, Season, Year))$Crop(FoodItem)
             -Yield(FoodItem, Node, Season, Year)*(
-                            Q_cattle(FoodItem, Season, Year)$(sameas(FoodItem,"milk"))+
+                            Q_cattle(FoodItem, Node, Season, Year)$(sameas(FoodItem,"milk"))+
                             Q_cattle_sl(Node, Season, Year)$(sameas(FoodItem,"beef"))
                             );
 
@@ -332,21 +305,21 @@ Equations
     E2_3a(FoodItem, Node, Season, Year)
     E2_3b(NodeFrom, Node, Season, Year)
     E2_3c(Node, Season, Year)
-    E2_3d(FoodItem, Node, Season, Year)
+    E2_3d(Node, Season, Year)
 ;
 * Yield defined with Foodcrop
 
 E2_2b(Node, Season, Year).. -q_Hide(Node, Season, Year)
                     =g=
                     -Yld_H(Node, Season, Year)*Q_cattle_sl(Node, Season, Year);
-E2_2c(Node, Season, Year).. -Q_cattle_sl(Node, Season, Year) =g= -sum(FoodItem, Q_cattle(FoodItem, Season, Year));
-E2_2d(Node, Season, Year).. -sum(FoodItem, Q_cattle(FoodItem, Season, Year))
+E2_2c(Node, Season, Year).. -Q_cattle_sl(Node, Season, Year) =g= -sum(FoodItem, Q_cattle(FoodItem, Node, Season, Year));
+E2_2d(Node, Season, Year).. -sum(FoodItem, Q_cattle(FoodItem, Node, Season, Year))
     =e=
-    -((1+k(Node, Season, Year)-kappa(Node, Season, Year))*(sum(FoodItem, Q_cattle(FoodItem, Season, Year-1)) + InitCow(Node)$(ORD(Year)=1)) -
+    -((1+k(Node, Season, Year)-kappa(Node, Season, Year))*(sum(FoodItem, Q_cattle(FoodItem, Node, Season, Year-1)) + InitCow(Node)$(ORD(Year)=1)) -
     Q_cattle_sl(Node, Season, Year) +
     sum(NodeFrom, Q_cattle_buy(NodeFrom, Node, Season, Year) - Q_cattle_buy(Node, NodeFrom, Season, Year)));
-E2_2e(Node, Season, Year).. Q_cattle_sl(Node, Season, Year) =g= CowDeath(Node, Season, Year)*sum(FoodItem, Q_cattle(FoodItem, Season, Year));
-E2_2f(Node, Season, Year).. sum(FoodItem, Q_cattle(FoodItem, Season, Year)) =g= Herdsize(Node);
+E2_2e(Node, Season, Year).. Q_cattle_sl(Node, Season, Year) =g= CowDeath(Node, Season, Year)*sum(FoodItem, Q_cattle(FoodItem, Node, Season, Year));
+E2_2f(Node, Season, Year).. sum(FoodItem, Q_cattle(FoodItem, Node, Season, Year)) =g= Herdsize(Node);
 
 
 E2_3a(FoodItem, Node, Season, Year).. df(Year)*C_cow(Node, Season, Year) - d2(FoodItem, Node, Season, Year)*Yield(FoodItem, Node, Season, Year)$sameas(FoodItem, "Milk") -
@@ -360,7 +333,7 @@ E2_3b(NodeFrom, Node, Season, Year)$(NOT(sameas(Node, NodeFrom)))..   df(Year)*(
     =g=
     0;
 E2_3c(Node, Season, Year).. d3(Node, Season, Year)-df(Year)*pr_Hide(Node, Season, Year) =g= 0;
-E2_3d(FoodItem, Node, Season, Year).. d4(Node, Season, Year) - d2(FoodItem, Node, Season, Year)*Yield(FoodItem, Node, Season, Year)$sameas(FoodItem, "beef")-
+E2_3d(Node, Season, Year).. d4(Node, Season, Year) - sum(FoodItem$sameas(FoodItem, "beef"), d2(FoodItem, Node, Season, Year)*Yield(FoodItem, Node, Season, Year))-
         d3(Node, Season, Year)*Yld_H(Node, Season, Year) + pi_cow(Node, Season, Year)-d10(Node, Season, Year)
                         =g=
                         0;
