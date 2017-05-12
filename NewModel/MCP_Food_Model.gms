@@ -194,6 +194,8 @@ $LOAD df=DiscFact
 $LOAD C_convert
 $LOAD C_chg
 $LOAD CYF
+$LOAD aFAO
+$LOAD C_prod
 $LOAD TotArea
 $LOAD Area_init
 
@@ -206,8 +208,8 @@ k1(Node, Year)
 kappa1(Node, Year)
 C_Cow1(Node, Year)
 CowDeath1(Node)
-Cap_Road1
-CF_Road_data1
+Cap_Road1(NodeFrom, Node)
+CF_Road_data1(NodeFrom, Node)
 ;
 
 
@@ -230,16 +232,38 @@ C_Cow(Node, Season, Year) = C_Cow1(Node, Year);
 $LOAD CowDeath1=CowDeath
 CowDeath(Node, Season, Year) = CowDeath1(Node);
 
+$LOAD CF_Road_data1=CF_Road_data
+CF_Road(FoodItem, NodeFrom, Node, Season, Year) = CF_Road_data1(NodeFrom, Node);
+
+$LOAD Cap_Road1=Cap_Road
+Cap_Road(FoodItem, NodeFrom, Node) = Cap_Road1(NodeFrom, Node);
+
 $LOAD InitCow
 $LOAD Herdsize
 $LOAD C_cow_tr1=CowtranYr1
 $GDXIN
 
 
+Elas(FoodItem, Node, Season, Year) = 1;
+DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year) = 0;
+DemInt(FoodItem, Node, Season, Year) = 1000;
+DemSlope(FoodItem, Node, Season, Year) = 10;
 
+C_Elec_L(Node, Season, Year) = 10;
+C_Elec_Q(Node, Season, Year) = 10;
+Cap_Elec(Node, Season, Year) = 1000;
+C_Elec_Trans(NodeFrom, Node, Season, Year) = 1;
+Cap_Elec_Trans(NodeFrom, Node, Season, Year) = 1000;
+Base_Elec_Dem(Node, Season, Year) = 100;
 
+CS_L(FoodItem, Node, Season, Year) = 0.01;
+CS_Q(FoodItem, Node, Season, Year) = 0.01;
+CAP_Store(FoodItem, Node, Season, Year) = 100;
 
-
+C_cow_tr(NodeFrom, Node, Season, Year) = 4;
+Cap_Road_Tot(NodeFrom, Node) = 1000;
+Yield("Milk", Node, Season, Year) = 10;
+Yield("Beef", Node, Season, Year) = 10;
 
 
 
@@ -351,9 +375,9 @@ Equations
     E3_3c(FoodItem, Node, Season, Year)
 ;
 
-E3_2b(FoodItem, Node, Season, Year).. QF_Db(FoodItem, Node, Season, Year) + sum(NodeFrom, qF_Road(FoodItem, NodeFrom, Node, Season, Year))
+E3_2b(FoodItem, Node, Season, Year).. QF_Db(FoodItem, Node, Season, Year) + sum(NodeFrom$Road(NodeFrom, Node), qF_Road(FoodItem, NodeFrom, Node, Season, Year))
                                 =g=
-                                QF_Ds(FoodItem, Node, Season, Year) + sum(NodeFrom,qF_Road(FoodItem, Node, NodeFrom, Season, Year));
+                                QF_Ds(FoodItem, Node, Season, Year) + sum(NodeFrom$Road(Node, NodeFrom),qF_Road(FoodItem, Node, NodeFrom, Season, Year));
 E3_2c(FoodItem, NodeFrom, Node, Season, Year)$((FoodDistrCap AND Road(NodeFrom, Node))).. -qF_Road(FoodItem, NodeFrom, Node, Season, Year)
                                         =g=
                                         -Cap_Road(FoodItem, NodeFrom, Node);
@@ -429,15 +453,15 @@ Equations
 
 
 E6_2a(Node, Season, Year).. Cap_Elec(Node, Season, Year) =g= q_Elec(Node, Season, Year);
-E6_2b(Node, Season, Year).. q_Elec(Node, Season, Year) + sum(NodeFrom, q_Elec_Trans(Node, NodeFrom, Season, Year))
+E6_2b(Node, Season, Year).. q_Elec(Node, Season, Year) + sum(NodeFrom$Eline(Node, NodeFrom), q_Elec_Trans(Node, NodeFrom, Season, Year))
                                  =g=
-                q_Elec_Dem(Node, Season, Year)+sum(NodeFrom, q_Elec_Trans(NodeFrom, Node, Season, Year));
-E6_2c(NodeFrom, Node, Season, Year)$Eline(Node, Node).. Cap_Elec_Trans(NodeFrom, Node, Season, Year)
+                q_Elec_Dem(Node, Season, Year)+sum(NodeFrom$Eline(NodeFrom, Node), q_Elec_Trans(NodeFrom, Node, Season, Year));
+E6_2c(NodeFrom, Node, Season, Year)$Eline(NodeFrom, Node).. Cap_Elec_Trans(NodeFrom, Node, Season, Year)
                                 =g=
                 q_Elec_Trans(NodeFrom, Node, Season, Year);
 E6_3a(Node, Season, Year).. C_Elec_L(Node, Season, Year)+C_Elec_Q(Node, Season, Year)*q_Elec(Node, Season, Year)+
                         d13(Node, Season, Year) + d14(Node, Season, Year) =g= 0;
-E6_3b(NodeFrom, Node, Season, Year)$Eline(Node, Node).. C_Elec_Trans(NodeFrom, Node, Season, Year)  +
+E6_3b(NodeFrom, Node, Season, Year)$Eline(NodeFrom, Node).. C_Elec_Trans(NodeFrom, Node, Season, Year)  +
                 d15(NodeFrom, Node, Season, Year) + d14(NodeFrom, Season, Year) - d14(Node, Season, Year) =g= 0;
 E_ElecDem(Node, Season, Year).. q_Elec_Dem(Node, Season, Year) =g= Base_Elec_Dem(Node, Season, Year);
 
