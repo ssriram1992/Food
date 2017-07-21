@@ -181,7 +181,7 @@ Positive Variables
 *$INCLUDE ./Data/Data.gms
 
 *Call from GDX to here
-$GDXIN Data/DataGdx
+$GDXIN Data/DataGdx1y
 * Loading sets
 $LOAD Year
 $LOAD Season
@@ -480,7 +480,7 @@ E_ElecDem(Node, Season, Year).. q_Elec_Dem(Node, Season, Year) =g= Base_Elec_Dem
 
 Display Year, Season, Node, FoodItem, Crop;
 
-Model FoodModel /
+Model Food1y /
 E1_2b.d1
 E1_2cd.d2
 E1_3a.q_Food
@@ -515,9 +515,10 @@ E6_3a.q_Elec
 E6_3b.q_Elec_Trans
 E_ElecDem.q_Elec_Dem
 /;
-execute_loadpoint 'FoodModel_p1';
+*execute_loadpoint 'FoodModel_p1';
 
-Solve FoodModel using MCP;
+Solve Food1y using MCP;
+execute_unload 'Food1y';
 
 $ontext
 
@@ -525,7 +526,7 @@ $ontext
 **********************       POST-PROCESSING       *********************
 ************************************************************************
 
-execute_unload 'Food';
+execute_unload 'Food1y';
 Display pi_Food.L, q_Food.L, pi_U.L, DemInt,q_W.L, DemSlope ,qF_Road.L;
 *Display q_W.L,pi_U.L,pi_Food.L;
 *Display qF_Road.L, CF_Road;
