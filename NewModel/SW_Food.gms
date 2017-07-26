@@ -1,4 +1,4 @@
-$TITLE "INFEWS FOOD MODEL"
+$TITLE "INFEWS FOOD MODEL with SOCIAL WELFARE"
 $ontext
 $offlisting
 option dispwidth=60;
@@ -18,7 +18,7 @@ option solvelink=5;
 ************************************************************************
 $INCLUDE ./ControlPanel.gms
 Sets
-    Year "Years" /2015*2016/
+    Year "Years"
     Month "Months"
     Node "Nodes"
     Season "seasons"
@@ -158,6 +158,7 @@ Positive Variables
 
 
 *** Dual Variables ***
+$ontext
 Positive Variables
     d1(Node, Year) "Dual to E1_2b"
     d2(FoodItem, Node, Season, Year) "Dual to E1_2cd"
@@ -174,6 +175,7 @@ Positive Variables
     d15(NodeFrom, Node, Season, Year) "Dual to E6_2c"
     d16(NodeFrom, Node, Season, Year) "Dual to E3_2d"
 ;
+$offtext
 
 ************************************************************************
 ***********************       DATA LOADING       ***********************
@@ -185,7 +187,7 @@ Positive Variables
 *Call from GDX to here
 $GDXIN Data/DataGdx
 * Loading sets
-*$LOAD Year
+$LOAD Year
 $LOAD Season
 $LOAD Node
 $LOAD FoodItem
@@ -290,8 +292,6 @@ E1_2cd(FoodItem, Node, Season, Year)
 * E1_2e(Node, Year)
 * Crop Rotation Constraint
 * E1_2f(FoodItem, FoodItem2, Node, Year)
-E1_3a(FoodItem, Node, Season, Year)
-E1_3b(FoodItem, Node, Season, Year)
 ;
 
 E1_2b(Node, Year).. TotArea(Node)
@@ -307,21 +307,7 @@ E1_2cd(FoodItem, Node, Season, Year).. -q_Food(FoodItem, Node, Season, Year)
                             Q_cattle_sl(Node, Season, Year)$(sameas(FoodItem,"beef"))
                             );
 
-
-E1_3a(FoodItem, Node, Season, Year).. d2(FoodItem, Node, Season, Year) - df(Year)*pi_Food(FoodItem, Node, Season, Year)
-                            =g=
-                            0;
-* Fallow and crop rotation costraints not yet added
-E1_3b(FoodItem, Node, Season, Year)$Crop(FoodItem).. d1(Node, Year)
-        -d2(FoodItem, Node, Season, Year)*aFAO(FoodItem, Node, Season, Year)*CYF(FoodItem, Node, Season, Year)*rPower(pi_Food(FoodItem, Node, Season, Year),Elas(FoodItem, Node, Season, Year))$Elas(FoodItem, Node, Season, Year)
-        + df(Year)*(
-            C_prod(FoodItem, Node, Season, Year) +
-            C_convert(Node, Year) - C_convert(Node, Year+1) +
-            C_chg(Node, Year)*(Area_Crop(FoodItem, Node, Season, Year) - Area_Crop(FoodItem, Node, Season, Year-1) - Area_init(FoodItem, Node)$(Ord(Year)=1))-
-            C_chg(Node, Year+1)*(Area_Crop(FoodItem, Node, Season, Year+1) - Area_Crop(FoodItem, Node, Season, Year))
-            )
-                    =g=
-            0;
+Q_cattle.fx(FoodItem, Node, Season, Year)$(NOT(sameas(FoodItem,"Milk"))) = 0;
 
 
 ************************************************************************
@@ -336,10 +322,6 @@ Equations
     E2_2d(Node, Season, Year)
     E2_2e(Node, Season, Year)
     E2_2f(Node, Season, Year)
-    E2_3a(FoodItem, Node, Season, Year)
-    E2_3b(NodeFrom, Node, Season, Year)
-    E2_3c(Node, Season, Year)
-    E2_3d(Node, Season, Year)
 ;
 * Yield defined with Foodcrop
 
@@ -356,23 +338,6 @@ E2_2e(Node, Season, Year).. Q_cattle_sl(Node, Season, Year) =g= CowDeath(Node, S
 E2_2f(Node, Season, Year).. sum(FoodItem, Q_cattle(FoodItem, Node, Season, Year)) =g= Herdsize(Node);
 
 
-E2_3a(FoodItem, Node, Season, Year)$sameas(FoodItem, "Milk").. df(Year)*C_cow(Node, Season, Year) - d2(FoodItem, Node, Season, Year)*Yield(FoodItem, Node, Season, Year)$sameas(FoodItem, "Milk") -
-    d4(Node, Season, Year)+ pi_cow(Node, Season, Year) - (1+k(Node, Season, Year)-kappa(Node, Season, Year))*pi_cow(Node, Season, Year+1)
-    +CowDeath(Node, Season, Year)*d9(Node, Season, Year) - d10(Node, Season, Year)
-    =g=
-    0;
-Q_cattle.fx(FoodItem, Node, Season, Year)$(NOT(sameas(FoodItem,"Milk"))) = 0;
-E2_3b(NodeFrom, Node, Season, Year)$(NOT(sameas(Node, NodeFrom)))..   df(Year)*(C_cow_tr(NodeFrom, Node, Season, Year)+
-    pi_cow(NodeFrom, Season, Year) - pi_cow(Node, Season, Year))+
-    (pi_cow(NodeFrom, Season, Year)-pi_cow(Node, Season, Year))
-    =g=
-    0;
-E2_3c(Node, Season, Year).. d3(Node, Season, Year)-df(Year)*pr_Hide(Node, Season, Year) =g= 0;
-E2_3d(Node, Season, Year).. d4(Node, Season, Year) - sum(FoodItem$sameas(FoodItem, "beef"), d2(FoodItem, Node, Season, Year)*Yield(FoodItem, Node, Season, Year))-
-        d3(Node, Season, Year)*Yld_H(Node, Season, Year) + pi_cow(Node, Season, Year)-d10(Node, Season, Year)
-                        =g=
-                        0;
-
 
 ************************************************************************
 ***********************       DISTRIBUTORS       ***********************
@@ -381,9 +346,6 @@ Equations
     E3_2b(FoodItem, Node, Season, Year)
     E3_2c(FoodItem, NodeFrom, Node, Season, Year)
     E3_2d(NodeFrom, Node, Season, Year)
-    E3_3a(FoodItem, Node, Season, Year)
-    E3_3b(FoodItem, NodeFrom, Node, Season, Year)
-    E3_3c(FoodItem, Node, Season, Year)
 ;
 
 E3_2b(FoodItem, Node, Season, Year).. QF_Db(FoodItem, Node, Season, Year) + sum(NodeFrom$Road(NodeFrom, Node), qF_Road(FoodItem, NodeFrom, Node, Season, Year))
@@ -396,15 +358,6 @@ E3_2c(FoodItem, NodeFrom, Node, Season, Year)$((FoodDistrCap AND Road(NodeFrom, 
 E3_2d(NodeFrom, Node, Season, Year)$Road(NodeFrom, Node).. -sum(FoodItem,qF_Road(FoodItem, NodeFrom, Node, Season, Year))
                                         =g=
                                         -Cap_Road_Tot(NodeFrom, Node);
-E3_3a(FoodItem, Node, Season, Year).. df(Year)*pi_Food(FoodItem, Node, Season, Year)
-                                =g=
-                                d6(FoodItem, Node, Season, Year);
-E3_3b(FoodItem, NodeFrom, Node, Season, Year)$Road(NodeFrom, Node).. d7(FoodItem, NodeFrom, Node, Season, Year)$(FoodDistrCap) + d16(NodeFrom, Node, Season, Year)  + df(Year)*CF_Road(FoodItem, NodeFrom, Node, Season, Year)
-                                        =g=
-                                        d6(FoodItem, Node, Season, Year) - d6(FoodItem, NodeFrom, Season, Year) ;
-E3_3c(FoodItem, Node, Season, Year).. d6(FoodItem, Node, Season, Year)
-                                =g=
-                                df(Year)*pi_W(FoodItem, Node, Season, Year);
 
 
 ************************************************************************
@@ -413,24 +366,12 @@ E3_3c(FoodItem, Node, Season, Year).. d6(FoodItem, Node, Season, Year)
 Equations
     E4_2a(FoodItem, Node, Season, Year)
     E4_2b(FoodItem, Node, Season, Year)
-    E4_3a(FoodItem, Node, Season, Year)
-    E4_3b(FoodItem, Node, Season, Year)
-    E4_3c(FoodItem, Node, Season, Year)
 ;
 E4_2a(FoodItem, Node, Season, Year).. -q_W(FoodItem, Node, Season, Year) =g= -CAP_Store(FoodItem, Node, Season, Year);
 E4_2b(FoodItem, Node, Season, Year).. q_W(FoodItem, Node, Season-1, Year)$(Ord(Season)>=2) +
         q_W(FoodItem, Node, Season + (Card(Season)-1), Year-1)$(Ord(Season)=1) + q_Wb(FoodItem, Node, Season, Year)
         -q_Ws(FoodItem, Node, Season, Year) =g= q_W(FoodItem, Node, Season, Year);
 
-E4_3a(FoodItem, Node, Season, Year).. pi_W(FoodItem, Node, Season, Year) - d11(FoodItem, Node, Season, Year)=g= 0;
-E4_3b(FoodItem, Node, Season, Year).. pi_U(FoodItem, Node, Season, Year) - d11(FoodItem, Node, Season, Year)=g= 0;
-
-E4_3c(FoodItem, Node, Season, Year).. d8(FoodItem, Node, Season, Year)  + d11(FoodItem, Node, Season, Year)
-            + CS_Q(FoodItem, Node, Season, Year)*q_W(FoodItem, Node, Season, Year)
-            + CS_L(FoodItem, Node, Season, Year) + d8(FoodItem, Node, Season, Year)
-            - d11(FoodItem, Node, Season-(Card(Season)-1), Year+1)$(Ord(Season)=Card(Season))
-            - d11(FoodItem, Node, Season+1, Year)$(Ord(Season)<>Card(Season))
-            =g= 0;
 
 
 ************************************************************************
@@ -457,8 +398,6 @@ Equations
     E6_2a(Node, Season, Year)
     E6_2b(Node, Season, Year)
     E6_2c(NodeFrom, Node, Season, Year)
-    E6_3a(Node, Season, Year)
-    E6_3b(NodeFrom, Node, Season, Year)
     E_ElecDem(Node, Season, Year)
 ;
 
@@ -470,11 +409,32 @@ E6_2b(Node, Season, Year).. q_Elec(Node, Season, Year) + sum(NodeFrom$Eline(Node
 E6_2c(NodeFrom, Node, Season, Year)$Eline(NodeFrom, Node).. Cap_Elec_Trans(NodeFrom, Node, Season, Year)
                                 =g=
                 q_Elec_Trans(NodeFrom, Node, Season, Year);
-E6_3a(Node, Season, Year).. C_Elec_L(Node, Season, Year)+C_Elec_Q(Node, Season, Year)*q_Elec(Node, Season, Year)+
-                        d13(Node, Season, Year) - d14(Node, Season, Year) =g= 0;
-E6_3b(NodeFrom, Node, Season, Year)$Eline(NodeFrom, Node).. C_Elec_Trans(NodeFrom, Node, Season, Year)  +
-                d15(NodeFrom, Node, Season, Year) + d14(NodeFrom, Season, Year) - d14(Node, Season, Year) =g= 0;
-E_ElecDem(Node, Season, Year).. q_Elec_Dem(Node, Season, Year) =e= Base_Elec_Dem(Node, Season, Year);
+E_ElecDem(Node, Season, Year).. q_Elec_Dem(Node, Season, Year) =g= Base_Elec_Dem(Node, Season, Year);
+
+************************************************************************
+*************************       OBJECTIVES       ***********************
+************************************************************************
+Equations
+ObjectiveEq
+;
+
+Variable 
+Objective
+;
+
+
+ 
+ObjectiveEq.. Objective =e= sum((Year, Season, Node),
+*Crop production
+    sum(FoodItem, C_prod(FoodItem, Node, Season, Year)*Area_Crop(FoodItem, Node, Season, Year)) +
+*Livestock
+    C_cow(Node, Season, Year)*sum(FoodItem, Q_cattle(FoodItem, Node, Season, Year))+
+*Distribution
+    sum((FoodItem, NodeFrom), CF_Road(FoodItem, Node, NodeFrom, Season, Year)*qF_Road(FoodItem, Node, NodeFrom, Season, Year))+
+*Storage
+    sum(FoodItem, CS_L(FoodItem, Node, Season, Year)*q_W(FoodItem, Node, Season, Year) + 0.5*CS_Q(FoodItem, Node, Season, Year)*q_W(FoodItem, Node, Season, Year)*q_W(FoodItem, Node, Season, Year))
+);
+
 
 
 ************************************************************************
@@ -484,45 +444,11 @@ E_ElecDem(Node, Season, Year).. q_Elec_Dem(Node, Season, Year) =e= Base_Elec_Dem
 *CF_Road(FoodItem, Node, NodeFrom, Season, Year) = CF_Road_data(FoodItem, Node, NodeFrom);
 
 
-Model Food1y /
-E1_2b.d1
-E1_2cd.d2
-E1_3a.q_Food
-E1_3b.Area_Crop
-E2_2b.d3
-E2_2c.d4
-E2_2d.pi_cow
-E2_2e.d9
-E2_2f.d10
-E2_3a.Q_cattle
-E2_3b.Q_cattle_buy
-E2_3c.q_Hide
-E2_3d.Q_cattle_sl
-E3_2b.d6
-E3_2c.d7
-E3_2d.d16
-E3_3a.qF_Db
-E3_3b.qF_Road
-E3_3c.qF_Ds
-E4_2a.d8
-E4_2b.d11
-E4_3a.q_Wb
-E4_3b.q_Ws
-E4_3c.q_W
-E5_1a.pi_Food
-E5_1b.pi_U
-E5_1c.pi_W
-E6_2a.d13
-E6_2b.d14
-E6_2c.d15
-E6_3a.q_Elec
-E6_3b.q_Elec_Trans
-E_ElecDem.q_Elec_Dem
-/;
-execute_loadpoint 'Food1y';
+Model SWFood / All /;
 
-Solve Food1y using MCP;
-execute_unload 'Food1y';
+
+Solve SWFood use NLP min Objective;
+execute_unload 'SWFood';
 
 $ontext
 
@@ -572,4 +498,6 @@ Display Arable ;
 *Display DemSlope, DemInt;
 *execute_unload 'Food';
 
+
 $offtext
+Display Year;
