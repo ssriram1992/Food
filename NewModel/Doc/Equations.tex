@@ -63,7 +63,7 @@
 
 
 \newcommand{\Qcow}[1][yh]		{\textcolor{blue} {\cow_{#1n}}}
-\newcommand{\Qcowsl}			{\textcolor{blue}{\cow_{yhn}^{\text{slg}}}}
+\newcommand{\Qcowsl}[1][yh]		{\textcolor{blue}{\cow_{#1n}^{\text{slg}}}}
 \newcommand{\Qcowbuy}[1][in]	{\textcolor{blue} {\cow_{yh#1}^{\text{buy}}}}
 \newcommand{\picow}[1][yhn]		{\textcolor{dgreen}{\pr^{\text{cow}}_{#1}}}
 \newcommand{\CowDeath}			{{\kappa^{\text{death}}_{yhn}}}
@@ -180,9 +180,9 @@ such that for $f\in \C$
 \intertext{where $\OFal$ is a number between 0 and 1 indicating the fraction of land that gets fallowed. $\OFalDur$ is the duration of fallow cycle.}
 \intertext{Crop rotation constraint (total area put into rotation using crop $f'$ after a period should be smaller than the total area of $f'$ as some $f'$ is not planted for rotation):}
 \OCr\sum_{y'=y}^{y+\OCrDur}\sum_{h\in\Se}\AF[y'snf] \quad &\leq \quad \OCrDur\sum_{y'=y}^{y+\OCrDur}\sum_{h\in\Se}\AF[y'snf']&(\dl)
-\intertext{where $f$ is the primary crop rotated with $f'$.}
 \end{align} 
 \end{subequations}
+where $f$ is the primary crop rotated with $f'$.
 \subsection{KKT Conditions} % (fold)
 These KKT conditions for this problem hold for $f\in \C$
 \begin{subequations}
@@ -227,7 +227,7 @@ such that for $f\not\in \C$
 \intertext{Number of Bovine slaughtered should not exceed the number owned:}
 \Qcowsl \quad &\leq \quad \Qcow&(\dd)\\
 \intertext{Quantity balance of Bovine:}
-\Qcow \quad &\leq \quad (1+k-\kappa)\Qcow[(y-1)h] - \Qcowsl + \sum_{i\in\N}\left( \Qcowbuy - 
+\Qcow \quad &\leq \quad (1+k-\kappa)\Qcow[(y-1)h] - \Qcowsl[(y-1)h] + \sum_{i\in\N}\left( \Qcowbuy - 
 \Qcowbuy[ni] \right) &(\picow[yhn])\\
 \intertext{where $k$ is the birth rate; $\kappa$ is the death rate.}
 \intertext{Number of Bovine should not be fewer than the natural deaths:}
@@ -250,7 +250,7 @@ such that for $f\not\in \C$
 \quad &\geq \quad 0&(\Qcowbuy)\\
 \db-\DiscFact\piF  \quad &\geq \quad 0 &(\QFf) \nonumber\\
 \dc-\DiscFact\piH\quad &\geq \quad 0&(\QH)\\
-\dd-\dj-\db\Yld - \dc\YldH +\picow \quad &\geq \quad 0 \qquad (f=\text{Beef})&(\Qcowsl)
+\dd-\di-\db\Yld - \dc\YldH +\picow[(y+1)hn] \quad &\geq \quad 0 \qquad (f=\text{Beef})&(\Qcowsl)
 \end{align} 
 \end{subequations}
 % \pagebreak
