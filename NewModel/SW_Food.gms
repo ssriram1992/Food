@@ -10,7 +10,7 @@ Option Solprint = off;
 Option limrow = 0;
 Option limcol = 0;
 $offtext
-option savepoint=2;
+*option savepoint=2;
 option solvelink=5;
 
 ************************************************************************
@@ -468,56 +468,6 @@ Model SWFood / All /;
 
 
 Solve SWFood use NLP min Objective;
-execute_unload 'SWFood';
-
-$ontext
-
-************************************************************************
-**********************       POST-PROCESSING       *********************
-************************************************************************
-
-$offtext
-
-$ontext
-execute_unload 'Food1y';
-Display pi_Food.L, q_Food.L, pi_U.L, DemInt,q_W.L, DemSlope ,qF_Road.L;
-*Display q_W.L,pi_U.L,pi_Food.L;
-*Display qF_Road.L, CF_Road;
-Display Q_cattle_sl.L, Q_cattle.L, Q_cattle_buy.L, Q_cattle_sl.L;
-*Display Area_Crop.L, Area_init;
-Parameter produce(*, Season, Year);
-produce(FoodItem, Season, Year) = sum((Node), q_Food.L(FoodItem, Node, Season, Year));
-produce("Hide",Season, Year) = sum(Node, q_Hide.L(Node, Season, Year));
-Display produce;
-Parameter price(FoodItem, Season, Year);
-price(FoodItem, Season, Year) = sum(Node, q_W.L(FoodItem, Node, Season, Year)*pi_U.L(FoodItem, Node, Season, Year))/sum(Node, q_W.L(FoodItem, Node, Season, Year));
-Display price;
-
-$ontext
-Parameter FarmerPrice(*, Year);
-Farmerprice("Cow",Year) = sum(Node, pi_cow.L(Node, Year))/card(Node);
-Farmerprice(FoodItem, Year) = sum(Node,  q_Food.L(FoodItem, Node, Year)*pi_Food.L(FoodItem, Node, Year))/sum(Node, q_Food.L(FoodItem, Node, Year));
-Display FarmerPrice;
-Parameter AllFood(Node, Year);
-AllFood(Node, Year) = sum(FoodItem, q_W.L(FoodItem, Node, Year));
-Display AllFood;
-*Display q_W.L, pi_U.L;
-
-Parameter AllFoodProd(Node, Year);
-AllFoodProd(Node, Year) = sum(FoodItem$sameas(FoodItem,"Milk"), q_Food.L(FoodItem, Node, Year));
-Display AllFoodProd;
-
-Display Area_Crop.L, q_Food.L, q_W.L, qF_Road.L;
-Parameter Arable(Node, Year);
-Arable(Node, Year) = sum(Crop,Area_Crop.L(Crop, Node, Year));
-Display Arable ;
-Arable(Node, Year) = Arable(Node, Year)/TotArea(Node);
-Display Arable ;
+execute_unload 'Results/SWFood';
 
 
-*Display DemSlope, DemInt;
-*execute_unload 'Food';
-
-
-$offtext
-Display Year;

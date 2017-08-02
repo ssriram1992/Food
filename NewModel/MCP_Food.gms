@@ -1,5 +1,17 @@
 $TITLE "INFEWS FOOD MODEL"
-$ontext
+
+************************************************************************
+************************       SETTINGS       **************************
+************************************************************************
+
+$SETGLOBAL Detailed_Listing "*"
+$SETGLOBAL RunningOnCluster ""
+
+$SETGLOBAL Scenario_Suffix ""
+
+
+
+%Detailed_Listing%$ontext
 $offlisting
 option dispwidth=60;
 $inlinecom /* */
@@ -9,14 +21,14 @@ $oninline
 Option Solprint = off;
 Option limrow = 0;
 Option limcol = 0;
+$ontext
 $offtext
-*option savepoint=2;
-option solvelink=5;
+%RunningOnCluster%option solvelink=5;
 
 ************************************************************************
 ***********************       COMMON INIT       ************************
 ************************************************************************
-$INCLUDE ./ControlPanel.gms
+$INCLUDE Data/ControlPanel.gms
 Sets
     Year "Years" /2015*2030/
     Month "Months"
@@ -539,13 +551,11 @@ E6_3a.q_Elec
 E6_3b.q_Elec_Trans
 E_ElecDem.q_Elec_Dem
 /;
-execute_loadpoint 'SWFood_p1';
-*execute_loadpoint 'Food1y_p1';
-*execute_loadpoint 'Food18to20';
+*execute_loadpoint 'SWFood_p1';
+execute_loadpoint 'Results/MCPRes_%Scenario_Suffix%';
 
 option reslim=10000000;
 Solve Food1y using MCP;
-execute_unload 'Food1y';
 
 $ontext
 
@@ -556,7 +566,6 @@ $ontext
 $offtext
 
 *$ontext
-execute_unload 'Food1y';
 Display pi_Food.L, q_Food.L, pi_U.L, q_W.L, qF_Road.L;
 *Display q_W.L,pi_U.L,pi_Food.L;
 *Display qF_Road.L, CF_Road;
@@ -600,3 +609,4 @@ Display Arable ;
 *execute_unload 'Food';
 
 $offtext
+execute_unload 'Results/MCPRes';
