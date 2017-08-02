@@ -85,6 +85,7 @@ Parameters
     CS_L(FoodItem, Node, Season, Year) "Cost of food storage Linear term"
     CS_Q(FoodItem, Node, Season, Year) "Cost of food storage Quadratic term"
     CAP_Store(FoodItem, Node, Season, Year) "Storage Capacity"
+    q_WInit(FoodItem, Node)
 ;
 
 *** Consumers ***
@@ -215,6 +216,9 @@ Cap_Road1(NodeFrom, Node)
 CF_Road_data1(NodeFrom, Node)
 MilkYield(Node, Year)
 BeefYield(Node, Year)
+C_Elec_L1(Node)
+C_Elec_Q1(Node)
+Cap_Elec1(Node)
 ;
 
 
@@ -255,6 +259,15 @@ $LOAD BeefYield
 Yield("Beef", Node, Season, Year) = BeefYield(Node, Year);
 $LOAD MilkYield
 Yield("Milk", Node, Season, Year) = MilkYield(Node, Year);
+$LOAD q_WInit=qWInit
+
+$LOAD C_Elec_L1
+$LOAD C_Elec_Q1
+$Load Cap_Elec1
+
+C_Elec_L(Node, Season, Year) = C_Elec_L1(Node);
+C_Elec_Q(Node, Season, Year) = C_Elec_Q1(Node);
+Cap_Elec(Node, Season, Year) = Cap_Elec1(Node);
 
 $GDXIN
 
@@ -271,7 +284,7 @@ Cap_Elec_Trans(NodeFrom, Node, Season, Year) = 10000;
 
 CS_L(FoodItem, Node, Season, Year) = 0.01;
 CS_Q(FoodItem, Node, Season, Year) = 0.01;
-CAP_Store(FoodItem, Node, Season, Year) = 0;
+CAP_Store(FoodItem, Node, Season, Year) = 10;
 
 C_cow_tr(NodeFrom, Node, Season, Year) = 4;
 Cap_Road_Tot(NodeFrom, Node) = sum(FoodItem, Cap_Road(FoodItem, NodeFrom, Node))*0.1;
@@ -376,8 +389,7 @@ Equations
 ;
 E4_2a(FoodItem, Node, Season, Year).. -q_W(FoodItem, Node, Season, Year) =g= -CAP_Store(FoodItem, Node, Season, Year);
 E4_2b(FoodItem, Node, Season, Year).. q_W(FoodItem, Node, Season-1, Year)$(Ord(Season)>=2) +
-        q_W(FoodItem, Node, Season + (Card(Season)-1), Year-1)$(Ord(Season)=1) + q_Wb(FoodItem, Node, Season, Year)
-        -q_Ws(FoodItem, Node, Season, Year) =g= q_W(FoodItem, Node, Season, Year);
+        (q_WInit(FoodItem, Node)$(ORD(Year)=1) +q_W(FoodItem, Node, Season + (Card(Season)-1), Year-1))$(Ord(Season)=1) + q_Wb(FoodItem, Node, Season, Year) -q_Ws(FoodItem, Node, Season, Year) =g= q_W(FoodItem, Node, Season, Year);
 
 
 
@@ -391,7 +403,7 @@ Equations
 ;
 
 E5_1a(FoodItem, Node, Season, Year).. q_Food(FoodItem, Node, Season, Year) =g= qF_Db(FoodItem, Node, Season, Year);
-E5_1b(FoodItem, Node, Season, Year).. q_Ws(FoodItem, Node, Season, Year) =g= 20;
+E5_1b(FoodItem, Node, Season, Year).. q_Ws(FoodItem, Node, Season, Year) =g= (ORD(Season)-1)*5;
 *E5_1b(FoodItem, Node, Season, Year).. pi_U(FoodItem, Node, Season, Year) =g= DemInt(FoodItem, Node, Season, Year)
 *                                - DemSlope(FoodItem, Node, Season, Year)*q_Ws(FoodItem, Node, Season, Year)
 *                                + sum(FoodItem2, DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year));
