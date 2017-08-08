@@ -4,11 +4,14 @@ $TITLE "INFEWS FOOD MODEL"
 ************************       SETTINGS       **************************
 ************************************************************************
 
-$SETGLOBAL Detailed_Listing "*"
-$SETGLOBAL RunningOnCluster ""
+$SETGLOBAL Detailed_Listing ""
+$SETGLOBAL RunningOnCluster "*"
 
-$SETGLOBAL Scenario_Suffix ""
+$SETGLOBAL Scenario "Base"
 
+$SETGLOBAL DataFile "Data/DataGdx"
+
+$SETGLOBAL Point "Data/MCPRes"
 
 
 %Detailed_Listing%$ontext
@@ -199,7 +202,7 @@ Positive Variables
 *$INCLUDE ./Data/Data.gms
 
 *Call from GDX to here
-$GDXIN Data/DataGdx
+$GDXIN %DataFile%
 * Loading sets
 *$LOAD Year
 $LOAD Season
@@ -234,12 +237,17 @@ BeefYield(Node, Year)
 C_Elec_L1(Node)
 C_Elec_Q1(Node)
 Cap_Elec1(Node)
+Base_Elec_Dem(Node, Season, Year) 
+DemCrossElas(FoodItem, FoodItem2)
 ;
 
 
 $LOAD DemInt
 $LOAD DemSlope
-$LOAD Base_Elec_Dem
+$LOAD DemCrossElas
+$LOAD Base_Elec_Dem=Base_Elec_Dem1
+
+DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year) = DemCrossElas(FoodItem, FoodItem2);
 
 $LOAD pr_Hide1=pr_Hide
 pr_Hide(Node, Season, Year) = pr_Hide1(Node, Year);
@@ -302,7 +310,10 @@ C_cow_tr(NodeFrom, Node, Season, Year) = 4;
 Cap_Road_Tot(NodeFrom, Node) = 1000000;
 
 
-
+* Including Scenario File
+$if exist Data/%Scenario% $include Data/%Scenario%.gms ;
+$if exist Data/%Scenario% Display 'Data/%Scenario%.gms loaded' ;
+$if not exist Data/%Scenario% Display 'Data/%Scenario%.gms does not exist. Running Base Scenario' ;
 
 
 ************************************************************************
@@ -476,7 +487,7 @@ Equations
 E5_1a(FoodItem, Node, Season, Year).. q_Food(FoodItem, Node, Season, Year) =g= qF_Db(FoodItem, Node, Season, Year);
 E5_1b(FoodItem, Node, Season, Year).. pi_U(FoodItem, Node, Season, Year) =g= DemInt(FoodItem, Node, Season, Year)
                                 - DemSlope(FoodItem, Node, Season, Year)*q_Ws(FoodItem, Node, Season, Year)
-                                + sum(FoodItem2, DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year));
+                                + sum(FoodItem2, DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year)*DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year)*DemSlope(FoodItem, Node, Season, Year)*(pi_U(FoodItem2, Node, Season, Year) - pi_U(FoodItem, Node, Season, Year)));
 E5_1c(FoodItem, Node, Season, Year).. q_Wb(FoodItem, Node, Season, Year) =e= qF_Ds(FoodItem, Node, Season, Year);
 
 
@@ -551,8 +562,12 @@ E6_3a.q_Elec
 E6_3b.q_Elec_Trans
 E_ElecDem.q_Elec_Dem
 /;
-*execute_loadpoint 'SWFood_p1';
-execute_loadpoint 'Results/MCPRes_%Scenario_Suffix%';
+
+
+execute_loadpoint '%Point%';
+
+
+
 
 option reslim=10000000;
 Solve Food1y using MCP;
@@ -565,48 +580,55 @@ $ontext
 
 $offtext
 
-*$ontext
+Parameter produce(*, Node, Season, Year);
+produce(FoodItem, Node, Season, Year) = q_Food.L(FoodItem, Node, Season, Year);
+produce("Hide", Node, Season, Year) = q_Hide.L(Node, Season, Year);
+
+
+Parameter Cows(*, Node, Season, Year);
+Cows("Number", Node, Season, Year) = Q_cattle.L("Milk", Node, Season, Year);
+Cows("Slaughter", Node, Season, Year) = Q_cattle_sl.L(Node, Season, Year);
+
+
+Parameter Prices(*, *, Node, Season, Year);
+Prices("Farmer", FoodItem, Node, Season, Year) = pi_Food.L(FoodItem, Node, Season, Year);
+Prices("Disrtibution", FoodItem, Node, Season, Year) = pi_W.L(FoodItem, Node, Season, Year);
+Prices("Store", FoodItem, Node, Season, Year) = pi_U.L(FoodItem, Node, Season, Year);
+Prices("Cow", "Animal", Node, Season, Year) = pi_cow.L(Node, Season, Year);
+Prices("Grid", "Electricity", Node, Season, Year) = d14.L(Node, Season, Year);
+
+Parameter Elec(*, Node, Season, Year);
+Elec("Production", Node, Season, Year) = q_Elec.L(Node, Season, Year);
+Elec("Consumption", Node, Season, Year) = q_Elec_Dem.L(Node, Season, Year);
+Elec("CapProduce", Node, Season, Year) = Cap_Elec(Node, Season, Year);
+Elec("Price", Node, Season, Year) = d14.L(Node, Season, Year);
+
+Parameter Transports(*, NodeFrom, Node, Season, Year);
+Transports(FoodItem, NodeFrom, Node, Season, Year) = qF_Road.L(FoodItem, NodeFrom, Node, Season, Year);
+Transports("Cow", NodeFrom, Node, Season, Year) = Q_cattle_buy.L(NodeFrom, Node, Season, Year);
+Transports("Electricity", NodeFrom, Node, Season, Year) = q_Elec_Trans.L(NodeFrom, Node, Season, Year);
+
+
+* Printing results to lst file
+%RunningOnCluster%$ontext
 Display pi_Food.L, q_Food.L, pi_U.L, q_W.L, qF_Road.L;
-*Display q_W.L,pi_U.L,pi_Food.L;
-*Display qF_Road.L, CF_Road;
-Display Q_cattle_sl.L, Q_cattle.L, Q_cattle_buy.L, Q_cattle_sl.L;
+Display Q_cattle.L, Q_cattle_buy.L, Q_cattle_sl.L;
 Display Area_Crop.L, Area_init;
-Parameter produce(*, Season, Year);
-produce(FoodItem, Season, Year) = sum((Node), q_Food.L(FoodItem, Node, Season, Year));
-produce("Hide",Season, Year) = sum(Node, q_Hide.L(Node, Season, Year));
-option produce:2:1:2;
+Display Prices;
+option produce:2:2:2;
 Display produce;
-
-
-
-Parameter price(FoodItem, Season, Year);
-*price(FoodItem, Season, Year) = sum(Node, q_W.L(FoodItem, Node, Season, Year)*pi_U.L(FoodItem, Node, Season, Year))/sum(Node, q_W.L(FoodItem, Node, Season, Year));
-*Display price;
-
+option Cows:2:2:2;
+Display Cows;
+option Elec:2:2:2;
+Display Elec;
 $ontext
-Parameter FarmerPrice(*, Year);
-Farmerprice("Cow",Year) = sum(Node, pi_cow.L(Node, Year))/card(Node);
-Farmerprice(FoodItem, Year) = sum(Node,  q_Food.L(FoodItem, Node, Year)*pi_Food.L(FoodItem, Node, Year))/sum(Node, q_Food.L(FoodItem, Node, Year));
-Display FarmerPrice;
-Parameter AllFood(Node, Year);
-AllFood(Node, Year) = sum(FoodItem, q_W.L(FoodItem, Node, Year));
-Display AllFood;
-*Display q_W.L, pi_U.L;
-
-Parameter AllFoodProd(Node, Year);
-AllFoodProd(Node, Year) = sum(FoodItem$sameas(FoodItem,"Milk"), q_Food.L(FoodItem, Node, Year));
-Display AllFoodProd;
-
-Display Area_Crop.L, q_Food.L, q_W.L, qF_Road.L;
-Parameter Arable(Node, Year);
-Arable(Node, Year) = sum(Crop,Area_Crop.L(Crop, Node, Year));
-Display Arable ;
-Arable(Node, Year) = Arable(Node, Year)/TotArea(Node);
-Display Arable ;
+$offtext 
 
 
-*Display DemSlope, DemInt;
-*execute_unload 'Food';
 
+* Exporting results
+%RunningOnCluster%execute_unload 'Results/%Scenario%';
+%RunningOnCluster%$ontext
+execute_unload '%Scenario%';
+$ontext
 $offtext
-execute_unload 'Results/MCPRes';
