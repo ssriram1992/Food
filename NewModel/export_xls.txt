@@ -1,2 +1,0 @@
-par=C_prod rng=produce!a2 cdim=0
-var=Area_Crop.L rng=AVar!a2 cdim=0
