@@ -1,0 +1,38 @@
+#! /bin/sh
+#PBS -l nodes=1
+#! name your PBS output log and error files: defaults to job_number.OU .ER
+#PBS -e zerr
+#PBS -o zlog
+
+
+#! unique name for this run (for error file and working directory naming)
+runname="HCropFail"
+
+#! Don't edit for gams files
+program2run="/opt/gams/gams24.1_linux_x64_64_sfx/gams"
+
+#! identify directory where your (for example) data file is
+rundir="/home/ssankar5/Docs/HCropFail"
+
+#! The GAMS file to run
+filetorun="MCP_Food.gms"
+
+#! Name for file to capture any error text
+errfile="err_"$runname".txt"
+
+
+#! write some node information to the PBS output file (for error tracking)
+echo "Running on host `hostname`"
+echo "time is `date`"
+echo "directory is `pwd`"
+echo "This job runs on the following processor:"
+echo "`cat $PBS_NODEFILE`"
+
+
+
+#! Run executable on the allocated node 
+cd $rundir
+$program2run $filetorun > $errfile
+
+
+
