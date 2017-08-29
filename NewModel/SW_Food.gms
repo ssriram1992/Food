@@ -13,6 +13,9 @@ $offtext
 *option savepoint=2;
 option solvelink=5;
 
+
+$SETGLOBAL Scenario "Base"
+
 ************************************************************************
 ***********************       COMMON INIT       ************************
 ************************************************************************
@@ -219,12 +222,17 @@ BeefYield(Node, Year)
 C_Elec_L1(Node)
 C_Elec_Q1(Node)
 Cap_Elec1(Node)
+Base_Elec_Dem(Node, Season, Year)
+DemCrossElas(FoodItem, FoodItem2)
 ;
 
 
 $LOAD DemInt
 $LOAD DemSlope
-$LOAD Base_Elec_Dem
+$LOAD DemCrossElas
+$LOAD Base_Elec_Dem=Base_Elec_Dem1
+
+DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year) = DemCrossElas(FoodItem, FoodItem2);
 
 $LOAD pr_Hide1=pr_Hide
 pr_Hide(Node, Season, Year) = pr_Hide1(Node, Year);
@@ -242,7 +250,7 @@ $LOAD C_Cow1=C_Cow
 C_Cow(Node, Season, Year) = C_Cow1(Node, Year);
 
 $LOAD CowDeath1=CowDeath
-CowDeath(Node, Season, Year) = CowDeath1(Node);
+CowDeath(Node, Season, Year) = CowDeath1(Node)*0 + 0.05;
 
 $LOAD CF_Road_data1=CF_Road_data
 CF_Road(FoodItem, NodeFrom, Node, Season, Year) = CF_Road_data1(NodeFrom, Node);
@@ -276,19 +284,21 @@ Elas(FoodItem, Node, Season, Year) = 0;
 DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year) = 0;
 
 *These are/could be altered in the calibration file
-C_Elec_L(Node, Season, Year) = 1;
-C_Elec_Q(Node, Season, Year) = 1;
-Cap_Elec(Node, Season, Year) = 10000;
 C_Elec_Trans(NodeFrom, Node, Season, Year) = 1;
 Cap_Elec_Trans(NodeFrom, Node, Season, Year) = 10000;
 
 CS_L(FoodItem, Node, Season, Year) = 0.01;
 CS_Q(FoodItem, Node, Season, Year) = 0.01;
-CAP_Store(FoodItem, Node, Season, Year) = 10;
+CAP_Store(FoodItem, Node, Season, Year) = 150;
 
 C_cow_tr(NodeFrom, Node, Season, Year) = 4;
-Cap_Road_Tot(NodeFrom, Node) = sum(FoodItem, Cap_Road(FoodItem, NodeFrom, Node))*0.1;
+Cap_Road_Tot(NodeFrom, Node) = sum(FoodItem, Cap_Road(FoodItem, NodeFrom, Node))*0 + 10000;
 
+
+
+$if exist Data/%Scenario% $include Data/%Scenario%.gms
+$if exist Data/%Scenario% Display 'Data/%Scenario%.gms loaded' ;
+$if not exist Data/%Scenario% Display 'Data/%Scenario%.gms does not exist. Running Base Scenario' ;
 
 
 
@@ -403,7 +413,7 @@ Equations
 ;
 
 E5_1a(FoodItem, Node, Season, Year).. q_Food(FoodItem, Node, Season, Year) =g= qF_Db(FoodItem, Node, Season, Year);
-E5_1b(FoodItem, Node, Season, Year).. q_Ws(FoodItem, Node, Season, Year) =g= (ORD(Season)-1)*5;
+E5_1b(FoodItem, Node, Season, Year).. q_Ws(FoodItem, Node, Season, Year) =g= (ORD(Season)-1)*5$(ORD(Year)>=2 AND (Not sameas(FoodItem, 'Coffee')));
 *E5_1b(FoodItem, Node, Season, Year).. pi_U(FoodItem, Node, Season, Year) =g= DemInt(FoodItem, Node, Season, Year)
 *                                - DemSlope(FoodItem, Node, Season, Year)*q_Ws(FoodItem, Node, Season, Year)
 *                                + sum(FoodItem2, DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year));
@@ -429,7 +439,7 @@ E6_2b(Node, Season, Year).. q_Elec(Node, Season, Year) + sum(NodeFrom$Eline(Node
 E6_2c(NodeFrom, Node, Season, Year)$Eline(NodeFrom, Node).. Cap_Elec_Trans(NodeFrom, Node, Season, Year)
                                 =g=
                 q_Elec_Trans(NodeFrom, Node, Season, Year);
-E_ElecDem(Node, Season, Year).. q_Elec_Dem(Node, Season, Year) =g= Base_Elec_Dem(Node, Season, Year);
+E_ElecDem(Node, Season, Year).. q_Elec_Dem(Node, Season, Year) =g= Base_Elec_Dem(Node, Season, Year)/2;
 
 ************************************************************************
 *************************       OBJECTIVES       ***********************
@@ -468,6 +478,4 @@ Model SWFood / All /;
 
 
 Solve SWFood use NLP min Objective;
-execute_unload 'Results/SWFood';
-
-
+execute_unload 'SW_%Scenario%';

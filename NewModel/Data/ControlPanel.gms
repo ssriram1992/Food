@@ -21,3 +21,6 @@ Scalar Fallow /0/;
 
 *"Cap for distributing individual food items"
 Scalar FoodDistrCap /0/;
+
+*"Including cross terms in demand function"
+Scalar CrossElasOn /0/;

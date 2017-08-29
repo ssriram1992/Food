@@ -7,11 +7,11 @@ $TITLE "INFEWS FOOD MODEL"
 $SETGLOBAL Detailed_Listing ""
 $SETGLOBAL RunningOnCluster "*"
 
-$SETGLOBAL Scenario "Base"
+$SETGLOBAL Scenario "BaseMod2"
 
 $SETGLOBAL DataFile "Data/DataGdx"
 
-$SETGLOBAL Point "Data/MCPRes"
+$SETGLOBAL Point "%Scenario%"
 
 
 %Detailed_Listing%$ontext
@@ -33,7 +33,7 @@ $offtext
 ************************************************************************
 $INCLUDE Data/ControlPanel.gms
 Sets
-    Year "Years" /2015*2030/
+    Year "Years" /2015*2017/
     Month "Months"
     Node "Nodes"
     Season "seasons"
@@ -132,7 +132,7 @@ Positive Variables
     Area_Crop(FoodItem, Node, Season, Year) "area allotted for each Crop"
 *    Area_conv(Node, Year) "area converted to become arable"
 ;
-Positive Variables
+Variables
     pi_Food(FoodItem, Node, Season, Year) "Price of Food item"
 ;
 
@@ -160,7 +160,7 @@ Positive Variables
     q_Wb(FoodItem, Node, Season, Year) "Quantity bought"
 ;
 
-Positive Variables
+Variables
     pi_U(FoodItem, Node, Season, Year)
 ;
 
@@ -173,21 +173,21 @@ Positive Variables
 ;
 
 Variables
-    d1(Node, Year) "Dual to E1_2b"
+    d6(FoodItem, Node, Season, Year) "Dual to E3_2b"
+    d11(FoodItem, Node, Season, Year) "Dual to E4_2b"
 ;
 
 
 *** Dual Variables ***
 Positive Variables
+    d1(Node, Year) "Dual to E1_2b"
     d2(FoodItem, Node, Season, Year) "Dual to E1_2cd"
     d3(Node, Season, Year) "Dual to E2_2b"
     d4(Node, Season, Year) "Dual to E2_2c"
-    d6(FoodItem, Node, Season, Year) "Dual to E3_2b"
     d7(FoodItem, NodeFrom, Node, Season, Year) "Dual to E3_2c"
     d8(FoodItem, Node, Season, Year) "Dual to E4_2a"
     d9(Node, Season, Year) "Dual to E2_2e"
     d10(Node, Season, Year) "Dual to E2_2f"
-    d11(FoodItem, Node, Season, Year) "Dual to E4_2b"
     d13(Node, Season, Year) "Dual to E6_2a"
     d14(Node, Season, Year) "Dual to E6_2b"
     d15(NodeFrom, Node, Season, Year) "Dual to E6_2c"
@@ -237,9 +237,12 @@ BeefYield(Node, Year)
 C_Elec_L1(Node)
 C_Elec_Q1(Node)
 Cap_Elec1(Node)
-Base_Elec_Dem(Node, Season, Year) 
+Consumption(FoodItem, Node, Season, Year)
+Base_Elec_Dem(Node, Season, Year)
 DemCrossElas(FoodItem, FoodItem2)
 ;
+
+$LOAD Consumption
 
 
 $LOAD DemInt
@@ -274,6 +277,7 @@ $LOAD Cap_Road1=Cap_Road
 Cap_Road(FoodItem, NodeFrom, Node) = Cap_Road1(NodeFrom, Node);
 
 $LOAD InitCow
+InitCow(Node) = InitCow(Node)*3;
 $LOAD Herdsize
 $LOAD C_cow_tr1=CowtranYr1
 
@@ -304,14 +308,14 @@ Cap_Elec_Trans(NodeFrom, Node, Season, Year) = 10000;
 
 CS_L(FoodItem, Node, Season, Year) = 0.01;
 CS_Q(FoodItem, Node, Season, Year) = 0.01;
-CAP_Store(FoodItem, Node, Season, Year) = 0;
+CAP_Store(FoodItem, Node, Season, Year) = 2000;
 
 C_cow_tr(NodeFrom, Node, Season, Year) = 4;
 Cap_Road_Tot(NodeFrom, Node) = 1000000;
 
 
 * Including Scenario File
-$if exist Data/%Scenario% $include Data/%Scenario%.gms ;
+$if exist Data/%Scenario% $include Data/%Scenario%.gms
 $if exist Data/%Scenario% Display 'Data/%Scenario%.gms loaded' ;
 $if not exist Data/%Scenario% Display 'Data/%Scenario%.gms does not exist. Running Base Scenario' ;
 
@@ -332,7 +336,7 @@ E1_3b(FoodItem, Node, Season, Year)
 ;
 
 E1_2b(Node, Year).. TotArea(Node)
-                    =e=
+                    =g=
                     sum((Crop, Season),Area_Crop(Crop, Node, Season, Year));
 
 * Yield of livestock also defined
@@ -387,7 +391,7 @@ E2_2c(Node, Season, Year).. -Q_cattle_sl(Node, Season, Year) =g= -sum(FoodItem, 
 
 
 E2_2d(Node, Season, Year).. -sum(FoodItem, Q_cattle(FoodItem, Node, Season, Year))
-    =e=
+    =g=
     -((1+k(Node, Season, Year)-kappa(Node, Season, Year))*(sum(FoodItem, Q_cattle(FoodItem, Node, Season-1, Year)$(ORD(Season)>1) + Q_cattle(FoodItem, Node, Season+(CARD(Season)-1), Year-1)$(ORD(Season)=1)) + InitCow(Node)$(ORD(Year)=1 AND ORD(Season)=1)) -
     Q_cattle_sl(Node, Season+(CARD(Season)-1), Year-1)$(ORD(Season)=1) - Q_cattle_sl(Node, Season-1, Year)$(ORD(Season)>1) +
     sum(NodeFrom, Q_cattle_buy(NodeFrom, Node, Season, Year) - Q_cattle_buy(Node, NodeFrom, Season, Year)));
@@ -395,7 +399,7 @@ E2_2d(Node, Season, Year).. -sum(FoodItem, Q_cattle(FoodItem, Node, Season, Year
 
 
 E2_2e(Node, Season, Year).. Q_cattle_sl(Node, Season, Year) =g= CowDeath(Node, Season, Year)*sum(FoodItem, Q_cattle(FoodItem, Node, Season, Year));
-E2_2f(Node, Season, Year).. sum(FoodItem, Q_cattle(FoodItem, Node, Season, Year)) =g= Herdsize(Node);
+E2_2f(Node, Season, Year).. sum(FoodItem, Q_cattle(FoodItem, Node, Season, Year)) =g= Herdsize(Node)-10;
 
 
 E2_3a(FoodItem, Node, Season, Year)$sameas(FoodItem, "Milk").. df(Year)*C_cow(Node, Season, Year) - d2(FoodItem, Node, Season, Year)*Yield(FoodItem, Node, Season, Year)$sameas(FoodItem, "Milk") -
@@ -429,7 +433,7 @@ Equations
 ;
 
 E3_2b(FoodItem, Node, Season, Year).. QF_Db(FoodItem, Node, Season, Year) + sum(NodeFrom$Road(NodeFrom, Node), qF_Road(FoodItem, NodeFrom, Node, Season, Year))
-                                =g=
+                                =e=
                                 QF_Ds(FoodItem, Node, Season, Year) + sum(NodeFrom$Road(Node, NodeFrom),qF_Road(FoodItem, Node, NodeFrom, Season, Year));
 E3_2c(FoodItem, NodeFrom, Node, Season, Year)$((FoodDistrCap AND Road(NodeFrom, Node))).. -qF_Road(FoodItem, NodeFrom, Node, Season, Year)
                                         =g=
@@ -462,7 +466,7 @@ Equations
 E4_2a(FoodItem, Node, Season, Year).. -q_W(FoodItem, Node, Season, Year) =g= -CAP_Store(FoodItem, Node, Season, Year);
 E4_2b(FoodItem, Node, Season, Year).. q_W(FoodItem, Node, Season-1, Year)$(Ord(Season)>1) +
         (q_WInit(FoodItem, Node)$(ORD(Year)=1) +q_W(FoodItem, Node, Season + (Card(Season)-1), Year-1))$(Ord(Season)=1) + q_Wb(FoodItem, Node, Season, Year)
-        -q_Ws(FoodItem, Node, Season, Year) =g= q_W(FoodItem, Node, Season, Year);
+        -q_Ws(FoodItem, Node, Season, Year) =e= q_W(FoodItem, Node, Season, Year);
 
 E4_3a(FoodItem, Node, Season, Year).. pi_W(FoodItem, Node, Season, Year) - d11(FoodItem, Node, Season, Year)=g= 0;
 E4_3b(FoodItem, Node, Season, Year).. d11(FoodItem, Node, Season, Year) - pi_U(FoodItem, Node, Season, Year)=g= 0;
@@ -484,10 +488,10 @@ Equations
     E5_1c(FoodItem, Node, Season, Year)
 ;
 
-E5_1a(FoodItem, Node, Season, Year).. q_Food(FoodItem, Node, Season, Year) =g= qF_Db(FoodItem, Node, Season, Year);
-E5_1b(FoodItem, Node, Season, Year).. pi_U(FoodItem, Node, Season, Year) =g= DemInt(FoodItem, Node, Season, Year)
+E5_1a(FoodItem, Node, Season, Year).. q_Food(FoodItem, Node, Season, Year) =e= qF_Db(FoodItem, Node, Season, Year);
+E5_1b(FoodItem, Node, Season, Year).. pi_U(FoodItem, Node, Season, Year) =e= DemInt(FoodItem, Node, Season, Year)*10
                                 - DemSlope(FoodItem, Node, Season, Year)*q_Ws(FoodItem, Node, Season, Year)
-                                + sum(FoodItem2, DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year)*DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year)*DemSlope(FoodItem, Node, Season, Year)*(pi_U(FoodItem2, Node, Season, Year) - pi_U(FoodItem, Node, Season, Year)));
+                                + sum(FoodItem2, DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year)*DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year)*DemSlope(FoodItem, Node, Season, Year)*(pi_U(FoodItem2, Node, Season, Year) - pi_U(FoodItem, Node, Season, Year)))$(CrossElasOn);
 E5_1c(FoodItem, Node, Season, Year).. q_Wb(FoodItem, Node, Season, Year) =e= qF_Ds(FoodItem, Node, Season, Year);
 
 
@@ -562,9 +566,9 @@ E6_3a.q_Elec
 E6_3b.q_Elec_Trans
 E_ElecDem.q_Elec_Dem
 /;
+q_Ws.lo(FoodItem, Node, Season, Year) = Consumption(FoodItem, Node, Season, Year);
 
-
-execute_loadpoint '%Point%';
+execute_loadpoint 'Results/BaseMod2';
 
 
 
@@ -592,7 +596,7 @@ Cows("Slaughter", Node, Season, Year) = Q_cattle_sl.L(Node, Season, Year);
 
 Parameter Prices(*, *, Node, Season, Year);
 Prices("Farmer", FoodItem, Node, Season, Year) = pi_Food.L(FoodItem, Node, Season, Year);
-Prices("Disrtibution", FoodItem, Node, Season, Year) = pi_W.L(FoodItem, Node, Season, Year);
+Prices("Distribution", FoodItem, Node, Season, Year) = pi_W.L(FoodItem, Node, Season, Year);
 Prices("Store", FoodItem, Node, Season, Year) = pi_U.L(FoodItem, Node, Season, Year);
 Prices("Cow", "Animal", Node, Season, Year) = pi_cow.L(Node, Season, Year);
 Prices("Grid", "Electricity", Node, Season, Year) = d14.L(Node, Season, Year);
@@ -608,11 +612,21 @@ Transports(FoodItem, NodeFrom, Node, Season, Year) = qF_Road.L(FoodItem, NodeFro
 Transports("Cow", NodeFrom, Node, Season, Year) = Q_cattle_buy.L(NodeFrom, Node, Season, Year);
 Transports("Electricity", NodeFrom, Node, Season, Year) = q_Elec_Trans.L(NodeFrom, Node, Season, Year);
 
+Parameter TranspCost(*, NodeFrom, Node, Season, Year);
+TranspCost("RoadCong", NodeFrom, Node, Season, Year) = d16.L(NodeFrom, Node, Season, Year);
+TranspCost("ElecCong", NodeFrom, Node, Season, Year) = d15.L(NodeFrom, Node, Season, Year);
+TranspCost("Roadfix", NodeFrom, Node, Season, Year) =  sum(FoodItem, qF_Road.L(FoodItem, NodeFrom, Node, Season, Year)*CF_Road(FoodItem, NodeFrom, Node, Season, Year));
+TranspCost("Elecfix", NodeFrom, Node, Season, Year) = q_Elec_Trans.L(NodeFrom, Node, Season, Year)*C_Elec_Trans(NodeFrom, Node, Season, Year);
+
+
+Parameter Storage(*, FoodItem, Node, Season, Year);
+Storage("Purchase", FoodItem, Node, Season, Year) = q_Wb.L(FoodItem, Node, Season, Year);
+Storage("Sold", FoodItem, Node, Season, Year) = q_Ws.L(FoodItem, Node, Season, Year);
+Storage("Stored", FoodItem, Node, Season, Year) = q_W.L(FoodItem, Node, Season, Year);
+
 
 * Printing results to lst file
 %RunningOnCluster%$ontext
-Display pi_Food.L, q_Food.L, pi_U.L, q_W.L, qF_Road.L;
-Display Q_cattle.L, Q_cattle_buy.L, Q_cattle_sl.L;
 Display Area_Crop.L, Area_init;
 Display Prices;
 option produce:2:2:2;
@@ -622,7 +636,7 @@ Display Cows;
 option Elec:2:2:2;
 Display Elec;
 $ontext
-$offtext 
+$offtext
 
 
 
