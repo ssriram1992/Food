@@ -29,6 +29,10 @@ $ontext
 $offtext
 %RunningOnCluster%option solvelink=5;
 
+Sets
+Year "Years" /2015*2017/
+;
+
 $INCLUDE Includes/ControlPanel.gms
 $INCLUDE Includes/PrimalDecl.gms
 $INCLUDE Includes/DualDecl.gms

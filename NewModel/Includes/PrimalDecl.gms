@@ -9,13 +9,10 @@ $offtext
 ***********************       COMMON INIT       ************************
 ************************************************************************
 Sets
-    Year "Years" /2015*2017/
-    Month "Months"
     Node "Nodes"
     Season "seasons"
     FoodItem "FoodItem"
     Crop(FoodItem) "Crops"
-    NonCrop(FoodItem) "Animal products"
     Road(Node, Node) "Transport connectivity"
     Eline(Node, Node) "Electricity Transmission"
 ;
