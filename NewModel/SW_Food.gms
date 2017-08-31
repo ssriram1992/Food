@@ -15,6 +15,11 @@ option solvelink=5;
 
 
 $SETGLOBAL Scenario "Base"
+$SETGLOBAL DataFile "Data/DataGdx"
+
+Sets
+Year "Years" /2015*2017/
+;
 
 $INCLUDE Includes/ControlPanel.gms
 $INCLUDE Includes/PrimalDecl.gms

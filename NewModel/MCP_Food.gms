@@ -12,7 +12,7 @@ $SETGLOBAL Scenario "Scene"
 $SETGLOBAL DataFile "Data/DataGdx"
 
 *$SETGLOBAL Point "%Scenario%"
-$SETGLOBAL Point "Base"
+$SETGLOBAL Point "Scene"
 
 
 %Detailed_Listing%$ontext
@@ -83,7 +83,7 @@ E6_3a.q_Elec
 E6_3b.q_Elec_Trans
 E_ElecDem.q_Elec_Dem
 /;
-q_Ws.lo(FoodItem, Node, Season, Year) = Consumption(FoodItem, Node, Season, Year);
+*q_Ws.lo(FoodItem, Node, Season, Year) = Consumption(FoodItem, Node, Season, Year);
 
 execute_loadpoint '%Point%'; 
 
