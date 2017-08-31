@@ -2,8 +2,6 @@
 ***********************       DATA LOADING       ***********************
 ************************************************************************
 
-* Load from gams data - temporary; switch to GDX using data import
-*$INCLUDE ./Data/Data.gms
 
 *Call from GDX to here
 $GDXIN %DataFile%
