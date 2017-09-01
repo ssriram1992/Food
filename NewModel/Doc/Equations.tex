@@ -44,8 +44,9 @@
 \newcommand{\YldH}			{\mathcal{Y}^{\H}}
 
 \newcommand{\CAP}			{\textcolor{black} {\text{CAP}}}
-\newcommand{\RCap}			{\textcolor{black} {\Q_{yrf}^{\R,\CAP}}}
-\newcommand{\SCap}			{\textcolor{black} {\Q_{ynf}^{\S,\CAP}}}
+\newcommand{\RCap}			{\textcolor{black} {\Q_{yhrf}^{\R,\CAP}}}
+\newcommand{\RCapTot}		{\textcolor{black} {\Q_{yhr}^{\R,\CAP}}}
+\newcommand{\SCap}			{\textcolor{black} {\Q_{yhnf}^{\S,\CAP}}}
 
 \newcommand{\QFf}			{\textcolor{blue} {\Q^{\F}_{yhnf}}}
 \newcommand{\QH}			{\textcolor{blue} {\Q^{\H}_{yhn}}}
@@ -62,7 +63,7 @@
 
 
 \newcommand{\Qcow}[1][yh]		{\textcolor{blue} {\cow_{#1n}}}
-\newcommand{\Qcowsl}			{\textcolor{blue}{\cow_{yhn}^{\text{slg}}}}
+\newcommand{\Qcowsl}[1][yh]		{\textcolor{blue}{\cow_{#1n}^{\text{slg}}}}
 \newcommand{\Qcowbuy}[1][in]	{\textcolor{blue} {\cow_{yh#1}^{\text{buy}}}}
 \newcommand{\picow}[1][yhn]		{\textcolor{dgreen}{\pr^{\text{cow}}_{#1}}}
 \newcommand{\CowDeath}			{{\kappa^{\text{death}}_{yhn}}}
@@ -111,7 +112,7 @@
 \numberwithin{equation}			{section}
 
 
-\newcommand{\da}			{\textcolor{teal} {\delta^1_{yhn}}}
+\newcommand{\da}			{\textcolor{teal} {\delta^1_{yn}}}
 \newcommand{\db}			{\textcolor{teal} {\delta^2_{yhnf}}}
 \newcommand{\dc}			{\textcolor{teal} {\delta^3_{yhn}}}
 \newcommand{\dd}			{\textcolor{teal} {\delta^4_{yhn}}}
@@ -128,6 +129,7 @@
 \newcommand{\dq}			{\textcolor{teal} {\delta^{15}_{yhr}}}
 \newcommand{\dr}			{\textcolor{teal} {\delta^{13}_{yhn}}}
 \newcommand{\ds}[1][n]		{\textcolor{teal} {\delta^{14}_{yh#1}}}
+\newcommand{\dt}			{\textcolor{teal} {\delta^{16}_{yhr}}}
 
 
 % Settings Information
@@ -144,7 +146,7 @@
 %% Heading information
 \title{\mytitle}
 \date{}
-\author{Sriram Sankaranarayanan\and Ying Zhang\and Sauleh Siddiqui}
+\author{}
 
 \begin{document}
 \maketitle
@@ -178,9 +180,9 @@ such that for $f\in \C$
 \intertext{where $\OFal$ is a number between 0 and 1 indicating the fraction of land that gets fallowed. $\OFalDur$ is the duration of fallow cycle.}
 \intertext{Crop rotation constraint (total area put into rotation using crop $f'$ after a period should be smaller than the total area of $f'$ as some $f'$ is not planted for rotation):}
 \OCr\sum_{y'=y}^{y+\OCrDur}\sum_{h\in\Se}\AF[y'snf] \quad &\leq \quad \OCrDur\sum_{y'=y}^{y+\OCrDur}\sum_{h\in\Se}\AF[y'snf']&(\dl)
-\intertext{where $f$ is the primary crop rotated with $f'$.}
 \end{align} 
 \end{subequations}
+where $f$ is the primary crop rotated with $f'$.
 \subsection{KKT Conditions} % (fold)
 These KKT conditions for this problem hold for $f\in \C$
 \begin{subequations}
@@ -225,7 +227,7 @@ such that for $f\not\in \C$
 \intertext{Number of Bovine slaughtered should not exceed the number owned:}
 \Qcowsl \quad &\leq \quad \Qcow&(\dd)\\
 \intertext{Quantity balance of Bovine:}
-\Qcow \quad &\leq \quad (1+k-\kappa)\Qcow[(y-1)h] - \Qcowsl + \sum_{i\in\N}\left( \Qcowbuy - 
+\Qcow \quad &\leq \quad (1+k-\kappa)\Qcow[(y-1)h] - \Qcowsl[(y-1)h] + \sum_{i\in\N}\left( \Qcowbuy - 
 \Qcowbuy[ni] \right) &(\picow[yhn])\\
 \intertext{where $k$ is the birth rate; $\kappa$ is the death rate.}
 \intertext{Number of Bovine should not be fewer than the natural deaths:}
@@ -248,7 +250,7 @@ such that for $f\not\in \C$
 \quad &\geq \quad 0&(\Qcowbuy)\\
 \db-\DiscFact\piF  \quad &\geq \quad 0 &(\QFf) \nonumber\\
 \dc-\DiscFact\piH\quad &\geq \quad 0&(\QH)\\
-\dd-\dj-\db\Yld - \dc\YldH +\picow \quad &\geq \quad 0 \qquad (f=\text{Beef})&(\Qcowsl)
+\dd-\di-\db\Yld - \dc\YldH +\picow[(y+1)hn] \quad &\geq \quad 0 \qquad (f=\text{Beef})&(\Qcowsl)
 \end{align} 
 \end{subequations}
 % \pagebreak
@@ -277,16 +279,19 @@ such that
 \QDbf,\, \QDr,\, \QDsf \quad &\geq \quad 0\\
 \intertext{The quantity purchased at one node $n$ plus the quantity being distributed into $n$ should be greater than total quantity sold and shipped out at $n$:}
 \QDbf+ \sum_{r\in \R_{\text{in}}} \QDr \quad &\geq \quad \QDsf + \sum_{r\in \R_{\text{out}}} \QDr&(\df)\\
-\intertext{Road capacity constraint:}
+\intertext{Road capacity constraint per food item:}
 \QDr \quad &\leq \quad \RCap&(\dg)
+\intertext{Road capacity constraint:}
+\sum_{f}\QDr \quad &\leq \quad \RCapTot&(\dt)
 \end{align} 
 \end{subequations}
+Note that equation (3.2c) will be active depending upon the \verb+FoodDistrCap+ setting.
 \subsection{KKT Conditions} 
 Representing $s_r$ and $d_r$ as the source and destination nodes of the transport system $r\in\R$, we have the following KKT conditions.
 \begin{subequations}
 \begin{align}
 \DiscFact \piF -\df \quad &\geq \quad 0 &(\QDbf)  \\
-\dg+\DiscFact\CsR + \df[s_r] - \df[d_r]  \quad &\geq \quad 0&(\QDr) 	\\
+\dg+\dt+\DiscFact\CsR + \df[s_r] - \df[d_r]  \quad &\geq \quad 0&(\QDr) 	\\
 \df-\DiscFact \piS \quad &\geq \quad 0&(\QDsf)
 \end{align}
 \end{subequations}
@@ -369,7 +374,7 @@ such that
 \subsection{KKT conditions}
 \begin{subequations}
 \begin{align}
-\CsEl + \CsEq\QE + \dr + \ds \quad&\geq\quad 0 &(\QE)\\
+\CsEl + \CsEq\QE + \dr - \ds \quad&\geq\quad 0 &(\QE)\\
 \intertext{If $n$ and $n'$ correspond to the nodes where the transmission line $r$ begin and end respectively, then}
 \CsER + \dq + \ds[n]-\ds[n']  \quad&\geq\quad 0 &(\QEr)
 \end{align}

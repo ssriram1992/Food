@@ -1,0 +1,11 @@
+var=Area_Crop.L rng=Area!a2 cdim=0
+par=produce rng=Produce!a2 cdim=0
+par=Cows rng=Cow!a2 cdim=0
+par=Prices rng=Prices!a2 cdim=0
+par=Transports rng=Transport!a2 cdim=0
+par=Elec rng=Electricity!a2 cdim=0
+set=Year rng=Index!A3 cdim=0
+set=Season rng=Index!B3 cdim=0
+set=FoodItem rng=Index!C3 cdim=0
+set=Node rng=Index!D3 cdim=0
+par=Storage rng=Storage!a2 cdim=0
