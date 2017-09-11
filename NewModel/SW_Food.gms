@@ -23,6 +23,7 @@ Year "Years" /2015*2017/
 
 $INCLUDE Includes/ControlPanel.gms
 $INCLUDE Includes/PrimalDecl.gms
+$INCLUDE Includes/DualDecl.gms
 $INCLUDE Includes/DataLoad.gms
 
 $if exist Data/%Scenario% $include Data/%Scenario%.gms
@@ -65,7 +66,9 @@ ObjectiveEq.. Objective =e= sum((Year, Season, Node),
 
 
 Model SWFood / All /;
+option optcr=0;
+option nlp=conopt;
 
 
 Solve SWFood use NLP min Objective;
-execute_unload 'SW_%Scenario%';
+execute_unload 'Results/SW_%Scenario%';

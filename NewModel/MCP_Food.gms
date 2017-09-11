@@ -7,12 +7,13 @@ $TITLE "INFEWS FOOD MODEL"
 $SETGLOBAL Detailed_Listing ""
 $SETGLOBAL RunningOnCluster "*"
 
-$SETGLOBAL Scenario "Scene"
+$SETGLOBAL Scenario "Base"
 
 $SETGLOBAL DataFile "Data/DataGdx"
 
-*$SETGLOBAL Point "%Scenario%"
-$SETGLOBAL Point "Scene"
+$SETGLOBAL UseInitialPoint "*"
+$SETGLOBAL Point "Results/%Scenario%"
+
 
 
 %Detailed_Listing%$ontext
@@ -27,7 +28,7 @@ Option limrow = 0;
 Option limcol = 0;
 $ontext
 $offtext
-%RunningOnCluster%option solvelink=5;
+option solvelink=5;
 
 Sets
 Year "Years" /2015*2017/
@@ -85,10 +86,10 @@ E_ElecDem.q_Elec_Dem
 /;
 *q_Ws.lo(FoodItem, Node, Season, Year) = Consumption(FoodItem, Node, Season, Year);
 
-execute_loadpoint '%Point%'; 
-
-
-
+%UseInitialPoint%$ontext
+execute_loadpoint '%Point%';
+$ontext
+$offtext
 
 option reslim=10000000;
 Solve Food1y using MCP;
@@ -96,8 +97,5 @@ Solve Food1y using MCP;
 $INCLUDE Includes/PostProcess.gms
 
 * Exporting results
-%RunningOnCluster%execute_unload 'Results/%Scenario%';
-%RunningOnCluster%$ontext
-execute_unload '%Scenario%';
-$ontext
-$offtext
+execute_unload 'Results/%Scenario%';
+
