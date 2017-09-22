@@ -100,37 +100,37 @@ Parameters
 
 *** Crop Producer ***
 Positive Variables
-    q_Food(FoodItem, Node, Season, Year) "quantity of Food produced"
-    Area_Crop(FoodItem, Node, Season, Year) "area allotted for each Crop"
+    Q_FOOD(FoodItem, Node, Season, Year) "quantity of Food produced"
+    AREA_CROP(FoodItem, Node, Season, Year) "area allotted for each Crop"
 *    Area_conv(Node, Year) "area converted to become arable"
 ;
 
 *** Livestock ***
 Positive Variables
-    q_Hide(Node, Season, Year) "Quantity of Hide produced"
-    Q_cattle_buy(NodeFrom, Node, Season, Year) "Number of cattle bought from a certain node"
-    Q_cattle(FoodItem, Node, Season, Year) "Number of cattle in the herd"
-    Q_cattle_sl(Node, Season, Year) "Number of cattle slaughtered"
+    Q_HIDE(Node, Season, Year) "Quantity of Hide produced"
+    Q_CATTLE_BUY(NodeFrom, Node, Season, Year) "Number of cattle bought from a certain node"
+    Q_CATTLE(FoodItem, Node, Season, Year) "Number of cattle in the herd"
+    Q_CATTLE_SL(Node, Season, Year) "Number of cattle slaughtered"
 ;
 
 *** Distributors ***
 Positive Variables
-    qF_Ds(FoodItem, Node, Season, Year) "Quantity of Food sold by distributor"
-    qF_Db(FoodItem, Node, Season, Year) "Quantity of Food bought by distributor"
-    qF_Road(FoodItem, Node, NodeFrom, Season, Year) "Quantity of Food transported"
+    QF_DS(FoodItem, Node, Season, Year) "Quantity of Food sold by distributor"
+    QF_DB(FoodItem, Node, Season, Year) "Quantity of Food bought by distributor"
+    QF_ROAD(FoodItem, Node, NodeFrom, Season, Year) "Quantity of Food transported"
 ;
 
 *** Storage ***
 Positive Variables
-    q_W(FoodItem, Node, Season, Year) "Total quantity stored"
-    q_Ws(FoodItem, Node, Season, Year) "Quantity sold"
-    q_Wb(FoodItem, Node, Season, Year) "Quantity bought"
+    Q_W(FoodItem, Node, Season, Year) "Total quantity stored"
+    Q_WS(FoodItem, Node, Season, Year) "Quantity sold"
+    Q_WB(FoodItem, Node, Season, Year) "Quantity bought"
 ;
 
 *** Electricity ***
 Positive Variables
-    q_Elec(Node, Season, Year)
-    q_Elec_Trans(NodeFrom, Node, Season, Year)
-    q_Elec_Dem(Node, Season, Year)
+    Q_ELEC(Node, Season, Year)
+    Q_ELEC_TRANS(NodeFrom, Node, Season, Year)
+    Q_ELEC_DEM(Node, Season, Year)
 ;
 
