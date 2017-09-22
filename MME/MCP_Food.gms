@@ -4,10 +4,11 @@ $TITLE "INFEWS FOOD MODEL"
 ************************       SETTINGS       **************************
 ************************************************************************
 
-$SETGLOBAL Detailed_Listing ""
+$SETGLOBAL Detailed_Listing "*"
 $SETGLOBAL RunningOnCluster "*"
 
 $SETGLOBAL Scenario "Base"
+$SETGLOBAL FutureKnowledge "Current"
 
 $SETGLOBAL DataFile "Data/DataGdx"
 
@@ -31,7 +32,7 @@ $offtext
 option solvelink=5;
 
 Sets
-Year "Years" /2015*2017/
+Year "Years" /2019*2022/
 ;
 
 $INCLUDE Includes/ControlPanel.gms
@@ -86,15 +87,34 @@ E_ElecDem.q_Elec_Dem
 /;
 *q_Ws.lo(FoodItem, Node, Season, Year) = Consumption(FoodItem, Node, Season, Year);
 
-%UseInitialPoint%$ontext
-execute_loadpoint '%Point%';
+
+
+option reslim=10000000;
+Loop(Year2Loop$(ORD(Year2Loop)+card(Period)-1<=Card(Year2Loop)),
+
+$INCLUDE Includes/RollingParam.gms
+$INCLUDE Includes/RollRules/%FutureKnowledge%
+
+        Solve Food1y using MCP;
+
+$INCLUDE Includes/ContinueRoll.gms
+$INCLUDE Includes/PostProcess.gms
+);
+
+
+
+%RunningOnCluster%$ontext
+Display AREA_CROP.L, Area_init;
+Display Prices;
+option produce:2:2:2;
+Display produce;
+option Cows:2:2:2;
+Display Cows;
+option Elec:2:2:2;
+Display Elec;
 $ontext
 $offtext
 
-option reslim=10000000;
-Solve Food1y using MCP;
-
-$INCLUDE Includes/PostProcess.gms
 
 * Exporting results
 execute_unload 'Results/%Scenario%';

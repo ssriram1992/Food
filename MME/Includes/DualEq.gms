@@ -3,22 +3,22 @@
 ************************************************************************
 
 Equations
-E1_3a(FoodItem, Node, Season, Year)
-E1_3b(FoodItem, Node, Season, Year)
+E1_3a(FoodItem, Node, Season, Period)
+E1_3b(FoodItem, Node, Season, Period)
 ;
 
 
-E1_3a(FoodItem, Node, Season, Year).. D2(FoodItem, Node, Season, Year) - df(Year)*PI_FOOD(FoodItem, Node, Season, Year)
+E1_3a(FoodItem, Node, Season, Period).. D2(FoodItem, Node, Season, Period) - df_roll(Period)*PI_FOOD(FoodItem, Node, Season, Period)
                             =g=
                             0;
 * Fallow and crop rotation costraints not yet added
-E1_3b(FoodItem, Node, Season, Year)$Crop(FoodItem).. D1(Node, Year)
-        -D2(FoodItem, Node, Season, Year)*aFAO(FoodItem, Node, Season, Year)*CYF(FoodItem, Node, Season, Year)*(1+(rPower(PI_FOOD(FoodItem, Node, Season, Year),Elas(FoodItem, Node, Season, Year))-1)$(Elas(FoodItem, Node, Season, Year)))
-        + df(Year)*(
-            C_prod(FoodItem, Node, Season, Year) +
-*            C_convert(Node, Year) - C_convert(Node, Year+1) +
-            C_chg(Node, Year)*(AREA_CROP(FoodItem, Node, Season, Year) - AREA_CROP(FoodItem, Node, Season, Year-1) - Area_init(Node, Season,  FoodItem)$(Ord(Year)=1))-
-            C_chg(Node, Year+1)*(AREA_CROP(FoodItem, Node, Season, Year+1) - AREA_CROP(FoodItem, Node, Season, Year))
+E1_3b(FoodItem, Node, Season, Period)$Crop(FoodItem).. D1(Node, Period)
+        -D2(FoodItem, Node, Season, Period)*aFAO_roll(FoodItem, Node, Season, Period)*Cyf_roll(FoodItem, Node, Season, Period)*(1+(rPower(PI_FOOD(FoodItem, Node, Season, Period),Elas_roll(FoodItem, Node, Season, Period))-1)$(Elas_roll(FoodItem, Node, Season, Period)))
+        + df_roll(Period)*(
+            C_prod_roll(FoodItem, Node, Season, Period) +
+*            C_convert(Node, Period) - C_convert(Node, Period+1) +
+            C_chg_roll(Node, Period)*(AREA_CROP(FoodItem, Node, Season, Period) - AREA_CROP(FoodItem, Node, Season, Period-1) - Area_init(Node, Season,  FoodItem)$(Ord(Period)=1))-
+            C_chg_roll(Node, Period+1)*(AREA_CROP(FoodItem, Node, Season, Period+1) - AREA_CROP(FoodItem, Node, Season, Period))
             )
                     =g=
             0;
@@ -31,27 +31,27 @@ E1_3b(FoodItem, Node, Season, Year)$Crop(FoodItem).. D1(Node, Year)
 * Quantity, price of milk and Beef are defined as (q/pi)_Food. Similarly for yield.
 
 Equations
-    E2_3a(FoodItem, Node, Season, Year)
-    E2_3b(NodeFrom, Node, Season, Year)
-    E2_3c(Node, Season, Year)
-    E2_3d(Node, Season, Year)
+    E2_3a(FoodItem, Node, Season, Period)
+    E2_3b(NodeFrom, Node, Season, Period)
+    E2_3c(Node, Season, Period)
+    E2_3d(Node, Season, Period)
 ;
 
 
-E2_3a(FoodItem, Node, Season, Year)$sameas(FoodItem, "Milk").. df(Year)*C_cow(Node, Season, Year) - D2(FoodItem, Node, Season, Year)*Yield(FoodItem, Node, Season, Year)$sameas(FoodItem, "Milk") -
-    D4(Node, Season, Year)+ PI_COW(Node, Season, Year) - (1+k(Node, Season, Year)-kappa(Node, Season, Year))*(PI_COW(Node, Season+1, Year)$(ORD(Season)<CARD(Season)) + PI_COW(Node, Season-(CARD(Season)-1), Year+1)$(ORD(Season)=CARD(Season)))
-    +CowDeath(Node, Season, Year)*D9(Node, Season, Year) - D10(Node, Season, Year)
+E2_3a(FoodItem, Node, Season, Period)$sameas(FoodItem, "Milk").. df_roll(Period)*C_cow_roll(Node, Season, Period) - D2(FoodItem, Node, Season, Period)*Yield_roll(FoodItem, Node, Season, Period)$sameas(FoodItem, "Milk") -
+    D4(Node, Season, Period)+ PI_COW(Node, Season, Period) - (1+k_roll(Node, Season, Period)-kappa_roll(Node, Season, Period))*(PI_COW(Node, Season+1, Period)$(ORD(Season)<CARD(Season)) + PI_COW(Node, Season-(CARD(Season)-1), Period+1)$(ORD(Season)=CARD(Season)))
+    +CowDeath_roll(Node, Season, Period)*D9(Node, Season, Period) - D10(Node, Season, Period)
     =g=
     0;
-Q_CATTLE.fx(FoodItem, Node, Season, Year)$(NOT(sameas(FoodItem,"Milk"))) = 0;
-E2_3b(NodeFrom, Node, Season, Year)$(NOT(sameas(Node, NodeFrom)))..   df(Year)*(C_cow_tr(NodeFrom, Node, Season, Year)+
-    PI_COW(NodeFrom, Season, Year) - PI_COW(Node, Season, Year))+
-    (PI_COW(NodeFrom, Season, Year)-PI_COW(Node, Season, Year))
+Q_CATTLE.fx(FoodItem, Node, Season, Period)$(NOT(sameas(FoodItem,"Milk"))) = 0;
+E2_3b(NodeFrom, Node, Season, Period)$(NOT(sameas(Node, NodeFrom)))..   df_roll(Period)*(C_cow_tr_roll(NodeFrom, Node, Season, Period)+
+    PI_COW(NodeFrom, Season, Period) - PI_COW(Node, Season, Period))+
+    (PI_COW(NodeFrom, Season, Period)-PI_COW(Node, Season, Period))
     =g=
     0;
-E2_3c(Node, Season, Year).. D3(Node, Season, Year)-df(Year)*pr_Hide(Node, Season, Year) =g= 0;
-E2_3d(Node, Season, Year).. D4(Node, Season, Year) - sum(FoodItem$sameas(FoodItem, "beef"), D2(FoodItem, Node, Season, Year)*Yield(FoodItem, Node, Season, Year))-
-        D3(Node, Season, Year)*Yld_H(Node, Season, Year) + PI_COW(Node, Season+1, Year)$(ORD(Season)<CARD(Season)) + PI_COW(Node, Season-(CARD(Season)-1), Year+1)$(ORD(Season)=CARD(Season))-D9(Node, Season, Year)
+E2_3c(Node, Season, Period).. D3(Node, Season, Period)-df_roll(Period)*pr_Hide_roll(Node, Season, Period) =g= 0;
+E2_3d(Node, Season, Period).. D4(Node, Season, Period) - sum(FoodItem$sameas(FoodItem, "beef"), D2(FoodItem, Node, Season, Period)*Yield_roll(FoodItem, Node, Season, Period))-
+        D3(Node, Season, Period)*Yld_H_roll(Node, Season, Period) + PI_COW(Node, Season+1, Period)$(ORD(Season)<CARD(Season)) + PI_COW(Node, Season-(CARD(Season)-1), Period+1)$(ORD(Season)=CARD(Season))-D9(Node, Season, Period)
                         =g=
                         0;
 
@@ -61,20 +61,20 @@ E2_3d(Node, Season, Year).. D4(Node, Season, Year) - sum(FoodItem$sameas(FoodIte
 ************************************************************************
 
 Equations
-    E3_3a(FoodItem, Node, Season, Year)
-    E3_3b(FoodItem, NodeFrom, Node, Season, Year)
-    E3_3c(FoodItem, Node, Season, Year)
+    E3_3a(FoodItem, Node, Season, Period)
+    E3_3b(FoodItem, NodeFrom, Node, Season, Period)
+    E3_3c(FoodItem, Node, Season, Period)
 ;
 
-E3_3a(FoodItem, Node, Season, Year).. df(Year)*PI_FOOD(FoodItem, Node, Season, Year)
+E3_3a(FoodItem, Node, Season, Period).. df_roll(Period)*PI_FOOD(FoodItem, Node, Season, Period)
                                 =g=
-                                D6(FoodItem, Node, Season, Year);
-E3_3b(FoodItem, NodeFrom, Node, Season, Year)$Road(NodeFrom, Node).. D7(FoodItem, NodeFrom, Node, Season, Year)$(FoodDistrCap) + D16(NodeFrom, Node, Season, Year)  + df(Year)*CF_Road(FoodItem, NodeFrom, Node, Season, Year)
+                                D6(FoodItem, Node, Season, Period);
+E3_3b(FoodItem, NodeFrom, Node, Season, Period)$Road(NodeFrom, Node).. D7(FoodItem, NodeFrom, Node, Season, Period)$(FoodDistrCap) + D16(NodeFrom, Node, Season, Period)  + df_roll(Period)*CF_Road_roll(FoodItem, NodeFrom, Node, Season, Period)
                                         =g=
-                                        D6(FoodItem, Node, Season, Year) - D6(FoodItem, NodeFrom, Season, Year) ;
-E3_3c(FoodItem, Node, Season, Year).. D6(FoodItem, Node, Season, Year)
+                                        D6(FoodItem, Node, Season, Period) - D6(FoodItem, NodeFrom, Season, Period) ;
+E3_3c(FoodItem, Node, Season, Period).. D6(FoodItem, Node, Season, Period)
                                 =g=
-                                df(Year)*PI_W(FoodItem, Node, Season, Year);
+                                df_roll(Period)*PI_W(FoodItem, Node, Season, Period);
 
 
 
@@ -82,20 +82,20 @@ E3_3c(FoodItem, Node, Season, Year).. D6(FoodItem, Node, Season, Year)
 ***********************       STORE/RETAIL       ***********************
 ************************************************************************
 Equations
-    E4_3a(FoodItem, Node, Season, Year)
-    E4_3b(FoodItem, Node, Season, Year)
-    E4_3c(FoodItem, Node, Season, Year)
+    E4_3a(FoodItem, Node, Season, Period)
+    E4_3b(FoodItem, Node, Season, Period)
+    E4_3c(FoodItem, Node, Season, Period)
 ;
 
 
-E4_3a(FoodItem, Node, Season, Year).. PI_W(FoodItem, Node, Season, Year) - D11(FoodItem, Node, Season, Year)=g= 0;
-E4_3b(FoodItem, Node, Season, Year).. D11(FoodItem, Node, Season, Year) - PI_U(FoodItem, Node, Season, Year)=g= 0;
+E4_3a(FoodItem, Node, Season, Period).. PI_W(FoodItem, Node, Season, Period) - D11(FoodItem, Node, Season, Period)=g= 0;
+E4_3b(FoodItem, Node, Season, Period).. D11(FoodItem, Node, Season, Period) - PI_U(FoodItem, Node, Season, Period)=g= 0;
 
-E4_3c(FoodItem, Node, Season, Year).. D8(FoodItem, Node, Season, Year)  + D11(FoodItem, Node, Season, Year)
-            + CS_Q(FoodItem, Node, Season, Year)*Q_W(FoodItem, Node, Season, Year)
-            + CS_L(FoodItem, Node, Season, Year) + D8(FoodItem, Node, Season, Year)
-            - D11(FoodItem, Node, Season-(Card(Season)-1), Year+1)$(Ord(Season)=Card(Season))
-            - D11(FoodItem, Node, Season+1, Year)$(Ord(Season)<>Card(Season))
+E4_3c(FoodItem, Node, Season, Period).. D8(FoodItem, Node, Season, Period)  + D11(FoodItem, Node, Season, Period)
+            + CS_Q_roll(FoodItem, Node, Season, Period)*Q_W(FoodItem, Node, Season, Period)
+            + CS_L_roll(FoodItem, Node, Season, Period) + D8(FoodItem, Node, Season, Period)
+            - D11(FoodItem, Node, Season-(Card(Season)-1), Period+1)$(Ord(Season)=Card(Season))
+            - D11(FoodItem, Node, Season+1, Period)$(Ord(Season)<>Card(Season))
             =g= 0;
 
 
@@ -104,12 +104,12 @@ E4_3c(FoodItem, Node, Season, Year).. D8(FoodItem, Node, Season, Year)  + D11(Fo
 ************************       ELECTRICITY       ***********************
 ************************************************************************
 Equations
-    E6_3a(Node, Season, Year)
-    E6_3b(NodeFrom, Node, Season, Year)
+    E6_3a(Node, Season, Period)
+    E6_3b(NodeFrom, Node, Season, Period)
 ;
 
-E6_3a(Node, Season, Year).. C_Elec_L(Node, Season, Year)+C_Elec_Q(Node, Season, Year)*Q_ELEC(Node, Season, Year)+
-                        D13(Node, Season, Year) - D14(Node, Season, Year) =g= 0;
-E6_3b(NodeFrom, Node, Season, Year)$Eline(NodeFrom, Node).. C_Elec_Trans(NodeFrom, Node, Season, Year)  +
-                D15(NodeFrom, Node, Season, Year) + D14(NodeFrom, Season, Year) - D14(Node, Season, Year) =g= 0;
+E6_3a(Node, Season, Period).. C_Elec_L_roll(Node, Season, Period)+C_Elec_Q_roll(Node, Season, Period)*Q_ELEC(Node, Season, Period)+
+                        D13(Node, Season, Period) - D14(Node, Season, Period) =g= 0;
+E6_3b(NodeFrom, Node, Season, Period)$Eline(NodeFrom, Node).. C_Elec_Trans_roll(NodeFrom, Node, Season, Period)  +
+                D15(NodeFrom, Node, Season, Period) + D14(NodeFrom, Season, Period) - D14(Node, Season, Period) =g= 0;
 

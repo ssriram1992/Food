@@ -16,7 +16,7 @@ $LOAD Eline
 $LOAD df=DiscFact
 $LOAD C_convert
 $LOAD C_chg
-$LOAD CYF
+$LOAD Cyf
 $LOAD aFAO
 $LOAD C_prod
 $LOAD TotArea
