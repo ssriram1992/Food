@@ -15,6 +15,7 @@ Sets
     Crop(FoodItem) "Crops"
     Road(Node, Node) "Transport connectivity"
     Eline(Node, Node) "Electricity Transmission"
+    Adapt "Adaptation regions"
 ;
 Alias(Year, Year2Loop);
 
@@ -24,6 +25,7 @@ Scalar Infinity /10000/;
 
 
 alias(Node, NodeFrom);
+Alias(Adapt, AdaptFrom)
 alias(FoodItem, FoodItem2);
 *Road(NodeFrom, Node)$(Ord(NodeFrom)<Ord(Node))=yes;
 *Eline(NodeFrom, Node)$(Ord(NodeFrom)<Ord(Node))=yes;
@@ -36,64 +38,66 @@ alias(FoodItem, FoodItem2);
 Parameter
     df(Year) "Discount factor"
     df_roll(Period) "Discount factor"
+    Adapt2Node(Adapt, Node) "Ratios for converting data in adaptation zone to administrative regions"
+    Node2Adapt(Node, Adapt) "Ratios for converting data in administrative region to adaptation regions"
 ;
 
 *** Crop Producer ***
 Parameters
-    C_prod(FoodItem, Node, Season, Year) "Cost of producing a Crop per unit area"
-    C_prod_roll(FoodItem, Node, Season, Period) "Cost of producing a Crop per unit area"
+    C_prod(FoodItem, Adapt, Season, Year) "Cost of producing a Crop per unit area"
+    C_prod_roll(FoodItem, Adapt, Season, Period) "Cost of producing a Crop per unit area"
 
-    C_convert(Node, Year) "Cost of converting land to make it arable"
-    C_convert_roll(Node, Period) "Cost of converting land to make it arable"
+    C_convert(Adapt, Year) "Cost of converting land to make it arable"
+    C_convert_roll(Adapt, Period) "Cost of converting land to make it arable"
 
-    C_chg(Node, Year) "Penalty to change cropping pattern"
-    C_chg_roll(Node, Period) "Penalty to change cropping pattern"
+    C_chg(Adapt, Year) "Penalty to change cropping pattern"
+    C_chg_roll(Adapt, Period) "Penalty to change cropping pattern"
 
-    Cyf(FoodItem, Node, Season, Year) "CYF in FAO model"
-    Cyf_roll(FoodItem, Node, Season, Period) "CYF in FAO model"
+    Cyf(FoodItem, Adapt, Season, Year) "CYF in FAO model"
+    Cyf_roll(FoodItem, Adapt, Season, Period) "CYF in FAO model"
 
-    aFAO(FoodItem, Node, Season, Year) "a in FAOs yield equation"
-    aFAO_roll(FoodItem, Node, Season, Period) "a in FAOs yield equation"
+    aFAO(FoodItem, Adapt, Season, Year) "a in FAOs yield equation"
+    aFAO_roll(FoodItem, Adapt, Season, Period) "a in FAOs yield equation"
 
-    Elas(FoodItem, Node, Season, Year) "Elasticity"
-    Elas_roll(FoodItem, Node, Season, Period) "Elasticity"
+    Elas(FoodItem, Adapt, Season, Year) "Elasticity"
+    Elas_roll(FoodItem, Adapt, Season, Period) "Elasticity"
 
-    Yield(FoodItem, Node, Season, Year) "Yield"
-    Yield_roll(FoodItem, Node, Season, Period) "Yield"
+    TotArea(Adapt) "Total Area available in the node"
 
-    TotArea(Node) "Total Area available in the node"
-
-    Area_init(Node, Season,  FoodItem) "Initial Area"
+    Area_init(Adapt, Season,  FoodItem) "Initial Area"
 ;
 
 *** Livestock ***
 Parameters
-    pr_Hide(Node, Season, Year) "Price of Hide"
-    pr_Hide_roll(Node, Season, Period) "Price of Hide"
+    pr_Hide(Adapt, Season, Year) "Price of Hide"
+    pr_Hide_roll(Adapt, Season, Period) "Price of Hide"
 
-    Yld_H(Node, Season, Year) "Hide yield per unit slaughtered cattle"
-    Yld_H_roll(Node, Season, Period) "Hide yield per unit slaughtered cattle"
+    Yield(FoodItem, Adapt, Season, Year) "Yield"
+    Yield_roll(FoodItem, Adapt, Season, Period) "Yield"
 
-    k(Node, Season, Year) "Cattle birth rate"
-    k_roll(Node, Season, Period) "Cattle birth rate"
+    Yld_H(Adapt, Season, Year) "Hide yield per unit slaughtered cattle"
+    Yld_H_roll(Adapt, Season, Period) "Hide yield per unit slaughtered cattle"
 
-    kappa(Node, Season, Year) "cattle death rate"
-    kappa_roll(Node, Season, Period) "cattle death rate"
+    k(Adapt, Season, Year) "Cattle birth rate"
+    k_roll(Adapt, Season, Period) "Cattle birth rate"
 
-    C_cow(Node, Season, Year) "Cost of rearing cattle"
-    C_cow_roll(Node, Season, Period) "Cost of rearing cattle"
+    kappa(Adapt, Season, Year) "cattle death rate"
+    kappa_roll(Adapt, Season, Period) "cattle death rate"
 
-    C_cow_tr(Node, NodeFrom, Season, Year) "Cost of transporting cattle"
-    C_cow_tr_roll(Node, NodeFrom, Season, Period) "Cost of transporting cattle"
+    C_cow(Adapt, Season, Year) "Cost of rearing cattle"
+    C_cow_roll(Adapt, Season, Period) "Cost of rearing cattle"
 
-    C_cow_tr1(NodeFrom, Node)
+    C_cow_tr(Adapt, AdaptFrom, Season, Year) "Cost of transporting cattle"
+    C_cow_tr_roll(Adapt, AdaptFrom, Season, Period) "Cost of transporting cattle"
 
-    InitCow(Node) "Initial number of cows"
+    C_cow_tr1(AdaptFrom, Adapt)
 
-    Herdsize(Node) "Minimum herd size to be maintained"
+    InitCow(Adapt) "Initial number of cows"
 
-    CowDeath(Node, Season, Year) "Rate of cowdeath to determine Minimum number cows to slaughter"
-    CowDeath_roll(Node, Season, Period) "Rate of cowdeath to determine Minimum number cows to slaughter"
+    Herdsize(Adapt) "Minimum herd size to be maintained"
+
+    CowDeath(Adapt, Season, Year) "Rate of cowdeath to determine Minimum number cows to slaughter"
+    CowDeath_roll(Adapt, Season, Period) "Rate of cowdeath to determine Minimum number cows to slaughter"
 ;
 
 *** Distributors ***
@@ -124,14 +128,14 @@ Parameters
 
 *** Consumers ***
 Parameters
-    DemSlope(FoodItem, Node, Season, Year) "Slope of Demand curve"
-    DemSlope_roll(FoodItem, Node, Season, Period) "Slope of Demand curve"
+    DemSlope(FoodItem, Adapt, Season, Year) "Slope of Demand curve"
+    DemSlope_roll(FoodItem, Adapt, Season, Period) "Slope of Demand curve"
 
-    DemInt(FoodItem, Node, Season, Year) "Intercept of demand curve"
-    DemInt_roll(FoodItem, Node, Season, Period) "Intercept of demand curve"
+    DemInt(FoodItem, Adapt, Season, Year) "Intercept of demand curve"
+    DemInt_roll(FoodItem, Adapt, Season, Period) "Intercept of demand curve"
 
-    DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year) "Cross terms in demand curve"
-    DemCrossTerms_roll(FoodItem, FoodItem2, Node, Season, Period) "Cross terms in demand curve"
+    DemCrossTerms(FoodItem, FoodItem2, Adapt, Season, Year) "Cross terms in demand curve"
+    DemCrossTerms_roll(FoodItem, FoodItem2, Adapt, Season, Period) "Cross terms in demand curve"
 ;
 
 *** Electricity ***
@@ -161,17 +165,21 @@ Parameters
 
 *** Crop Producer ***
 Positive Variables
-    Q_FOOD(FoodItem, Node, Season, Period) "quantity of Food produced"
-    AREA_CROP(FoodItem, Node, Season, Period) "area allotted for each Crop"
-*    Area_conv(Node, Period) "area converted to become arable"
+    Q_FOOD(FoodItem, Adapt, Season, Period) "quantity of Food produced"
+    AREA_CROP(FoodItem, Adapt, Season, Period) "area allotted for each Crop"
+*    Area_conv(Adapt, Period) "area converted to become arable"
 ;
 
 *** Livestock ***
 Positive Variables
-    Q_HIDE(Node, Season, Period) "Quantity of Hide produced"
-    Q_CATTLE_BUY(NodeFrom, Node, Season, Period) "Number of cattle bought from a certain node"
-    Q_CATTLE(FoodItem, Node, Season, Period) "Number of cattle in the herd"
-    Q_CATTLE_SL(Node, Season, Period) "Number of cattle slaughtered"
+    Q_HIDE(Adapt, Season, Period) "Quantity of Hide produced"
+    Q_CATTLE_BUY(AdaptFrom, Adapt, Season, Period) "Number of cattle bought from a certain node"
+    Q_CATTLE(FoodItem, Adapt, Season, Period) "Number of cattle in the herd"
+    Q_CATTLE_SL(Adapt, Season, Period) "Number of cattle slaughtered"
+;
+
+Positive Variables
+    Q_FOOD_ADMIN(FoodItem, Node, Season, Period) "Quantity of Food - by admin region"
 ;
 
 *** Distributors ***
@@ -188,6 +196,10 @@ Positive Variables
     Q_WB(FoodItem, Node, Season, Period) "Quantity bought"
 ;
 
+*** Consumers ***
+Positive Variables
+    Q_U(FoodItem, Adapt, Season, Period) "Quantity of Food consmued"
+;
 *** Electricity ***
 Positive Variables
     Q_ELEC(Node, Season, Period)
@@ -197,9 +209,9 @@ Positive Variables
 
 
 
-Parameter produce(*, Node, Season, Year);
-Parameter Cows(*, Node, Season, Year);
-Parameter Prices(*, *, Node, Season, Year);
+Parameter produce(*, Adapt, Season, Year);
+Parameter Cows(*, Adapt, Season, Year);
+Parameter Prices(*, *, *, Season, Year);
 Parameter Elec(*, Node, Season, Year);
 Parameter Transports(*, NodeFrom, Node, Season, Year);
 Parameter TranspCost(*, NodeFrom, Node, Season, Year);

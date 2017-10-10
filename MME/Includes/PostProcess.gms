@@ -3,19 +3,19 @@
 ************************************************************************
 
 
-produce(FoodItem, Node, Season, Year2Loop) = Q_FOOD.L(FoodItem, Node, Season, "Period1");
-produce("Hide", Node, Season, Year2Loop) = Q_HIDE.L(Node, Season, "Period1");
+produce(FoodItem, Adapt, Season, Year2Loop) = Q_FOOD.L(FoodItem, Adapt, Season, "Period1");
+produce("Hide", Adapt, Season, Year2Loop) = Q_HIDE.L(Adapt, Season, "Period1");
 
 
 
-Cows("Number", Node, Season, Year2Loop) = Q_CATTLE.L("Milk", Node, Season, "Period1");
-Cows("Slaughter", Node, Season, Year2Loop) = Q_CATTLE_SL.L(Node, Season, "Period1");
+Cows("Number", Adapt, Season, Year2Loop) = Q_CATTLE.L("Milk", Adapt, Season, "Period1");
+Cows("Slaughter", Adapt, Season, Year2Loop) = Q_CATTLE_SL.L(Adapt, Season, "Period1");
 
 
-Prices("Farmer", FoodItem, Node, Season, Year2Loop) = PI_FOOD.L(FoodItem, Node, Season, "Period1");
+Prices("Farmer", FoodItem, Adapt, Season, Year2Loop) = PI_FOOD.L(FoodItem, Adapt, Season, "Period1");
 Prices("Distribution", FoodItem, Node, Season, Year2Loop) = PI_W.L(FoodItem, Node, Season, "Period1");
 Prices("Store", FoodItem, Node, Season, Year2Loop) = PI_U.L(FoodItem, Node, Season, "Period1");
-Prices("Cow", "Animal", Node, Season, Year2Loop) = PI_COW.L(Node, Season, "Period1");
+Prices("Cow", "Animal", Adapt, Season, Year2Loop) = PI_COW.L(Adapt, Season, "Period1");
 Prices("Grid", "Electricity", Node, Season, Year2Loop) = D14.L(Node, Season, "Period1");
 
 
@@ -26,7 +26,7 @@ Elec("Price", Node, Season, Year2Loop) = D14.L(Node, Season, "Period1");
 
 
 Transports(FoodItem, NodeFrom, Node, Season, Year2Loop) = QF_ROAD.L(FoodItem, NodeFrom, Node, Season, "Period1");
-Transports("Cow", NodeFrom, Node, Season, Year2Loop) = Q_CATTLE_BUY.L(NodeFrom, Node, Season, "Period1");
+*Transports("Cow", NodeFrom, Node, Season, Year2Loop) = Q_CATTLE_BUY.L(NodeFrom, Node, Season, "Period1");
 Transports("Electricity", NodeFrom, Node, Season, Year2Loop) = Q_ELEC_TRANS.L(NodeFrom, Node, Season, "Period1");
 
 TranspCost("RoadCong", NodeFrom, Node, Season, Year2Loop) = D16.L(NodeFrom, Node, Season, "Period1");

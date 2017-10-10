@@ -1,23 +1,23 @@
 df_roll('Period1') = df(Year2Loop);
 
 *** Crop Producer ***
-C_prod_roll(FoodItem, Node, Season, 'Period1') 	= C_prod(FoodItem, Node, Season, Year2Loop);
-C_convert_roll(Node, 'Period1') 				= C_convert(Node, Year2Loop);
-C_chg_roll(Node, 'Period1') 					= C_chg(Node, Year2Loop);
-Cyf_roll(FoodItem, Node, Season, 'Period1') 	= Cyf(FoodItem, Node, Season, Year2Loop);
-aFAO_roll(FoodItem, Node, Season, 'Period1') 	= aFAO(FoodItem, Node, Season, Year2Loop);
-Elas_roll(FoodItem, Node, Season, 'Period1') 	= Elas(FoodItem, Node, Season, Year2Loop);
-Yield_roll(FoodItem, Node, Season, 'Period1') 	= Yield(FoodItem, Node, Season, Year2Loop);
+C_prod_roll(FoodItem, Adapt, Season, 'Period1') 	= C_prod(FoodItem, Adapt, Season, Year2Loop);
+C_convert_roll(Adapt, 'Period1') 				= C_convert(Adapt, Year2Loop);
+C_chg_roll(Adapt, 'Period1') 					= C_chg(Adapt, Year2Loop);
+Cyf_roll(FoodItem, Adapt, Season, 'Period1') 	= Cyf(FoodItem, Adapt, Season, Year2Loop);
+aFAO_roll(FoodItem, Adapt, Season, 'Period1') 	= aFAO(FoodItem, Adapt, Season, Year2Loop);
+Elas_roll(FoodItem, Adapt, Season, 'Period1') 	= Elas(FoodItem, Adapt, Season, Year2Loop);
+Yield_roll(FoodItem, Adapt, Season, 'Period1') 	= Yield(FoodItem, Adapt, Season, Year2Loop);
 
 
 *** Livestock ***
-pr_Hide_roll(Node, Season, 'Period1')			= pr_Hide(Node, Season, Year2Loop);
-Yld_H_roll(Node, Season, 'Period1')				= Yld_H(Node, Season, Year2Loop);
-k_roll(Node, Season, 'Period1')					= k(Node, Season, Year2Loop);
-kappa_roll(Node, Season, 'Period1')				= kappa(Node, Season, Year2Loop);
-C_cow_roll(Node, Season, 'Period1')				= C_cow(Node, Season, Year2Loop);
-C_cow_tr_roll(Node, NodeFrom, Season, 'Period1')= C_cow_tr(Node, NodeFrom, Season, Year2Loop);
-CowDeath_roll(Node, Season, 'Period1')			= CowDeath(Node, Season, Year2Loop);
+pr_Hide_roll(Adapt, Season, 'Period1')			= pr_Hide(Adapt, Season, Year2Loop);
+Yld_H_roll(Adapt, Season, 'Period1')				= Yld_H(Adapt, Season, Year2Loop);
+k_roll(Adapt, Season, 'Period1')					= k(Adapt, Season, Year2Loop);
+kappa_roll(Adapt, Season, 'Period1')				= kappa(Adapt, Season, Year2Loop);
+C_cow_roll(Adapt, Season, 'Period1')				= C_cow(Adapt, Season, Year2Loop);
+C_cow_tr_roll(Adapt, AdaptFrom, Season, 'Period1')= C_cow_tr(Adapt, AdaptFrom, Season, Year2Loop);
+CowDeath_roll(Adapt, Season, 'Period1')			= CowDeath(Adapt, Season, Year2Loop);
 
 *** Distributors ***
 CF_Road_roll(FoodItem, Node, NodeFrom, Season, 'Period1') = CF_Road(FoodItem, Node, NodeFrom, Season, Year2Loop);
@@ -30,9 +30,9 @@ CAP_Store_roll(FoodItem, Node, Season, 'Period1')	= CAP_Store(FoodItem, Node, Se
 
 
 *** Consumers ***
-DemSlope_roll(FoodItem, Node, Season, 'Period1')					= DemSlope(FoodItem, Node, Season, Year2Loop);
-DemInt_roll(FoodItem, Node, Season, 'Period1')						= DemInt(FoodItem, Node, Season, Year2Loop);
-DemCrossTerms_roll(FoodItem, FoodItem2, Node, Season, 'Period1')	= DemCrossTerms(FoodItem, FoodItem2, Node, Season, Year2Loop);
+DemSlope_roll(FoodItem, Adapt, Season, 'Period1')					= DemSlope(FoodItem, Adapt, Season, Year2Loop);
+DemInt_roll(FoodItem, Adapt, Season, 'Period1')						= DemInt(FoodItem, Adapt, Season, Year2Loop);
+DemCrossTerms_roll(FoodItem, FoodItem2, Adapt, Season, 'Period1')	= DemCrossTerms(FoodItem, FoodItem2, Adapt, Season, Year2Loop);
 
 *** Electricity ***
 C_Elec_L_roll(Node, Season, 'Period1')								= C_Elec_L(Node, Season, Year2Loop);

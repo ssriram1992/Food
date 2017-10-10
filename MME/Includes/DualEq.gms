@@ -3,22 +3,22 @@
 ************************************************************************
 
 Equations
-E1_3a(FoodItem, Node, Season, Period)
-E1_3b(FoodItem, Node, Season, Period)
+E1_3a(FoodItem, Adapt, Season, Period)
+E1_3b(FoodItem, Adapt, Season, Period)
 ;
 
 
-E1_3a(FoodItem, Node, Season, Period).. D2(FoodItem, Node, Season, Period) - df_roll(Period)*PI_FOOD(FoodItem, Node, Season, Period)
+E1_3a(FoodItem, Adapt, Season, Period).. D2(FoodItem, Adapt, Season, Period) - df_roll(Period)*PI_FOOD(FoodItem, Adapt, Season, Period)
                             =g=
                             0;
 * Fallow and crop rotation costraints not yet added
-E1_3b(FoodItem, Node, Season, Period)$Crop(FoodItem).. D1(Node, Period)
-        -D2(FoodItem, Node, Season, Period)*aFAO_roll(FoodItem, Node, Season, Period)*Cyf_roll(FoodItem, Node, Season, Period)*(1+(rPower(PI_FOOD(FoodItem, Node, Season, Period),Elas_roll(FoodItem, Node, Season, Period))-1)$(Elas_roll(FoodItem, Node, Season, Period)))
+E1_3b(FoodItem, Adapt, Season, Period)$Crop(FoodItem).. D1(Adapt, Period)
+        -D2(FoodItem, Adapt, Season, Period)*aFAO_roll(FoodItem, Adapt, Season, Period)*Cyf_roll(FoodItem, Adapt, Season, Period)*(1+(rPower(PI_FOOD(FoodItem, Adapt, Season, Period),Elas_roll(FoodItem, Adapt, Season, Period))-1)$(Elas_roll(FoodItem, Adapt, Season, Period)))
         + df_roll(Period)*(
-            C_prod_roll(FoodItem, Node, Season, Period) +
-*            C_convert(Node, Period) - C_convert(Node, Period+1) +
-            C_chg_roll(Node, Period)*(AREA_CROP(FoodItem, Node, Season, Period) - AREA_CROP(FoodItem, Node, Season, Period-1) - Area_init(Node, Season,  FoodItem)$(Ord(Period)=1))-
-            C_chg_roll(Node, Period+1)*(AREA_CROP(FoodItem, Node, Season, Period+1) - AREA_CROP(FoodItem, Node, Season, Period))
+            C_prod_roll(FoodItem, Adapt, Season, Period) +
+*            C_convert(Adapt, Period) - C_convert(Adapt, Period+1) +
+            C_chg_roll(Adapt, Period)*(AREA_CROP(FoodItem, Adapt, Season, Period) - AREA_CROP(FoodItem, Adapt, Season, Period-1) - Area_init(Adapt, Season,  FoodItem)$(Ord(Period)=1))-
+            C_chg_roll(Adapt, Period+1)*(AREA_CROP(FoodItem, Adapt, Season, Period+1) - AREA_CROP(FoodItem, Adapt, Season, Period))
             )
                     =g=
             0;
@@ -31,27 +31,27 @@ E1_3b(FoodItem, Node, Season, Period)$Crop(FoodItem).. D1(Node, Period)
 * Quantity, price of milk and Beef are defined as (q/pi)_Food. Similarly for yield.
 
 Equations
-    E2_3a(FoodItem, Node, Season, Period)
-    E2_3b(NodeFrom, Node, Season, Period)
-    E2_3c(Node, Season, Period)
-    E2_3d(Node, Season, Period)
+    E2_3a(FoodItem, Adapt, Season, Period)
+    E2_3b(AdaptFrom, Adapt, Season, Period)
+    E2_3c(Adapt, Season, Period)
+    E2_3d(Adapt, Season, Period)
 ;
 
 
-E2_3a(FoodItem, Node, Season, Period)$sameas(FoodItem, "Milk").. df_roll(Period)*C_cow_roll(Node, Season, Period) - D2(FoodItem, Node, Season, Period)*Yield_roll(FoodItem, Node, Season, Period)$sameas(FoodItem, "Milk") -
-    D4(Node, Season, Period)+ PI_COW(Node, Season, Period) - (1+k_roll(Node, Season, Period)-kappa_roll(Node, Season, Period))*(PI_COW(Node, Season+1, Period)$(ORD(Season)<CARD(Season)) + PI_COW(Node, Season-(CARD(Season)-1), Period+1)$(ORD(Season)=CARD(Season)))
-    +CowDeath_roll(Node, Season, Period)*D9(Node, Season, Period) - D10(Node, Season, Period)
+E2_3a(FoodItem, Adapt, Season, Period)$sameas(FoodItem, "Milk").. df_roll(Period)*C_cow_roll(Adapt, Season, Period) - D2(FoodItem, Adapt, Season, Period)*Yield_roll(FoodItem, Adapt, Season, Period)$sameas(FoodItem, "Milk") -
+    D4(Adapt, Season, Period)+ PI_COW(Adapt, Season, Period) - (1+k_roll(Adapt, Season, Period)-kappa_roll(Adapt, Season, Period))*(PI_COW(Adapt, Season+1, Period)$(ORD(Season)<CARD(Season)) + PI_COW(Adapt, Season-(CARD(Season)-1), Period+1)$(ORD(Season)=CARD(Season)))
+    +CowDeath_roll(Adapt, Season, Period)*D9(Adapt, Season, Period) - D10(Adapt, Season, Period)
     =g=
     0;
-Q_CATTLE.fx(FoodItem, Node, Season, Period)$(NOT(sameas(FoodItem,"Milk"))) = 0;
-E2_3b(NodeFrom, Node, Season, Period)$(NOT(sameas(Node, NodeFrom)))..   df_roll(Period)*(C_cow_tr_roll(NodeFrom, Node, Season, Period)+
-    PI_COW(NodeFrom, Season, Period) - PI_COW(Node, Season, Period))+
-    (PI_COW(NodeFrom, Season, Period)-PI_COW(Node, Season, Period))
+Q_CATTLE.fx(FoodItem, Adapt, Season, Period)$(NOT(sameas(FoodItem,"Milk"))) = 0;
+E2_3b(AdaptFrom, Adapt, Season, Period)$(NOT(sameas(Adapt, AdaptFrom)))..   df_roll(Period)*(C_cow_tr_roll(AdaptFrom, Adapt, Season, Period)+
+    PI_COW(AdaptFrom, Season, Period) - PI_COW(Adapt, Season, Period))+
+    (PI_COW(AdaptFrom, Season, Period)-PI_COW(Adapt, Season, Period))
     =g=
     0;
-E2_3c(Node, Season, Period).. D3(Node, Season, Period)-df_roll(Period)*pr_Hide_roll(Node, Season, Period) =g= 0;
-E2_3d(Node, Season, Period).. D4(Node, Season, Period) - sum(FoodItem$sameas(FoodItem, "beef"), D2(FoodItem, Node, Season, Period)*Yield_roll(FoodItem, Node, Season, Period))-
-        D3(Node, Season, Period)*Yld_H_roll(Node, Season, Period) + PI_COW(Node, Season+1, Period)$(ORD(Season)<CARD(Season)) + PI_COW(Node, Season-(CARD(Season)-1), Period+1)$(ORD(Season)=CARD(Season))-D9(Node, Season, Period)
+E2_3c(Adapt, Season, Period).. D3(Adapt, Season, Period)-df_roll(Period)*pr_Hide_roll(Adapt, Season, Period) =g= 0;
+E2_3d(Adapt, Season, Period).. D4(Adapt, Season, Period) - sum(FoodItem$sameas(FoodItem, "beef"), D2(FoodItem, Adapt, Season, Period)*Yield_roll(FoodItem, Adapt, Season, Period))-
+        D3(Adapt, Season, Period)*Yld_H_roll(Adapt, Season, Period) + PI_COW(Adapt, Season+1, Period)$(ORD(Season)<CARD(Season)) + PI_COW(Adapt, Season-(CARD(Season)-1), Period+1)$(ORD(Season)=CARD(Season))-D9(Adapt, Season, Period)
                         =g=
                         0;
 
@@ -66,7 +66,7 @@ Equations
     E3_3c(FoodItem, Node, Season, Period)
 ;
 
-E3_3a(FoodItem, Node, Season, Period).. df_roll(Period)*PI_FOOD(FoodItem, Node, Season, Period)
+E3_3a(FoodItem, Node, Season, Period).. df_roll(Period)*PI_FOOD_ADMIN(FoodItem, Node, Season, Period)
                                 =g=
                                 D6(FoodItem, Node, Season, Period);
 E3_3b(FoodItem, NodeFrom, Node, Season, Period)$Road(NodeFrom, Node).. D7(FoodItem, NodeFrom, Node, Season, Period)$(FoodDistrCap) + D16(NodeFrom, Node, Season, Period)  + df_roll(Period)*CF_Road_roll(FoodItem, NodeFrom, Node, Season, Period)

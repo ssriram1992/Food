@@ -32,7 +32,7 @@ $offtext
 option solvelink=5;
 
 Sets
-Year "Years" /2019*2022/
+Year "Years" /2015*2017/
 ;
 
 $INCLUDE Includes/ControlPanel.gms
@@ -51,39 +51,43 @@ $INCLUDE Includes/DualEq.gms
 
 
 Model Food1y /
-E1_2b.d1
-E1_2cd.d2
-E1_3a.q_Food
-E1_3b.Area_Crop
-E2_2b.d3
-E2_2c.d4
-E2_2d.pi_cow
-E2_2e.d9
-E2_2f.d10
-E2_3a.Q_cattle
-E2_3b.Q_cattle_buy
-E2_3c.q_Hide
-E2_3d.Q_cattle_sl
-E3_2b.d6
-E3_2c.d7
-E3_2d.d16
-E3_3a.qF_Db
-E3_3b.qF_Road
-E3_3c.qF_Ds
-E4_2a.d8
-E4_2b.d11
-E4_3a.q_Wb
-E4_3b.q_Ws
-E4_3c.q_W
-E5_1a.pi_Food
-E5_1b.pi_U
-E5_1c.pi_W
-E6_2a.d13
-E6_2b.d14
-E6_2c.d15
-E6_3a.q_Elec
-E6_3b.q_Elec_Trans
-E_ElecDem.q_Elec_Dem
+E1_2b.D1
+E1_2cd.D2
+E1_3a.Q_FOOD
+E1_3b.AREA_CROP
+E2_2b.D3
+E2_2c.D4
+E2_2d.PI_COW
+E2_2e.D9
+E2_2f.D10
+E2_3a.Q_CATTLE
+E2_3b.Q_CATTLE_BUY
+E2_3c.Q_HIDE
+E2_3d.Q_CATTLE_SL
+E2_4a.Q_FOOD_ADMIN
+E2_4b.PI_FOOD
+E3_2b.D6
+E3_2c.D7
+E3_2d.D16
+E3_3a.QF_DB
+E3_3b.QF_ROAD
+E3_3c.QF_DS
+E4_2a.D8
+E4_2b.D11
+E4_3a.Q_WB
+E4_3b.Q_WS
+E4_3c.Q_W
+E4_4a.Q_U
+E4_4b.PI_U
+E5_1a.PI_FOOD_ADMIN
+E5_1b.PI_U_ADAPT
+E5_1c.PI_W
+E6_2a.D13
+E6_2b.D14
+E6_2c.D15
+E6_3a.Q_ELEC
+E6_3b.Q_ELEC_TRANS
+E_ElecDem.Q_ELEC_DEM
 /;
 *q_Ws.lo(FoodItem, Node, Season, Year) = Consumption(FoodItem, Node, Season, Year);
 
@@ -104,7 +108,6 @@ $INCLUDE Includes/PostProcess.gms
 
 
 %RunningOnCluster%$ontext
-Display AREA_CROP.L, Area_init;
 Display Prices;
 option produce:2:2:2;
 Display produce;
