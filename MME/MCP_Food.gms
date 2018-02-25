@@ -4,20 +4,21 @@ $TITLE "INFEWS FOOD MODEL"
 ************************       SETTINGS       **************************
 ************************************************************************
 
-$SETGLOBAL Detailed_Listing "*"
-$SETGLOBAL RunningOnCluster "*"
+$SETGLOBAL Limit_Listing "*"
+$SETGLOBAL RunningOnCluster ""
 
 $SETGLOBAL Scenario "Base"
 $SETGLOBAL FutureKnowledge "Current"
 
 $SETGLOBAL DataFile "Data/DataGdx"
 
-$SETGLOBAL UseInitialPoint "*"
-$SETGLOBAL Point "Results/%Scenario%"
+* Remember to specify in Includes/PointLoad.gms on what years to be used with existing point
+$SETGLOBAL UseInitialPoint ""
+$SETGLOBAL Point "%Scenario%_%FutureKnowledge%"
 
 
 
-%Detailed_Listing%$ontext
+%Limit_Listing%$ONTEXT
 $offlisting
 option dispwidth=60;
 $inlinecom /* */
@@ -27,8 +28,8 @@ $oninline
 Option Solprint = off;
 Option limrow = 0;
 Option limcol = 0;
-$ontext
-$offtext
+$ONTEXT
+$OFFTEXT
 option solvelink=5;
 
 Sets
@@ -89,17 +90,26 @@ E6_3a.Q_ELEC
 E6_3b.Q_ELEC_TRANS
 E_ElecDem.Q_ELEC_DEM
 /;
+Food1y.savepoint = 2;
 *q_Ws.lo(FoodItem, Node, Season, Year) = Consumption(FoodItem, Node, Season, Year);
 
 
-
+$INCLUDE Includes/PointLoad.gms
 option reslim=10000000;
 Loop(Year2Loop$(ORD(Year2Loop)+card(Period)-1<=Card(Year2Loop)),
+
+
+%UseInitialPoint%$ONTEXT
+put_utility 'gdxin' / 'auxiliary/%Point%_'Year2Loop.tl:0 ;
+execute_load$(Years2PtLoad(Year2Loop)) ;
+$ONTEXT
+$OFFTEXT
 
 $INCLUDE Includes/RollingParam.gms
 $INCLUDE Includes/RollRules/%FutureKnowledge%
 
         Solve Food1y using MCP;
+        SolveCount = SolveCount + 1;
 
 $INCLUDE Includes/ContinueRoll.gms
 $INCLUDE Includes/PostProcess.gms
@@ -117,7 +127,7 @@ option Elec:2:2:2;
 Display Elec;
 $ontext
 $offtext
-
+Display Consumption;
 
 * Exporting results
 execute_unload 'Results/%Scenario%';

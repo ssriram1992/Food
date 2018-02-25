@@ -46,16 +46,17 @@ E2_2b(Adapt, Season, Period).. -Q_HIDE(Adapt, Season, Period)
 E2_2c(Adapt, Season, Period).. -Q_CATTLE_SL(Adapt, Season, Period) =g= -sum(FoodItem, Q_CATTLE(FoodItem, Adapt, Season, Period));
 
 
-E2_2d(Adapt, Season, Period).. -sum(FoodItem, Q_CATTLE(FoodItem, Adapt, Season, Period))
-    =g=
-    -((1+k_roll(Adapt, Season, Period)-kappa_roll(Adapt, Season, Period))*(sum(FoodItem, Q_CATTLE(FoodItem, Adapt, Season-1, Period)$(ORD(Season)>1) + Q_CATTLE(FoodItem, Adapt, Season+(CARD(Season)-1), Period-1)$(ORD(Season)=1)) + InitCow(Adapt)$(ORD(Period)=1 AND ORD(Season)=1)) -
+E2_2d(Adapt, Season, Period).. ((1+k_roll(Adapt, Season, Period)-kappa_roll(Adapt, Season, Period))*(sum(FoodItem, Q_CATTLE(FoodItem, Adapt, Season-1, Period)$(ORD(Season)>1) + 
+        Q_CATTLE(FoodItem, Adapt, Season+(CARD(Season)-1), Period-1)$(ORD(Season)=1)) + InitCow(Adapt)$(ORD(Period)=1 AND ORD(Season)=1)) -
     Q_CATTLE_SL(Adapt, Season+(CARD(Season)-1), Period-1)$(ORD(Season)=1) - Q_CATTLE_SL(Adapt, Season-1, Period)$(ORD(Season)>1) +
-    sum(AdaptFrom, Q_CATTLE_BUY(AdaptFrom, Adapt, Season, Period) - Q_CATTLE_BUY(Adapt, AdaptFrom, Season, Period)));
+    sum(AdaptFrom, Q_CATTLE_BUY(AdaptFrom, Adapt, Season, Period) - Q_CATTLE_BUY(Adapt, AdaptFrom, Season, Period)))
+    =g=
+    sum(FoodItem, Q_CATTLE(FoodItem, Adapt, Season, Period));
 
 
 
 E2_2e(Adapt, Season, Period).. Q_CATTLE_SL(Adapt, Season, Period) =g= CowDeath_roll(Adapt, Season, Period)*sum(FoodItem, Q_CATTLE(FoodItem, Adapt, Season, Period));
-E2_2f(Adapt, Season, Period).. sum(FoodItem, Q_CATTLE(FoodItem, Adapt, Season, Period)) =g= Herdsize(Adapt)-10;
+E2_2f(Adapt, Season, Period).. sum(FoodItem, Q_CATTLE(FoodItem, Adapt, Season, Period)) =g= Herdsize(Adapt);
 
 
 ************************************************************************
@@ -140,7 +141,7 @@ Equations
 ;
 
 E5_1a(FoodItem, Node, Season, Period).. Q_FOOD_ADMIN(FoodItem, Node, Season, Period) =e= QF_DB(FoodItem, Node, Season, Period);
-E5_1b(FoodItem, Adapt, Season, Period).. PI_U_ADAPT(FoodItem, Adapt, Season, Period) =e= DemInt_roll(FoodItem, Adapt, Season, Period)*10
+E5_1b(FoodItem, Adapt, Season, Period).. PI_U_ADAPT(FoodItem, Adapt, Season, Period) =e= DemInt_roll(FoodItem, Adapt, Season, Period)
                                 - DemSlope_roll(FoodItem, Adapt, Season, Period)*Q_U(FoodItem, Adapt, Season, Period)
                                 + sum(FoodItem2, DemCrossTerms_roll(FoodItem, FoodItem2, Adapt, Season, Period)*DemCrossTerms_roll(FoodItem, FoodItem2, Adapt, Season, Period)*DemSlope_roll(FoodItem, Adapt, Season, Period)*(PI_U_ADAPT(FoodItem2, Adapt, Season, Period) - PI_U_ADAPT(FoodItem, Adapt, Season, Period)))$(CrossElasOn);
 E5_1c(FoodItem, Node, Season, Period).. Q_WB(FoodItem, Node, Season, Period) =e= QF_DS(FoodItem, Node, Season, Period);

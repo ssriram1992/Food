@@ -48,7 +48,7 @@ Cap_Road1(NodeFrom, Node)
 CF_Road_data1(NodeFrom, Node)
 
 * Consumption
-Consumption(FoodItem, Node, Season, Year)
+Consumption(Adapt, FoodItem)
 DemInt1(Season, FoodItem, Adapt)
 DemSlope1(Season, FoodItem, Adapt)
 DemCrossElas(FoodItem, FoodItem2)
@@ -104,14 +104,13 @@ C_Cow(Adapt, Season, Year) = C_Cow1(Adapt);
 $LOAD CowDeath1=CowDeath
 CowDeath(Adapt, Season, Year) = CowDeath1(Adapt);
 $LOAD InitCow
-InitCow(Adapt) = InitCow(Adapt);
 $LOAD Herdsize
 $LOAD C_cow_tr1=CowtranYr1
 $LOAD BeefYield
 Yield("Beef", Adapt, Season, Year) = BeefYield(Adapt, Year);
 $LOAD MilkYield
 Yield("Milk", Adapt, Season, Year) = MilkYield(Adapt, Year);
-C_cow_tr(AdaptFrom, Adapt, Season, Year) = 4;
+C_cow_tr(AdaptFrom, Adapt, Season, Year) = C_cow_tr1(AdaptFrom, Adapt);
 
 
 *** Distribution ***

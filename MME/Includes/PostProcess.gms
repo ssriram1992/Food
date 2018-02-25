@@ -40,5 +40,7 @@ Storage("Sold", FoodItem, Node, Season, Year2Loop) = Q_WS.L(FoodItem, Node, Seas
 Storage("Stored", FoodItem, Node, Season, Year2Loop) = Q_W.L(FoodItem, Node, Season, "Period1");
 
 
-* Printing results to lst file
+*Storing the GDX
+put_utility  'shell' / 'mv Food1y_p'SolveCount:0:0'.gdx auxiliary/%Scenario%_%FutureKnowledge%_'Year2Loop.tl:0'.gdx';
+
 
