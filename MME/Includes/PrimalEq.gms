@@ -119,10 +119,10 @@ Equations
     E4_4b(FoodItem, Node, Season, Period)
 ;
 
-E4_4a(FoodItem, Adapt, Season, Period).. Q_U(FoodItem, Adapt, Season, Period) =e= sum(Node, Node2Adapt(Node, Adapt)*Q_WS(FoodItem, Node, Season, Period));
-E4_4b(FoodItem, Node, Season, Period).. sum(Adapt, Adapt2Node(Adapt, Node)*
-                    PI_U_ADAPT(FoodItem, Adapt, Season, Period)) =g= 
-                    PI_U(FoodItem, Node, Season, Period);
+E4_4a(FoodItem, Adapt, Season, Period).. -Q_U(FoodItem, Adapt, Season, Period) =g= -sum(Node, Node2Adapt(Node, Adapt)*Q_WS(FoodItem, Node, Season, Period));
+E4_4b(FoodItem, Node, Season, Period).. -sum(Adapt, Adapt2Node(Adapt, Node)*
+                    PI_U_ADAPT(FoodItem, Adapt, Season, Period)*Q_U(FoodItem, Adapt, Season, Period)) =g= 
+                    -PI_U(FoodItem, Node, Season, Period)*Q_WS(FoodItem, Node, Season, Period);
 
 $ontext
 E4_4b(FoodItem, Node, Season, Period).. sum(Adapt, Adapt2Node(Adapt, Node)*
@@ -165,4 +165,4 @@ E6_2b(Node, Season, Period).. Q_ELEC(Node, Season, Period) + sum(NodeFrom$Eline(
 E6_2c(NodeFrom, Node, Season, Period)$Eline(NodeFrom, Node).. Cap_Elec_Trans_roll(NodeFrom, Node, Season, Period)
                                 =g=
                 Q_ELEC_TRANS(NodeFrom, Node, Season, Period);
-E_ElecDem(Node, Season, Period).. Q_ELEC_DEM(Node, Season, Period) =e= Base_Elec_Dem_roll(Node, Season, Period)/2;
+E_ElecDem(Node, Season, Period).. Q_ELEC_DEM(Node, Season, Period) =g= Base_Elec_Dem_roll(Node, Season, Period)/2;

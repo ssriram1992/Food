@@ -68,6 +68,7 @@ E_Supply_Cost.. Obj =e= sum((Period, Season), df_roll(Period)*
 
 E_Dem_Cons(FoodItem, Adapt, Season, Period).. Q_U(FoodItem, Adapt, Season, Period) =g= Consumption(Adapt, FoodItem)/2;
 
+Q_U.L(FoodItem, Adapt, Season, Period) = Consumption(Adapt, FoodItem)/2;
 
 
 Model Supply_Price /
@@ -101,6 +102,7 @@ Supply_Price.savepoint = 2;
 *q_Ws.lo(FoodItem, Node, Season, Year) = Consumption(FoodItem, Node, Season, Year);
 
 
+
 $INCLUDE Includes/PointLoad.gms
 option reslim=10000000;
 Loop(Year2Loop$(ORD(Year2Loop)+card(Period)-1<=Card(Year2Loop)),
@@ -115,7 +117,10 @@ $OFFTEXT
 $INCLUDE Includes/RollingParam.gms
 $INCLUDE Includes/RollRules/Current
 
-        Solve Supply_Price using NLP max obj;
+Q_FOOD.L("Milk", Adapt, Season, Period) = Yield_roll("Milk", Adapt, Season, Period)*InitCow(Adapt);
+Q_FOOD.L("Beef", Adapt, Season, Period) = Yield_roll("Beef", Adapt, Season, Period)*(InitCow(Adapt) - HerdSize(Adapt));
+
+        Solve Supply_Price using NLP min obj;
         SolveCount = SolveCount + 1;
 
 *$INCLUDE Includes/ContinueRoll.gms
@@ -135,3 +140,11 @@ $INCLUDE Includes/RollRules/Current
 * Exporting results
 execute_unload 'Results/Supply_Price';
 
+Parameters t1,t2,t3, t5;
+Scalar t4;
+t1 = Q_FOOD.L("CashCrop", "SM2N", "Belg", "Period3");
+t2 = aFAO_roll("CashCrop", "SM2N", "Belg", "Period3");
+t3 = Cyf_roll("CashCrop", "SM2N", "Belg", "Period3");
+t4 = AREA_CROP.L("CashCrop", "SM2N", "Belg", "Period3");
+t5 = t2*t3*t4;
+Display t1,t2,t3,t4, t5;

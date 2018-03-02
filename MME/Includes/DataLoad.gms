@@ -26,12 +26,9 @@ Phi(Adapt, Node)
 
 *Crop Producer
 C_prod1(Season, FoodItem, Adapt)
-aFAO1(Season, FoodItem, Node)
-C_convert1(Node)
-C_chg1(Node)
-TotArea1(Node)
-Area_init1(Node, Season, FoodItem)
-Cyf1(FoodItem, Node, Season, Year)
+C_convert1(Adapt)
+C_chg1(Adapt)
+
 
 * Livestock raiser
 pr_Hide1(Adapt)
@@ -48,7 +45,6 @@ Cap_Road1(NodeFrom, Node)
 CF_Road_data1(NodeFrom, Node)
 
 * Consumption
-Consumption(Adapt, FoodItem)
 DemInt1(Season, FoodItem, Adapt)
 DemSlope1(Season, FoodItem, Adapt)
 DemCrossElas(FoodItem, FoodItem2)
@@ -58,6 +54,14 @@ Base_Elec_Dem(Node, Season, Year)
 C_Elec_L1(Node)
 C_Elec_Q1(Node)
 Cap_Elec1(Node)
+
+* Initialization
+Consumption(Adapt, FoodItem)
+Consum_Admin(Node, FoodItem)
+Production(Adapt, FoodItem)
+Produc_Admin(Node, FoodItem)
+Price(Adapt, FoodItem, Season)
+Price_Admin(Node, FoodItem, Season)
 ;
 
 *** Conversion Factors
@@ -66,7 +70,6 @@ Adapt2Node(Adapt, Node) = Psi(Node, Adapt);
 $LOAD Phi
 Node2Adapt(Node, Adapt) = Phi(Adapt, Node);
 
-Display Psi, Phi, Node2Adapt, Adapt2Node;
 
 
 ***Crop Producer***
@@ -74,21 +77,17 @@ $LOAD C_prod1=C_prod
 C_prod(FoodItem, Adapt, Season, Year) = C_prod1(Season, FoodItem, Adapt);
 
 * Change to adaptation zone input when possible
-$LOAD aFAO1=aFAO
-aFAO(FoodItem, Adapt, Season, Year) = sum(Node,Node2Adapt(Node, Adapt)*aFAO1(Season, FoodItem, Node));
+$LOAD aFAO
 $LOAD C_convert1=C_convert
-C_convert(Adapt, Year) = sum(Node, Node2Adapt(Node, Adapt)*C_convert1(Node));
+C_convert(Adapt, Year) = C_convert1(Adapt);
 $LOAD C_chg1=C_chg
-C_chg(Adapt, Year) = sum(Node, Node2Adapt(Node, Adapt)*C_chg1(Node));
-*Probably not okay to do this for Cyf
-*$LOAD Cyf1=Cyf
-Cyf(FoodItem, Adapt, Season, Year) = 1;
-*sum(Node, Node2Adapt(Node, Adapt)*Cyf1(FoodItem, Node, Season, Year));
-$LOAD TotArea1=TotArea
-TotArea(Adapt) = sum(Node, Node2Adapt(Node, Adapt)*TotArea1(Node));
-$LOAD Area_init1=Area_init
-Area_init(Adapt, Season, FoodItem) = sum(Node, Node2Adapt(Node, Adapt)*Area_init1(Node, Season, FoodItem));
-Display Area_init, Area_init1;
+C_chg(Adapt, Year) = C_chg1(Adapt);
+
+$LOAD Cyf
+$LOAD TotArea
+$LOAD Area_init
+
+
 
 *** Livestock production ***
 $LOAD pr_Hide1=pr_Hide
@@ -133,7 +132,6 @@ DemInt(FoodItem, Adapt, Season, Year) =  DemInt1(Season, FoodItem, Adapt);
 $LOAD DemSlope1=DemSlope
 DemSlope(FoodItem, Adapt, Season, Year) = DemSlope1(Season, FoodItem, Adapt);
 $LOAD DemCrossElas
-$LOAD Consumption
 $LOAD Base_Elec_Dem=Base_Elec_Dem1
 
 DemCrossTerms(FoodItem, FoodItem2, Adapt, Season, Year) = DemCrossElas(FoodItem, FoodItem2);
@@ -153,7 +151,23 @@ C_Elec_Trans(NodeFrom, Node, Season, Year) = 1;
 Cap_Elec_Trans(NodeFrom, Node, Season, Year) = 10000;
 
 
+*** Data Initialization ***
+$LOAD Consumption
+Q_U.L(FoodItem, Adapt, Season, Period) = Consumption(Adapt, FoodItem)/2 ;
+$LOAD Consum_Admin
+Q_WS.L(FoodItem, Node, Season, Period) = Consum_Admin(Node, FoodItem)/2;
+$LOAD Production
+Q_FOOD.L(FoodItem, Adapt, "Kremt", Period) = Production(Adapt, FoodItem)*0.7;
+Q_FOOD.L(FoodItem, Adapt, "Belg", Period) = Production(Adapt, FoodItem)*0.3;
+$LOAD Produc_Admin
+Q_FOOD_ADMIN.L(FoodItem, Node, "Kremt", Period) = Produc_Admin(Node, FoodItem)*0.7;
+Q_FOOD_ADMIN.L(FoodItem, Node, "Belg", Period) = Produc_Admin(Node, FoodItem)*0.3;
+$LOAD Price
+PI_U_ADAPT.L(FoodItem, Adapt, Season, Period) = Price(Adapt, FoodItem, Season);
+$LOAD Price_Admin
+PI_U.L(FoodItem, Node, Season, Period) = Price_Admin(Node, FoodItem, Season);
 
+AREA_CROP.L(FoodItem, Adapt, Season, Period) = Area_init(Adapt, Season,  FoodItem);
 $GDXIN
 
 $INCLUDE Includes/Calibration.gms

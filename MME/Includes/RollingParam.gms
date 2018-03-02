@@ -7,10 +7,10 @@ C_chg_roll(Adapt, 'Period1') 					= C_chg(Adapt, Year2Loop);
 Cyf_roll(FoodItem, Adapt, Season, 'Period1') 	= Cyf(FoodItem, Adapt, Season, Year2Loop);
 aFAO_roll(FoodItem, Adapt, Season, 'Period1') 	= aFAO(FoodItem, Adapt, Season, Year2Loop);
 Elas_roll(FoodItem, Adapt, Season, 'Period1') 	= Elas(FoodItem, Adapt, Season, Year2Loop);
-Yield_roll(FoodItem, Adapt, Season, 'Period1') 	= Yield(FoodItem, Adapt, Season, Year2Loop);
 
 
 *** Livestock ***
+Yield_roll(FoodItem, Adapt, Season, 'Period1') 	= Yield(FoodItem, Adapt, Season, Year2Loop);
 pr_Hide_roll(Adapt, Season, 'Period1')			= pr_Hide(Adapt, Season, Year2Loop);
 Yld_H_roll(Adapt, Season, 'Period1')				= Yld_H(Adapt, Season, Year2Loop);
 k_roll(Adapt, Season, 'Period1')					= k(Adapt, Season, Year2Loop);
