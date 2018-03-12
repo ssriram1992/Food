@@ -52,6 +52,7 @@
 
 \newcommand{\QFf}			{\textcolor{blue} {\Q^{\F}_{yhnf}}}
 \newcommand{\QFfz}			{\textcolor{blue} {\Q^{\F}_{yhzf}}}
+\newcommand{\QFfzSel}		{\textcolor{blue} {\Q^{\F\D}_{yhznf}}}
 \newcommand{\QH}			{\textcolor{blue} {\Q^{\H}_{yhz}}}
 \newcommand{\QDr}			{\textcolor{blue} {\Q^{\D}_{yhrf}}}
 \newcommand{\QDbf}			{\textcolor{blue} {\Q^{\D_b}_{yhnf}}}
@@ -59,6 +60,7 @@
 \newcommand{\QSf}[1][yh]	{\textcolor{blue} {\Q^{\S}_{#1nf}}}
 \newcommand{\QSfbuy}		{\textcolor{blue} {\Q^{\S_b}_{yhnf}}}
 \newcommand{\QSfsel}		{\textcolor{blue} {\Q^{\S_s}_{yhnf}}}
+\newcommand{\QSfselAdap}    {\textcolor{blue} {\Q^{\S\U}_{yhnzf}}}
 \newcommand{\QUf}			{\textcolor{blue} {\Q^{\U}_{yhzf}}}
 \newcommand{\QE}			{\textcolor{blue} {\Q^{\E-gen}_{yhn}}}
 \newcommand{\QEDem}			{\textcolor{blue} {\Q^{\E-dem}_{yhn}}}
@@ -140,6 +142,10 @@
 \newcommand{\dr}			{\textcolor{teal} {\delta^{13}_{yhn}}}
 \newcommand{\ds}[1][n]		{\textcolor{teal} {\delta^{14}_{yh#1}}}
 \newcommand{\dt}			{\textcolor{teal} {\delta^{16}_{yhr}}}
+\newcommand{\du}			{\textcolor{teal} {\delta^{17}_{yhnzf}}}
+\newcommand{\dv}			{\textcolor{teal} {\delta^{18}_{yhnf}}}
+\newcommand{\dw}			{\textcolor{teal} {\delta^{18}_{yhznf}}}
+\newcommand{\dx}			{\textcolor{teal} {\delta^{18}_{yhnf}}}
 
 
 % Settings Information
@@ -166,7 +172,7 @@ A crop producer makes decisions on the land allotted for various crops. She has 
 A farmer maximizes his profit, which is the benefit given production and unit price minus the cost of cropping area, expanding area, and converting cropping area for different crop types.
 \begin{align}
 \Max \quad &: \quad  \sum_{\substack{y\in\Y\\h\in\Se}} \DiscFact \left \{ \sum_{f\in \C}\left (
-	{\piFz}{\QFfz} - \CsFz\AFz - \frac{1}{2}\CsChg \left( \AF - \AF[(y-1)hzf] \right)^2
+	\left(\sum_n {\piF}{\QFfzSel} \right)  - \CsFz\AFz - \frac{1}{2}\CsChg \left( \AF - \AF[(y-1)hzf] \right)^2
  \right)\right .\nonumber\\
  \quad &\quad \quad \qquad \qquad \left .- \CsConv  \sum_{\substack{f\in\C}} \left(\AF - \AF[(y-1)hzf]\right) \right \}
 \end{align}
@@ -185,6 +191,7 @@ such that for $f\in \C$
 \Yld \quad &= \quad \aInCYF\CYF \left( \piFz \right)  ^{\elasticity}%\left( 1+\YieldBoost \right) \\
 &(\Yld)
 \intertext{where $\Yld$ is yield; $\aInCYF$ is a adjustment factor; $\CYF$ is Climate Yield Factor; $\elasticity$ is crop own elasticity.}
+\QFfzSel \quad&= \quad \Psi_{nz}\QFfz&(\dw)\\
 \intertext{Fallow constraint (farmers put a land to rest after a period of usage before reusing it):}
 \sum_{\substack{f\in\C\\h\in\Se}}\sum_{y'=y}^{y+\OFalDur}\AF[y'snf] \quad &\leq \quad {\OFalDur}\An - \OFal\An&(\dk)\\
 \intertext{where $\OFal$ is a number between 0 and 1 indicating the fraction of land that gets fallowed. $\OFalDur$ is the duration of fallow cycle.}
@@ -197,7 +204,7 @@ where $f$ is the primary crop rotated with $f'$.
 These KKT conditions for this problem hold for $f\in \C$
 \begin{subequations}
 \begin{align}
-\db - \DiscFact\piFz \quad &\geq \quad 0&(\QFfz)\\
+\db - \Psi_{nz}\dw \quad &\geq \quad 0&(\QFfz)\\
 \left .
 \begin{aligned}
 	  \da+\DiscFact \left( \CsFz+\CsConvz[yh] - \CsConvz[(y+1)h] + \CsChgz\AF + \CsChgz[(y+1)h]\AF \right)  \\
@@ -205,7 +212,8 @@ These KKT conditions for this problem hold for $f\in \C$
 	+\OFal\sum_{\substack{y'=y-\OCrDur}}^y\dk \\
 	\pm\OCr \sum_{\substack{y'=y-\OFalDur}}^y\dl
 \end{aligned}
-\right \} \quad &\geq \quad 0 &(\AFz)
+\right \} \quad &\geq \quad 0 &(\AFz)\\
+\dw - \DiscFact\piF \quad&\geq\quad 0&(\QFfzSel)
 \end{align}
 where the sign of the last term depends upon whether $f$ is the main crop or the secondary crop used for rotation.
 \end{subequations}
@@ -217,7 +225,7 @@ A livestock producer produces and manages livestock. She makes decisions on sell
 A livestock producer maximizes his profit, which is the benefit given the production (food and leather) and corresponding unit prices, minus the cost of buying and shipping the livestocks himself, plus the income from selling the livestocks, and minus the cost of managing the livestocks she owns.
 \begin{align}
 \Max \quad &: \quad \sum_{\substack{y\in Y\\h\in\Se\\ f\not\in \C}} \DiscFact \left(
-\piFz\QFfz + \piH \QH - \sum_{i\in \Z} (\Cscowtrans + \picow[yhi])\Qcowbuy \right . \nonumber\\
+\left(\sum_n {\piF}{\QFfzSel} \right ) + \piH \QH - \sum_{i\in \Z} (\Cscowtrans + \picow[yhi])\Qcowbuy \right . \nonumber\\
 & \qquad+\left . \sum_{i\in \Z}  \picow[yhz]\Qcowbuy[zi] - \Qcow\CsCow
  \right)
 \end{align}
@@ -240,7 +248,8 @@ such that for $f\not\in \C$
 \intertext{Number of Bovine should not be fewer than the natural deaths:}
 \Qcowsl \quad &\geq \quad \CowDeath\Qcow&({\di})\\
 \intertext{Number of Bovine owned should be above certain level for reproduction (cannot slaughter all the livestocks):}
-\Qcow \quad &\geq \quad \Herdsize&(\dj)
+\Qcow \quad &\geq \quad \Herdsize&(\dj)\\
+\QFfzSel \quad&= \quad \Psi_{nz}\QFfz&(\dw)\nonumber
 \end{align}
 \end{subequations}
 \subsection{KKT Conditions} % (fold)
@@ -255,13 +264,13 @@ such that for $f\not\in \C$
 \qquad (f=\text{Milk})&(\Qcow)\\
 \DiscFact\left( \Cscowtrans+\picow[yhi]-\picow[yhz] \right)  +\left( \picow[yhi]-\picow \right)
 \quad &\geq \quad 0&(\Qcowbuy)\\
-\db-\DiscFact\piFz  \quad &\geq \quad 0 &(\QFfz) \nonumber\\
+\db-\DiscFact\Psi_{nz}\dw  \quad &\geq \quad 0 &(\QFfz) \nonumber\\
 \dc-\DiscFact\piH\quad &\geq \quad 0&(\QH)\\
-\dd-\di-\db\Yldz - \dc\YldH +\picow[(y+1)hz] \quad &\geq \quad 0 \qquad (f=\text{Beef})&(\Qcowsl)
+\dd-\di-\db\Yldz - \dc\YldH +\picow[(y+1)hz] \quad &\geq \quad 0 \qquad (f=\text{Beef})&(\Qcowsl)\\
+\dw - \DiscFact\piF \quad&\geq 0 &(\QFfzSel)
 \end{align}
 \end{subequations}
 % \pagebreak
-\\
 
 
 \subsection{Adaptation zones to administrative regions} % (fold)
@@ -272,8 +281,7 @@ Here we convert production data from adaptation zone level to administrative reg
 Let $\Phi$ and $\Psi$ be matrices of size $|z|\times|z| = |n| \times |n|$. (Note that $\Psi = \Phi^{-1}$)  They contain the ratios used to convert data back and forth between administrave zones ($n$) and adaptation zone ($z$). %{\bf\color{red} To add duals, or think about removing the non-linear equality constraint (1.4b) and instead have the RHS embedded directly in (1.1)}.
 \begin{subequations}
 \begin{align}
-	\QFf \quad&=\quad \sum_z \Psi_{nz}\QFfz&\left( \QFf \right) \\
-	\piFz\QFfz \quad&=\quad \sum_n\Phi_{zn}\piF\QFf &\left( \piFz \right)
+	\QDbf \quad&=\quad \sum_z \QFfzSel &\left( \piF \right) 
 \end{align}
 \end{subequations}
 
@@ -326,7 +334,7 @@ A storage manager buys food products from distributor and sells them to customer
 \subsection{Problem}
 A storage manager maximize his profit, which is the quantity of food products she sells to customers times the corresponding unit price, minus the quantity she buys from distributor times the corresponding unit price (cost), minus a quadratic and linear cost function times the quantity stored.
 \begin{align}
-\Max \quad &: \quad \sum_{\substack{y\in\Y\\h\in\Se\\ f\in \F}}  \piU\QSfsel-\piS\QSfbuy -\left( \frac{1}{2}\CsSq\QSf  + \CsSl \right)  \QSf
+\Max \quad &: \quad \sum_{\substack{y\in\Y\\h\in\Se\\ f\in \F}}  \left\{ \left( \sum_z\piUz\QSfselAdap \right) -\piS\QSfbuy -\left( \frac{1}{2}\CsSq\QSf  + \CsSl \right)  \QSf \right\}
 \end{align}
 where $U$ in superscript stands for ultimate or utility price selling to the customers;$W_s$ in superscript stands for the quantity sell out from the warehouse and $W_b$ stands for the quantity buy into the warehouse; $W q$ and $W l$ stand for the quadratic and linear storage cost factors; $\QSf$ is the quantity of food $f$ stored in year $y$ season $h$ at node $n$.\\\\
 such that
@@ -339,18 +347,23 @@ such that
 \intertext{For the first season $h$, if $h'$ is the last season:}
 \QSf \quad &= \quad \QSf[(y-1)h'] + \QSfbuy-\QSfsel&(\dm)
 \intertext{For other seasons:}
-\QSf \quad &= \quad \QSf[y(h-1)] + \QSfbuy-\QSfsel&(\dm)\nonumber
+\QSf \quad &= \quad \QSf[y(h-1)] + \QSfbuy-\QSfsel&(\dm)\nonumber\\
+\intertext{Storage operators don't have the liberty to ``choose'' the amount to sell in each adap zone. They are constrained by ratios}
+\QSfselAdap \quad&=\quad \Phi_{zn} \QSfsel &(\du)%\\
+% \intertext{The total amount sold by storage should equal the amount sold in each adaptation zone}
+% \sum_z\QSfselAdap \quad&\leq\quad \QSfsel &(\dv)
 \end{align}
 \end{subequations}
 \subsection{KKT Conditions}
 \begin{subequations}
 \begin{align}
 \piS-\dm \quad &\geq \quad 0&(\QSfbuy)\\
-\dm-\piU \quad &\geq \quad 0&(\QSfsel)
+\dm- \Phi_{zn}\du \quad &\geq \quad 0&(\QSfsel)
 \intertext{For last season $h$, where $h'$ is the first season:}
 \CsSq\QSf + \CsSl +\dh +\dm -\dm[(y+1)h'] \quad &\geq \quad 0&(\QSf)
 \intertext{For other seasons:}
-\CsSq\QSf + \CsSl +\dh +\dm -\dm[y(h+1)] \quad &\geq \quad 0&(\QSf)\nonumber
+\CsSq\QSf + \CsSl +\dh +\dm -\dm[y(h+1)] \quad &\geq \quad 0&(\QSf)\nonumber\\
+\du -\piUz \quad& = \quad 0 &(\QSfselAdap)
 \end{align}
 \end{subequations}
 % \pagebreak
@@ -361,16 +374,17 @@ These are again market clearing equations just as in Sec~\ref{sub:adaptation_zon
 % subsection administrative_zones_to_adaptation_zones (end)
 \begin{subequations}
 \begin{align}
-\QUf \quad&=\quad \sum_n \Phi_{zn}\QSfsel & (\QUf)\\
-\piU\QSfsel \quad&=\quad \sum_z\Psi_{nz}\piUz\QUf &(\piU)
+\QUf \quad&=\quad \sum_n \QSfselAdap & (\QUf)%\\
+% \piU\QSfsel \quad&=\quad \sum_z\Psi_{nz}\piUz\QUf &(\piU)
 \end{align}
 \end{subequations}
 
 \section{Market Clearing}
 \begin{subequations}
 \begin{align}
-\intertext{Food supply from crop producer and livestock producer should equal to the quantity bought by distributor (demand of distributor):}
-\QFf \quad &= \quad  \QDbf&(\piF)\\
+% \intertext{Food supply from crop producer and livestock producer should equal to the quantity bought by distributor (demand of distributor):}
+%\QFf \quad &= \quad  \QDbf&(\piF)\\
+\text{{Equation removed}}\\
 \intertext{Ultimate/utility price of $f$ selling to the customer is a function of supply quantity of $f$ and the price of other products $i$ (own elasticity and cross elasticity):}
 \piUz \quad &= \quad \DemInt - \DemSlope\QUf + \sum_{i\in\F}\DemCross \piUz[i]&(\piUz)\\
 \intertext{The quantity storage manager bought in (demand) equals to the quantity sold from the distributor (supply): }
