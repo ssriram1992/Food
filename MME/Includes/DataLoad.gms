@@ -58,8 +58,8 @@ Cap_Elec1(Node)
 * Initialization
 Consumption(Adapt, FoodItem)
 Consum_Admin(Node, FoodItem)
-Production(Adapt, FoodItem)
-Produc_Admin(Node, FoodItem)
+Production(Adapt, Season, FoodItem)
+Produc_Admin(Node, Season, FoodItem)
 Price(Adapt, FoodItem, Season)
 Price_Admin(Node, FoodItem, Season)
 ;
@@ -81,7 +81,7 @@ $LOAD aFAO
 $LOAD C_convert1=C_convert
 C_convert(Adapt, Year) = C_convert1(Adapt);
 $LOAD C_chg1=C_chg
-C_chg(Adapt, Year) = C_chg1(Adapt);
+C_chg(Adapt, Year) = C_chg1(Adapt)*10*100;
 
 $LOAD Cyf
 $LOAD TotArea
@@ -117,13 +117,15 @@ $LOAD CF_Road_data1=CF_Road_data
 CF_Road(FoodItem, NodeFrom, Node, Season, Year) = CF_Road_data1(NodeFrom, Node);
 $LOAD Cap_Road1=Cap_Road
 Cap_Road(FoodItem, NodeFrom, Node) = Cap_Road1(NodeFrom, Node);
-Cap_Road_Tot(NodeFrom, Node) = 1000000;
+Cap_Road_Tot(NodeFrom, Node) = 100000000;
+Cap_Road(FoodItem, NodeFrom, Node) = 10000000;
 
 *** Storage ***
 $LOAD q_WInit=qWInit
+*q_WInit(FoodItem, Node)
 CS_L(FoodItem, Node, Season, Year) = 0.01;
 CS_Q(FoodItem, Node, Season, Year) = 0.01;
-CAP_Store(FoodItem, Node, Season, Year) = 2000;
+CAP_Store(FoodItem, Node, Season, Year) = 2000000;
 
 
 *** Consumption ***
@@ -153,21 +155,23 @@ Cap_Elec_Trans(NodeFrom, Node, Season, Year) = 10000;
 
 *** Data Initialization ***
 $LOAD Consumption
-Q_U.L(FoodItem, Adapt, Season, Period) = Consumption(Adapt, FoodItem)/2 ;
+Q_U.FX(FoodItem, Adapt, Season, Period) = Consumption(Adapt, FoodItem) ;
 $LOAD Consum_Admin
-Q_WS.L(FoodItem, Node, Season, Period) = Consum_Admin(Node, FoodItem)/2;
+*Q_WB.L(FoodItem, Node, Season, Period) = Consum_Admin(Node, FoodItem);
+*QF_DS.L(FoodItem, Node, Season, Period) = Consum_Admin(Node, FoodItem);
+Q_WS.FX(FoodItem, Node, Season, Period) = Consum_Admin(Node, FoodItem);
 $LOAD Production
-Q_FOOD.L(FoodItem, Adapt, "Kremt", Period) = Production(Adapt, FoodItem)*0.7;
-Q_FOOD.L(FoodItem, Adapt, "Belg", Period) = Production(Adapt, FoodItem)*0.3;
+Q_FOOD.FX(FoodItem, Adapt, Season, Period) = Production(Adapt, Season, FoodItem);
 $LOAD Produc_Admin
-Q_FOOD_ADMIN.L(FoodItem, Node, "Kremt", Period) = Produc_Admin(Node, FoodItem)*0.7;
-Q_FOOD_ADMIN.L(FoodItem, Node, "Belg", Period) = Produc_Admin(Node, FoodItem)*0.3;
+QF_DB.FX(FoodItem, Node, Season, Period) = Produc_Admin(Node, Season, FoodItem);
 $LOAD Price
 PI_U_ADAPT.L(FoodItem, Adapt, Season, Period) = Price(Adapt, FoodItem, Season);
+PI_U_ADAPT.FX(FoodItem, Adapt, Season, Period) = DemInt(FoodItem, Adapt, Season, "2015") - DemSlope(FoodItem, Adapt, Season, "2015")*Consumption(Adapt, FoodItem);
 $LOAD Price_Admin
 PI_U.L(FoodItem, Node, Season, Period) = Price_Admin(Node, FoodItem, Season);
 
-AREA_CROP.L(FoodItem, Adapt, Season, Period) = Area_init(Adapt, Season,  FoodItem);
+AREA_CROP.FX(FoodItem, Adapt, Season, Period) = Area_init(Adapt, Season,  FoodItem);
 $GDXIN
 
 $INCLUDE Includes/Calibration.gms
+*QF_ROAD.FX("Teff", "BahirDar", "AddisAbaba", "Kremt", "Period1") = 2557.50818564473;

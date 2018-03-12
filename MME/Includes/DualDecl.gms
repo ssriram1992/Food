@@ -36,7 +36,7 @@ Variables
 
 *** Dual Variables ***
 Positive Variables
-    D1(Adapt, Period) "Dual to E1_2b"
+    D1(Adapt, Season, Period) "Dual to E1_2b"
     D2(FoodItem, Adapt, Season, Period) "Dual to E1_2cd"
     D3(Adapt, Season, Period) "Dual to E2_2b"
     D4(Adapt, Season, Period) "Dual to E2_2c"

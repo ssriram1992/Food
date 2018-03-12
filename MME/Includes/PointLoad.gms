@@ -11,4 +11,4 @@ Set Years2PtLoad(Year2Loop);
 
 
 * Set this to "yes" for those years where point loading has to be used
-Years2PtLoad(Year2Loop) = no ; 
+Years2PtLoad(Year2Loop) = yes ; 

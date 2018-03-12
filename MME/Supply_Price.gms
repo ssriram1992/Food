@@ -9,8 +9,8 @@ $SETGLOBAL Limit_Listing ""
 $SETGLOBAL DataFile "Data/DataGdx"
 
 * Remember to specify in Includes/PointLoad.gms on what years to be used with existing point
-$SETGLOBAL UseInitialPoint ""
-$SETGLOBAL Point "Base_Current"
+$SETGLOBAL UseInitialPoint "*"
+$SETGLOBAL Point "Supply_Price"
 
 
 
@@ -54,7 +54,7 @@ E_Supply_Cost.. Obj =e= sum((Period, Season), df_roll(Period)*
 	0.5* C_chg_roll(Adapt, Period)*SQR(AREA_CROP(FoodItem, Adapt, Season, Period) - AREA_CROP(FoodItem, Adapt, Season, Period-1) - Area_init(Adapt, Season,  FoodItem)$(Ord(Period)=1) ) 
 	 )+
 * Livestock costs
-	sum((Adapt, FoodItem), Q_CATTLE(FoodItem, Adapt, Season, Period)*C_cow_roll(Adapt, Season, Period))+
+*	sum((Adapt, FoodItem), Q_CATTLE(FoodItem, Adapt, Season, Period)*C_cow_roll(Adapt, Season, Period))+
 * Distribution costs
 	sum((NodeFrom, Node, FoodItem), CF_Road_roll(FoodItem, NodeFrom, Node, Season, Period)* QF_ROAD(FoodItem, NodeFrom, Node, Season, Period)) + 
 * Storage Costs
@@ -66,9 +66,9 @@ E_Supply_Cost.. Obj =e= sum((Period, Season), df_roll(Period)*
 	);
 
 
-E_Dem_Cons(FoodItem, Adapt, Season, Period).. Q_U(FoodItem, Adapt, Season, Period) =g= Consumption(Adapt, FoodItem)/2;
+E_Dem_Cons(FoodItem, Adapt, Season, Period).. Q_U(FoodItem, Adapt, Season, Period) =g= Consumption(Adapt, FoodItem);
 
-Q_U.L(FoodItem, Adapt, Season, Period) = Consumption(Adapt, FoodItem)/2;
+Q_U.L(FoodItem, Adapt, Season, Period) = Consumption(Adapt, FoodItem);
 
 
 Model Supply_Price /
@@ -88,7 +88,6 @@ E4_2a
 E4_2b
 E4_4a
 E4_4b
-E5_1a
 E5_1b
 E5_1c
 E6_2a
@@ -101,6 +100,7 @@ E_Dem_Cons
 Supply_Price.savepoint = 2;
 *q_Ws.lo(FoodItem, Node, Season, Year) = Consumption(FoodItem, Node, Season, Year);
 
+Parameters t1,t2,t3(Node),t4(Node),t5,t6, t7, t8, t9;
 
 
 $INCLUDE Includes/PointLoad.gms
@@ -125,6 +125,7 @@ Q_FOOD.L("Beef", Adapt, Season, Period) = Yield_roll("Beef", Adapt, Season, Peri
 
 *$INCLUDE Includes/ContinueRoll.gms
 *$INCLUDE Includes/PostProcess.gms
+put_utility  'shell' / 'mv SupplyPrice_p'SolveCount:0:0'.gdx auxiliary/Supply_Price_'Year2Loop.tl:0'.gdx';
 );
 
 
@@ -140,11 +141,26 @@ Q_FOOD.L("Beef", Adapt, Season, Period) = Yield_roll("Beef", Adapt, Season, Peri
 * Exporting results
 execute_unload 'Results/Supply_Price';
 
-Parameters t1,t2,t3, t5;
-Scalar t4;
-t1 = Q_FOOD.L("CashCrop", "SM2N", "Belg", "Period3");
-t2 = aFAO_roll("CashCrop", "SM2N", "Belg", "Period3");
-t3 = Cyf_roll("CashCrop", "SM2N", "Belg", "Period3");
-t4 = AREA_CROP.L("CashCrop", "SM2N", "Belg", "Period3");
-t5 = t2*t3*t4;
-Display t1,t2,t3,t4, t5;
+
+
+t1 = QF_DB.L("Teff", "AddisAbaba","Kremt", "Period1");
+t2 = QF_DS.L("Teff", "AddisAbaba","Kremt", "Period1");
+t3(NodeFrom) = QF_ROAD.L("Teff", NodeFrom, "AddisAbaba", "Kremt", "Period1");
+t4(Node) = QF_ROAD.L("Teff", "AddisAbaba", Node, "Kremt", "Period1");
+t5 = sum(Node, t3(Node));
+t6 = sum(Node, t4(Node));
+t7 = t1+t5 - t2-t6;
+Parameters start(node), end(node);
+start(node) = QF_DB.L("Teff", Node,"Kremt", "Period1");
+end(node) = QF_DS.L("Teff", Node,"Kremt", "Period1");
+
+t8 = sum(Node, QF_DB.L("Teff", Node, "Kremt", "Period1"));
+t9 = sum(Node, QF_DS.L("Teff", Node, "Kremt", "Period1"));
+
+Display t1,t2,t3,t4,t5,t6,t7, t8, t9;
+Parameter t10(FoodItem, Node, NodeFrom, Season, Period);
+t10(FoodItem, Node, NodeFrom, Season, Period) = QF_ROAD.L(FoodItem, Node, NodeFrom, Season, Period);
+$GDXOUT temp
+$UNLOAD t10 
+$GDXOUT
+Display t10;

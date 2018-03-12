@@ -269,7 +269,7 @@ such that for $f\not\in \C$
 Here we convert production data from adaptation zone level to administrative region level to model transportation. These are indeed market clearing equations.\\
 % subsection adaptation_zones_to_administrative_regions (end)
 % \pagebreak
-Let $\Phi$ and $\Psi$ be matrices of size $|z|\times|n|$ and $|n| \times |z|$ respectively. They contain the ratios used to convert data back and forth between administrave zones ($n$) and adaptation zone ($z$). {\bf\color{red} To add duals, or think about removing the non-linear equality constraint (1.4b) and instead have the RHS embedded directly in (1.1)}.
+Let $\Phi$ and $\Psi$ be matrices of size $|z|\times|z| = |n| \times |n|$. (Note that $\Psi = \Phi^{-1}$)  They contain the ratios used to convert data back and forth between administrave zones ($n$) and adaptation zone ($z$). %{\bf\color{red} To add duals, or think about removing the non-linear equality constraint (1.4b) and instead have the RHS embedded directly in (1.1)}.
 \begin{subequations}
 \begin{align}
 	\QFf \quad&=\quad \sum_z \Psi_{nz}\QFfz&\left( \QFf \right) \\

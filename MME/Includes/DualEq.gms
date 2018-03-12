@@ -12,7 +12,7 @@ E1_3a(FoodItem, Adapt, Season, Period).. D2(FoodItem, Adapt, Season, Period) - d
                             =g=
                             0;
 * Fallow and crop rotation costraints not yet added
-E1_3b(FoodItem, Adapt, Season, Period)$Crop(FoodItem).. D1(Adapt, Period)
+E1_3b(FoodItem, Adapt, Season, Period)$Crop(FoodItem).. D1(Adapt, Season, Period)
         -D2(FoodItem, Adapt, Season, Period)*aFAO_roll(FoodItem, Adapt, Season, Period)*Cyf_roll(FoodItem, Adapt, Season, Period)*(1+(rPower(PI_FOOD(FoodItem, Adapt, Season, Period),Elas_roll(FoodItem, Adapt, Season, Period))-1)$(Elas_roll(FoodItem, Adapt, Season, Period)))
         + df_roll(Period)*(
             C_prod_roll(FoodItem, Adapt, Season, Period) +
@@ -89,7 +89,7 @@ Equations
 
 
 E4_3a(FoodItem, Node, Season, Period).. PI_W(FoodItem, Node, Season, Period) - D11(FoodItem, Node, Season, Period)=g= 0;
-E4_3b(FoodItem, Node, Season, Period).. D11(FoodItem, Node, Season, Period) - PI_U(FoodItem, Node, Season, Period)=g= 0;
+E4_3b(FoodItem, Node, Season, Period).. D11(FoodItem, Node, Season, Period) - PI_U(FoodItem, Node, Season, Period)=n= 0;
 
 E4_3c(FoodItem, Node, Season, Period).. D8(FoodItem, Node, Season, Period)  + D11(FoodItem, Node, Season, Period)
             + CS_Q_roll(FoodItem, Node, Season, Period)*Q_W(FoodItem, Node, Season, Period)

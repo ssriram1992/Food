@@ -62,7 +62,7 @@ Parameters
     Elas(FoodItem, Adapt, Season, Year) "Elasticity"
     Elas_roll(FoodItem, Adapt, Season, Period) "Elasticity"
 
-    TotArea(Adapt) "Total Area available in the node"
+    TotArea(Adapt, Season) "Total Area available in the node"
 
     Area_init(Adapt, Season,  FoodItem) "Initial Area"
 ;
