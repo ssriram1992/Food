@@ -5,10 +5,11 @@
 Equations
 E1_3a(FoodItem, Adapt, Season, Period)
 E1_3b(FoodItem, Adapt, Season, Period)
+E1_3c(FoodItem, Adapt, Node, Season, Period) 
 ;
 
 
-E1_3a(FoodItem, Adapt, Season, Period).. D2(FoodItem, Adapt, Season, Period) - df_roll(Period)*PI_FOOD(FoodItem, Adapt, Season, Period)
+E1_3a(FoodItem, Adapt, Season, Period).. D2(FoodItem, Adapt, Season, Period) - sum(Node, Adapt2Node(Adapt, Node)*D18(FoodItem, Adapt, Node, Season, Period)) 
                             =g=
                             0;
 * Fallow and crop rotation costraints not yet added
@@ -22,6 +23,9 @@ E1_3b(FoodItem, Adapt, Season, Period)$Crop(FoodItem).. D1(Adapt, Season, Period
             )
                     =g=
             0;
+E1_3c(FoodItem, Adapt, Node, Season, Period).. D18(FoodItem, Adapt, Node, Season, Period)  - df_roll(Period)*PI_FOOD_ADMIN(FoodItem, Node, Season, Period) 
+                                                    =g=
+                                                    0;
 
 
 
@@ -85,11 +89,14 @@ Equations
     E4_3a(FoodItem, Node, Season, Period)
     E4_3b(FoodItem, Node, Season, Period)
     E4_3c(FoodItem, Node, Season, Period)
+    E4_3d(FoodItem, Node, Adapt, Season, Period)
 ;
 
 
 E4_3a(FoodItem, Node, Season, Period).. PI_W(FoodItem, Node, Season, Period) - D11(FoodItem, Node, Season, Period)=g= 0;
-E4_3b(FoodItem, Node, Season, Period).. D11(FoodItem, Node, Season, Period) - PI_U(FoodItem, Node, Season, Period)=n= 0;
+E4_3b(FoodItem, Node, Season, Period).. D11(FoodItem, Node, Season, Period) - sum(Adapt, Node2Adapt(Node, Adapt)*D17(FoodItem, Node, Adapt, Season, Period))
+                                            =e= 
+                                            0;
 
 E4_3c(FoodItem, Node, Season, Period).. D8(FoodItem, Node, Season, Period)  + D11(FoodItem, Node, Season, Period)
             + CS_Q_roll(FoodItem, Node, Season, Period)*Q_W(FoodItem, Node, Season, Period)
@@ -98,6 +105,9 @@ E4_3c(FoodItem, Node, Season, Period).. D8(FoodItem, Node, Season, Period)  + D1
             - D11(FoodItem, Node, Season+1, Period)$(Ord(Season)<>Card(Season))
             =g= 0;
 
+E4_3d(FoodItem, Node, Adapt, Season, Period).. D17(FoodItem, Node, Adapt, Season, Period) - PI_U_ADAPT(FoodItem, Adapt, Season, Period)
+                                                =e=
+                                                0;
 
 
 ************************************************************************

@@ -168,6 +168,8 @@ Positive Variables
     Q_FOOD(FoodItem, Adapt, Season, Period) "quantity of Food produced"
     AREA_CROP(FoodItem, Adapt, Season, Period) "area allotted for each Crop"
 *    Area_conv(Adapt, Period) "area converted to become arable"
+    Q_FOOD_ADMIN(FoodItem, Node, Season, Period) "Quantity of Food - by admin region"
+    Q_FOOD_TRANS(FoodItem, Adapt, Node, Season, Period)
 ;
 
 *** Livestock ***
@@ -178,9 +180,6 @@ Positive Variables
     Q_CATTLE_SL(Adapt, Season, Period) "Number of cattle slaughtered"
 ;
 
-Positive Variables
-    Q_FOOD_ADMIN(FoodItem, Node, Season, Period) "Quantity of Food - by admin region"
-;
 
 *** Distributors ***
 Positive Variables
@@ -194,6 +193,10 @@ Positive Variables
     Q_W(FoodItem, Node, Season, Period) "Total quantity stored"
     Q_WS(FoodItem, Node, Season, Period) "Quantity sold"
     Q_WB(FoodItem, Node, Season, Period) "Quantity bought"
+;
+
+Variables
+    Q_WU(FoodItem, Node, Adapt, Season, Period) "Transfered to adaptation zones"
 ;
 
 *** Consumers ***

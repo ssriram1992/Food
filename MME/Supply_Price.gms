@@ -74,20 +74,20 @@ Q_U.L(FoodItem, Adapt, Season, Period) = Consumption(Adapt, FoodItem);
 Model Supply_Price /
 E1_2b
 E1_2cd
+E1_2e
 E2_2b
 E2_2c
 E2_2d
 E2_2e
 E2_2f
 E2_4a
-E2_4b
 E3_2b
 E3_2c
 E3_2d
 E4_2a
 E4_2b
+E4_2c
 E4_4a
-E4_4b
 E5_1b
 E5_1c
 E6_2a

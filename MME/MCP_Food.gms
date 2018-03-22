@@ -13,7 +13,7 @@ $SETGLOBAL FutureKnowledge "Current"
 $SETGLOBAL DataFile "Data/DataGdx"
 
 * Remember to specify in Includes/PointLoad.gms on what years to be used with existing point
-$SETGLOBAL UseInitialPoint "*"
+$SETGLOBAL UseInitialPoint ""
 $SETGLOBAL Point "%Scenario%_%FutureKnowledge%"
 $SETGLOBAL Point "Supply_Price"
 
@@ -53,21 +53,22 @@ $INCLUDE Includes/DualEq.gms
 
 
 Model Food1y /
-*E1_2b.D1
-*E1_2cd.D2
-*E1_3a.Q_FOOD
-*E1_3b.AREA_CROP
-*E2_2b.D3
-*E2_2c.D4
-*E2_2d.PI_COW
-*E2_2e.D9
-*E2_2f.D10
-*E2_3a.Q_CATTLE
-*E2_3b.Q_CATTLE_BUY
-*E2_3c.Q_HIDE
-*E2_3d.Q_CATTLE_SL
+E1_2b.D1
+E1_2cd.D2
+E1_2e.D18
+E1_3a.Q_FOOD
+E1_3b.AREA_CROP
+E1_3c.Q_FOOD_TRANS
+E2_2b.D3
+E2_2c.D4
+E2_2d.PI_COW
+E2_2e.D9
+E2_2f.D10
+E2_3a.Q_CATTLE
+E2_3b.Q_CATTLE_BUY
+E2_3c.Q_HIDE
+E2_3d.Q_CATTLE_SL
 E2_4a.PI_FOOD_ADMIN
-*E2_4b.PI_FOOD
 E3_2b.D6
 E3_2c.D7
 E3_2d.D16
@@ -76,19 +77,20 @@ E3_3b.QF_ROAD
 E3_3c.QF_DS
 E4_2a.D8
 E4_2b.D11
+E4_2c.D17
 E4_3a.Q_WB
 E4_3b.Q_WS
 E4_3c.Q_W
+E4_3d.Q_WU
 E4_4a.PI_U_ADAPT
-E4_4b.PI_U
 E5_1b.Q_U
 E5_1c.PI_W
-*E6_2a.D13
-*E6_2b.D14
-*E6_2c.D15
-*E6_3a.Q_ELEC
-*E6_3b.Q_ELEC_TRANS
-*E_ElecDem.Q_ELEC_DEM
+E6_2a.D13
+E6_2b.D14
+E6_2c.D15
+E6_3a.Q_ELEC
+E6_3b.Q_ELEC_TRANS
+E_ElecDem.Q_ELEC_DEM
 /;
 Food1y.savepoint = 2;
 *q_Ws.lo(FoodItem, Node, Season, Year) = Consumption(FoodItem, Node, Season, Year);

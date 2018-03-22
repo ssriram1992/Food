@@ -154,24 +154,37 @@ Cap_Elec_Trans(NodeFrom, Node, Season, Year) = 10000;
 
 
 *** Data Initialization ***
-$LOAD Consumption
-Q_U.FX(FoodItem, Adapt, Season, Period) = Consumption(Adapt, FoodItem) ;
-$LOAD Consum_Admin
-*Q_WB.L(FoodItem, Node, Season, Period) = Consum_Admin(Node, FoodItem);
-*QF_DS.L(FoodItem, Node, Season, Period) = Consum_Admin(Node, FoodItem);
-Q_WS.FX(FoodItem, Node, Season, Period) = Consum_Admin(Node, FoodItem);
 $LOAD Production
-Q_FOOD.FX(FoodItem, Adapt, Season, Period) = Production(Adapt, Season, FoodItem);
 $LOAD Produc_Admin
-QF_DB.FX(FoodItem, Node, Season, Period) = Produc_Admin(Node, Season, FoodItem);
-$LOAD Price
-PI_U_ADAPT.L(FoodItem, Adapt, Season, Period) = Price(Adapt, FoodItem, Season);
-PI_U_ADAPT.FX(FoodItem, Adapt, Season, Period) = DemInt(FoodItem, Adapt, Season, "2015") - DemSlope(FoodItem, Adapt, Season, "2015")*Consumption(Adapt, FoodItem);
-$LOAD Price_Admin
-PI_U.L(FoodItem, Node, Season, Period) = Price_Admin(Node, FoodItem, Season);
 
 AREA_CROP.FX(FoodItem, Adapt, Season, Period) = Area_init(Adapt, Season,  FoodItem);
+Q_FOOD.FX(FoodItem, Adapt, Season, Period) = Production(Adapt, Season, FoodItem);
+Q_FOOD_TRANS.FX(FoodItem, Adapt, Node, Season, Period) = Adapt2Node(Adapt, Node)*Production(Adapt, Season, FoodItem);
+QF_DB.FX(FoodItem, Node, Season, Period) = sum(Adapt, Adapt2Node(Adapt, Node)*Production(Adapt, Season, FoodItem));
+
+$LOAD Consumption
+$LOAD Consum_Admin
+Q_U.FX(FoodItem, Adapt, Season, Period) = Consumption(Adapt, FoodItem);
+Q_WS.FX(FoodItem, Node, Season, Period) = Consum_Admin(Node, FoodItem);
+Q_WU.FX(FoodItem, Node, Adapt, Season, Period) = Consumption(Adapt, FoodItem)/14;
+
+$LOAD Price
+$LOAD Price_Admin
+PI_U_ADAPT.L(FoodItem, Adapt, Season, Period) = DemInt(FoodItem, Adapt, Season, "2015") 
+							- DemSlope(FoodItem, Adapt, Season, "2015")*Consumption(Adapt, FoodItem);
+
 $GDXIN
 
 $INCLUDE Includes/Calibration.gms
-*QF_ROAD.FX("Teff", "BahirDar", "AddisAbaba", "Kremt", "Period1") = 2557.50818564473;
+*QF_ROAD.L("Teff", "BahirDar", "AddisAbaba", "Kremt", "Period1") = 2557.50818564473;
+
+D17.L(FoodItem, Node, Adapt, Season, Period) = DemInt(FoodItem, Adapt, Season, "2015") - DemSlope(FoodItem, Adapt, Season, "2015")*Consumption(Adapt, FoodItem);
+D11.L(FoodItem, Node, Season, Period) = sum(Adapt, Node2Adapt(Node, Adapt)*(
+						DemInt(FoodItem, Adapt, Season, "2015") - DemSlope(FoodItem, Adapt, Season, "2015")*Consumption(Adapt, FoodItem)
+						));
+PI_W.L(FoodItem, Node, Season, Period)=  sum(Adapt, Node2Adapt(Node, Adapt)*(
+						DemInt(FoodItem, Adapt, Season, "2015") - DemSlope(FoodItem, Adapt, Season, "2015")*Consumption(Adapt, FoodItem)
+						));
+D6.L(FoodItem, Node, Season, Period)=  sum(Adapt, Node2Adapt(Node, Adapt)*(
+						DemInt(FoodItem, Adapt, Season, "2015") - DemSlope(FoodItem, Adapt, Season, "2015")*Consumption(Adapt, FoodItem)
+						));

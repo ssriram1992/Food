@@ -204,7 +204,7 @@ where $f$ is the primary crop rotated with $f'$.
 These KKT conditions for this problem hold for $f\in \C$
 \begin{subequations}
 \begin{align}
-\db - \Psi_{nz}\dw \quad &\geq \quad 0&(\QFfz)\\
+\db - \sum_n\Psi_{nz}\dw \quad &\geq \quad 0&(\QFfz)\\
 \left .
 \begin{aligned}
 	  \da+\DiscFact \left( \CsFz+\CsConvz[yh] - \CsConvz[(y+1)h] + \CsChgz\AF + \CsChgz[(y+1)h]\AF \right)  \\
@@ -358,7 +358,7 @@ such that
 \begin{subequations}
 \begin{align}
 \piS-\dm \quad &\geq \quad 0&(\QSfbuy)\\
-\dm- \Phi_{zn}\du \quad &\geq \quad 0&(\QSfsel)
+\dm- \sum_z\Phi_{zn}\du \quad &\geq \quad 0&(\QSfsel)
 \intertext{For last season $h$, where $h'$ is the first season:}
 \CsSq\QSf + \CsSl +\dh +\dm -\dm[(y+1)h'] \quad &\geq \quad 0&(\QSf)
 \intertext{For other seasons:}
@@ -374,7 +374,7 @@ These are again market clearing equations just as in Sec~\ref{sub:adaptation_zon
 % subsection administrative_zones_to_adaptation_zones (end)
 \begin{subequations}
 \begin{align}
-\QUf \quad&=\quad \sum_n \QSfselAdap & (\QUf)%\\
+\QUf \quad&=\quad \sum_n \QSfselAdap & (\piUz)%\\
 % \piU\QSfsel \quad&=\quad \sum_z\Psi_{nz}\piUz\QUf &(\piU)
 \end{align}
 \end{subequations}
@@ -386,7 +386,7 @@ These are again market clearing equations just as in Sec~\ref{sub:adaptation_zon
 %\QFf \quad &= \quad  \QDbf&(\piF)\\
 \text{{Equation removed}}\\
 \intertext{Ultimate/utility price of $f$ selling to the customer is a function of supply quantity of $f$ and the price of other products $i$ (own elasticity and cross elasticity):}
-\piUz \quad &= \quad \DemInt - \DemSlope\QUf + \sum_{i\in\F}\DemCross \piUz[i]&(\piUz)\\
+\piUz \quad &= \quad \DemInt - \DemSlope\QUf + \sum_{i\in\F}\DemCross \piUz[i]&(\QUf)\\
 \intertext{The quantity storage manager bought in (demand) equals to the quantity sold from the distributor (supply): }
 \QSfbuy \quad &= \quad \QDsf&(\piS)
 \end{align}

@@ -5,10 +5,11 @@
 Equations
 E1_2b(Adapt, Season, Period)
 E1_2cd(FoodItem, Adapt, Season, Period)
+E1_2e(FoodItem, Adapt, Node, Season, Period)
 * Fallow Constraint
-* E1_2e(Node, Period)
+* E1_2f(Adapt, Period)
 * Crop Rotation Constraint
-* E1_2f(FoodItem, FoodItem2, Node, Period)
+* E1_2g(FoodItem, FoodItem2, Adapt, Period)
 ;
 
 E1_2b(Adapt, Season, Period).. TotArea(Adapt, Season)
@@ -23,6 +24,11 @@ E1_2cd(FoodItem, Adapt, Season, Period).. -Q_FOOD(FoodItem, Adapt, Season, Perio
                             Q_CATTLE(FoodItem, Adapt, Season, Period)$(sameas(FoodItem,"milk"))+
                             Q_CATTLE_SL(Adapt, Season, Period)$(sameas(FoodItem,"beef"))
                             );
+
+* Written together for livestock also
+E1_2e(FoodItem, Adapt, Node, Season, Period).. Q_FOOD_TRANS(FoodItem, Adapt, Node, Season, Period)
+                                                 =e= 
+                                                Adapt2Node(Adapt, Node)*Q_FOOD(FoodItem, Adapt, Season, Period); 
 
 ************************************************************************
 ********************       LIVESTOCK PRODUCER       ********************
@@ -64,16 +70,11 @@ E2_2f(Adapt, Season, Period).. sum(FoodItem, Q_CATTLE(FoodItem, Adapt, Season, P
 ************************************************************************
 Equations
 E2_4a(FoodItem, Node, Season, Period)
-E2_4b(FoodItem, Adapt, Season, Period)
 ;
 
- E2_4a(FoodItem, Node, Season, Period).. QF_DB(FoodItem, Node, Season, Period) =e=  sum(Adapt, Adapt2Node(Adapt, Node)*Q_FOOD(FoodItem, Adapt, Season, Period));
+E2_4a(FoodItem, Node, Season, Period).. QF_DB(FoodItem, Node, Season, Period) =e=  sum(Adapt, Q_FOOD_TRANS(FoodItem, Adapt, Node, Season, Period));
  
- E2_4b(FoodItem, Adapt, Season, Period).. Q_FOOD(FoodItem, Adapt, Season, Period)=e= sum(Node, Node2Adapt(Node, Adapt)*
-                                                            QF_DB(FoodItem, Node, Season, Period)
-                                                                );
-
-
+ 
 ************************************************************************
 ***********************       DISTRIBUTORS       ***********************
 ************************************************************************
@@ -103,12 +104,16 @@ E3_2d(NodeFrom, Node, Season, Period)$Road(NodeFrom, Node).. -sum(FoodItem,QF_RO
 Equations
     E4_2a(FoodItem, Node, Season, Period)
     E4_2b(FoodItem, Node, Season, Period)
+    E4_2c(FoodItem, Node, Adapt, Season, Period)
 ;
 
 E4_2a(FoodItem, Node, Season, Period).. -Q_W(FoodItem, Node, Season, Period) =g= -CAP_Store_roll(FoodItem, Node, Season, Period);
 E4_2b(FoodItem, Node, Season, Period).. Q_W(FoodItem, Node, Season-1, Period)$(Ord(Season)>1) +
         (Q_WInit(FoodItem, Node)$(ORD(Period)=1) +Q_W(FoodItem, Node, Season + (Card(Season)-1), Period-1))$(Ord(Season)=1) + Q_WB(FoodItem, Node, Season, Period)
-        -Q_WS(FoodItem, Node, Season, Period) =e= Q_W(FoodItem, Node, Season, Period);
+        -Q_WS(FoodItem, Node, Season, Period) =n= Q_W(FoodItem, Node, Season, Period);
+E4_2c(FoodItem, Node, Adapt, Season, Period).. Q_WU(FoodItem, Node, Adapt, Season, Period) 
+                                                =n= 
+                                            Node2Adapt(Node, Adapt)*Q_WS(FoodItem, Node, Season, Period);
 
 
 ************************************************************************
@@ -116,15 +121,12 @@ E4_2b(FoodItem, Node, Season, Period).. Q_W(FoodItem, Node, Season-1, Period)$(O
 ************************************************************************
 Equations
     E4_4a(FoodItem, Adapt, Season, Period)
-    E4_4b(FoodItem, Node, Season, Period)
 ;
 
 E4_4a(FoodItem, Adapt, Season, Period).. -Q_U(FoodItem, Adapt, Season, Period) 
-                                            =e= 
-                                        -sum(NodeFrom, Node2Adapt(NodeFrom, Adapt)*Q_WS(FoodItem, NodeFrom, Season, Period));
+                                            =n= 
+                                        -sum(NodeFrom, Q_WU(FoodItem, NodeFrom, Adapt, Season, Period));
 
-E4_4b(FoodItem, Node, Season, Period).. -sum(Adapt, Adapt2Node(Adapt, Node)*Q_U(FoodItem, Adapt, Season, Period)) =e= 
-                                        -Q_WS(FoodItem, Node, Season, Period);
 
 $ontext
 E4_4b(FoodItem, Node, Season, Period).. sum(Adapt, Adapt2Node(Adapt, Node)*
