@@ -94,8 +94,9 @@ Equations
 
 
 E4_3a(FoodItem, Node, Season, Period).. PI_W(FoodItem, Node, Season, Period) - D11(FoodItem, Node, Season, Period)=g= 0;
-E4_3b(FoodItem, Node, Season, Period).. D11(FoodItem, Node, Season, Period) - sum(Adapt, Node2Adapt(Node, Adapt)*D17(FoodItem, Node, Adapt, Season, Period))
-                                            =e= 
+E4_3b(FoodItem, Node, Season, Period).. D11(FoodItem, Node, Season, Period) 
+                                        - PI_U(FoodItem, Node, Season, Period) 
+                                            =g= 
                                             0;
 
 E4_3c(FoodItem, Node, Season, Period).. D8(FoodItem, Node, Season, Period)  + D11(FoodItem, Node, Season, Period)
@@ -105,10 +106,22 @@ E4_3c(FoodItem, Node, Season, Period).. D8(FoodItem, Node, Season, Period)  + D1
             - D11(FoodItem, Node, Season+1, Period)$(Ord(Season)<>Card(Season))
             =g= 0;
 
-E4_3d(FoodItem, Node, Adapt, Season, Period).. D17(FoodItem, Node, Adapt, Season, Period) - PI_U_ADAPT(FoodItem, Adapt, Season, Period)
-                                                =e=
-                                                0;
 
+************************************************************************
+************************       CONSUMERS       *************************
+************************************************************************
+Equations
+    E5_3a(FoodItem, Node, Adapt, Season, Period)
+    E5_3b(FoodItem, Adapt, Season, Period)
+;
+
+E5_3a(FoodItem, Node, Adapt, Season, Period).. PI_U(FoodItem, Node, Season, Period) - D19(FoodItem, Adapt, Season, Period) 
+                                    - D17(FoodItem, Node, Adapt, Season, Period) =g= 0;
+
+E5_3b(FoodItem, Adapt, Season, Period).. DemSlope_roll(FoodItem, Adapt, Season, Period)*Q_U(FoodItem, Adapt, Season, Period)
+                                    - DemInt_roll(FoodItem, Adapt, Season, Period) + D19(FoodItem, Adapt, Season, Period)
+                                    + sum(Node, Adapt2Node(Adapt, Node)*D17(FoodItem, Node, Adapt, Season, Period))
+                                    =g= 0;
 
 ************************************************************************
 ************************       ELECTRICITY       ***********************

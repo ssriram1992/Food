@@ -83,6 +83,7 @@ Equations
     E3_2b(FoodItem, Node, Season, Period)
     E3_2c(FoodItem, NodeFrom, Node, Season, Period)
     E3_2d(NodeFrom, Node, Season, Period)
+    E3_4a(FoodItem, Node, Season, Period)
 ;
 
 E3_2b(FoodItem, Node, Season, Period).. QF_DB(FoodItem, Node, Season, Period) + sum(NodeFrom$Road(NodeFrom, Node), QF_ROAD(FoodItem, NodeFrom, Node, Season, Period))
@@ -96,7 +97,7 @@ E3_2d(NodeFrom, Node, Season, Period)$Road(NodeFrom, Node).. -sum(FoodItem,QF_RO
                                         =g=
                                         -Cap_Road_Tot(NodeFrom, Node);
 
-
+E3_4a(FoodItem, Node, Season, Period).. Q_WB(FoodItem, Node, Season, Period) =e= QF_DS(FoodItem, Node, Season, Period);
 
 ************************************************************************
 ***********************       STORE/RETAIL       ***********************
@@ -111,21 +112,19 @@ E4_2a(FoodItem, Node, Season, Period).. -Q_W(FoodItem, Node, Season, Period) =g=
 E4_2b(FoodItem, Node, Season, Period).. Q_W(FoodItem, Node, Season-1, Period)$(Ord(Season)>1) +
         (Q_WInit(FoodItem, Node)$(ORD(Period)=1) +Q_W(FoodItem, Node, Season + (Card(Season)-1), Period-1))$(Ord(Season)=1) + Q_WB(FoodItem, Node, Season, Period)
         -Q_WS(FoodItem, Node, Season, Period) =n= Q_W(FoodItem, Node, Season, Period);
-E4_2c(FoodItem, Node, Adapt, Season, Period).. Q_WU(FoodItem, Node, Adapt, Season, Period) 
-                                                =n= 
-                                            Node2Adapt(Node, Adapt)*Q_WS(FoodItem, Node, Season, Period);
+
 
 
 ************************************************************************
 ************************       Node2Adapt       ************************
 ************************************************************************
 Equations
-    E4_4a(FoodItem, Adapt, Season, Period)
+    E4_4a(FoodItem, Node, Season, Period)
 ;
 
-E4_4a(FoodItem, Adapt, Season, Period).. -Q_U(FoodItem, Adapt, Season, Period) 
-                                            =n= 
-                                        -sum(NodeFrom, Q_WU(FoodItem, NodeFrom, Adapt, Season, Period));
+E4_4a(FoodItem, Node, Season, Period).. Q_WS(FoodItem, Node, Season, Period) =e= sum(Adapt,
+                                                Q_WU(FoodItem, Node, Adapt, Season, Period)
+                                                        );
 
 
 $ontext
@@ -139,16 +138,24 @@ $offtext
 ***********************       CONSUMERS       **********************
 ************************************************************************
 Equations
-*    E5_1a(FoodItem, Node, Season, Period)
-    E5_1b(FoodItem, Adapt, Season, Period)
-    E5_1c(FoodItem, Node, Season, Period)
+    E5_2a(FoodItem, Adapt, Season, Period)
+    E5_2b(FoodItem, Node, Adapt, Season, Period)
 ;
 
+E5_2a(FoodItem, Adapt, Season, Period).. sum(Node, Q_WU(FoodItem, Node, Adapt, Season, Period)) 
+                                            =g= 
+                                    Q_U(FoodItem, Adapt, Season, Period);
+
+E5_2b(FoodItem, Node, Adapt, Season, Period).. Q_WU(FoodItem, Node, Adapt, Season, Period) 
+                                                                =g=
+                                                Adapt2Node(Adapt, Node)*Q_U(FoodItem, Adapt, Season, Period);
+
+
 *E5_1a(FoodItem, Node, Season, Period).. Q_FOOD_ADMIN(FoodItem, Node, Season, Period) =e= QF_DB(FoodItem, Node, Season, Period);
-E5_1b(FoodItem, Adapt, Season, Period).. -PI_U_ADAPT(FoodItem, Adapt, Season, Period) =g= -(DemInt_roll(FoodItem, Adapt, Season, Period)
-                                - DemSlope_roll(FoodItem, Adapt, Season, Period)*Q_U(FoodItem, Adapt, Season, Period) 
-                                + sum(FoodItem2, DemCrossTerms_roll(FoodItem, FoodItem2, Adapt, Season, Period)*DemCrossTerms_roll(FoodItem, FoodItem2, Adapt, Season, Period)*DemSlope_roll(FoodItem, Adapt, Season, Period)*(PI_U_ADAPT(FoodItem2, Adapt, Season, Period) - PI_U_ADAPT(FoodItem, Adapt, Season, Period)))$(CrossElasOn));
-E5_1c(FoodItem, Node, Season, Period).. Q_WB(FoodItem, Node, Season, Period) =e= QF_DS(FoodItem, Node, Season, Period);
+*E5_2a(FoodItem, Adapt, Season, Period).. -PI_U_ADAPT(FoodItem, Adapt, Season, Period) =g= -(DemInt_roll(FoodItem, Adapt, Season, Period)
+*                                - DemSlope_roll(FoodItem, Adapt, Season, Period)*Q_U(FoodItem, Adapt, Season, Period) 
+*                                + sum(FoodItem2, DemCrossTerms_roll(FoodItem, FoodItem2, Adapt, Season, Period)*DemCrossTerms_roll(FoodItem, FoodItem2, Adapt, Season, Period)*DemSlope_roll(FoodItem, Adapt, Season, Period)*(PI_U_ADAPT(FoodItem2, Adapt, Season, Period) - PI_U_ADAPT(FoodItem, Adapt, Season, Period)))$(CrossElasOn));
+*
 
 
 ************************************************************************

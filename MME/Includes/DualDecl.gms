@@ -31,7 +31,6 @@ Variables
 *** Electricity ***
 Variables
     D11(FoodItem, Node, Season, Period) "Dual to E4_2b"
-    D17(FoodItem, Node, Adapt, Season, Period) "Dual to E4_2c"
     D18(FoodItem, Adapt, Node, Season, Period) "Dual to E1_2e"
 ;
 
@@ -50,4 +49,6 @@ Positive Variables
     D14(Node, Season, Period) "Dual to E6_2b"
     D15(NodeFrom, Node, Season, Period) "Dual to E6_2c"
     D16(NodeFrom, Node, Season, Period) "Dual to E3_2d"
+    D17(FoodItem, Node, Adapt, Season, Period) "Dual to E5_2b"
+    D19(FoodItem, Adapt, Season, Period) "Dual to E5_2a"
 ;

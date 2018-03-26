@@ -62,6 +62,7 @@
 \newcommand{\QSfsel}		{\textcolor{blue} {\Q^{\S_s}_{yhnf}}}
 \newcommand{\QSfselAdap}    {\textcolor{blue} {\Q^{\S\U}_{yhnzf}}}
 \newcommand{\QUf}			{\textcolor{blue} {\Q^{\U}_{yhzf}}}
+\newcommand{\QUfnz}			{\textcolor{blue} {\Q^{\U}_{yhnzf}}}
 \newcommand{\QE}			{\textcolor{blue} {\Q^{\E-gen}_{yhn}}}
 \newcommand{\QEDem}			{\textcolor{blue} {\Q^{\E-dem}_{yhn}}}
 \newcommand{\QEr}			{\textcolor{blue} {\Q^{\E}_{yhr}}}
@@ -143,9 +144,9 @@
 \newcommand{\ds}[1][n]		{\textcolor{teal} {\delta^{14}_{yh#1}}}
 \newcommand{\dt}			{\textcolor{teal} {\delta^{16}_{yhr}}}
 \newcommand{\du}			{\textcolor{teal} {\delta^{17}_{yhnzf}}}
-\newcommand{\dv}			{\textcolor{teal} {\delta^{18}_{yhnf}}}
+\newcommand{\dv}			{\textcolor{teal} {\delta^{19}_{yhzf}}}
 \newcommand{\dw}			{\textcolor{teal} {\delta^{18}_{yhznf}}}
-\newcommand{\dx}			{\textcolor{teal} {\delta^{18}_{yhnf}}}
+\newcommand{\dx}			{\textcolor{teal} {\delta^{20}_{yhnf}}}
 
 
 % Settings Information
@@ -323,18 +324,26 @@ Representing $s_r$ and $d_r$ as the source and destination nodes of the transpor
 \df-\DiscFact \piS \quad &\geq \quad 0&(\QDsf)
 \end{align}
 \end{subequations}
+
+
+
+\subsection{Market Clearing between distribution and Storage} % (fold)
+\label{sub:market_clearing_between_distribution_and_storage}
+{The quantity storage manager bought in (demand) equals to the quantity sold from the distributor (supply): }
+\begin{subequations}
+	\begin{align}	
+		\QSfbuy \quad &= \quad \QDsf&(\piS)
+	\end{align}
+\end{subequations}
+% subsection market_clearing_between_distribution_and_storage (end)
 % \pagebreak
-
-
-
-
 
 \section{Storage}
 A storage manager buys food products from distributor and sells them to customers. She can also store food over years. Therefore, she makes decision on the quantity to buy, sell, and store.
 \subsection{Problem}
 A storage manager maximize his profit, which is the quantity of food products she sells to customers times the corresponding unit price, minus the quantity she buys from distributor times the corresponding unit price (cost), minus a quadratic and linear cost function times the quantity stored.
 \begin{align}
-\Max \quad &: \quad \sum_{\substack{y\in\Y\\h\in\Se\\ f\in \F}}  \left\{ \left( \sum_z\piUz\QSfselAdap \right) -\piS\QSfbuy -\left( \frac{1}{2}\CsSq\QSf  + \CsSl \right)  \QSf \right\}
+\Max \quad &: \quad \sum_{\substack{y\in\Y\\h\in\Se\\ f\in \F}}  \left\{  \piU\QSfsel  -\piS\QSfbuy -\left( \frac{1}{2}\CsSq\QSf  + \CsSl \right)  \QSf \right\}
 \end{align}
 where $U$ in superscript stands for ultimate or utility price selling to the customers;$W_s$ in superscript stands for the quantity sell out from the warehouse and $W_b$ stands for the quantity buy into the warehouse; $W q$ and $W l$ stand for the quadratic and linear storage cost factors; $\QSf$ is the quantity of food $f$ stored in year $y$ season $h$ at node $n$.\\\\
 such that
@@ -347,9 +356,9 @@ such that
 \intertext{For the first season $h$, if $h'$ is the last season:}
 \QSf \quad &= \quad \QSf[(y-1)h'] + \QSfbuy-\QSfsel&(\dm)
 \intertext{For other seasons:}
-\QSf \quad &= \quad \QSf[y(h-1)] + \QSfbuy-\QSfsel&(\dm)\nonumber\\
-\intertext{Storage operators don't have the liberty to ``choose'' the amount to sell in each adap zone. They are constrained by ratios}
-\QSfselAdap \quad&=\quad \Phi_{zn} \QSfsel &(\du)%\\
+\QSf \quad &= \quad \QSf[y(h-1)] + \QSfbuy-\QSfsel&(\dm)\nonumber%\\
+% \intertext{Storage operators don't have the liberty to ``choose'' the amount to sell in each adap zone. They are constrained by ratios}
+% \QSfselAdap \quad&=\quad \Phi_{zn} \QSfsel &(\du)%\\
 % \intertext{The total amount sold by storage should equal the amount sold in each adaptation zone}
 % \sum_z\QSfselAdap \quad&\leq\quad \QSfsel &(\dv)
 \end{align}
@@ -358,12 +367,12 @@ such that
 \begin{subequations}
 \begin{align}
 \piS-\dm \quad &\geq \quad 0&(\QSfbuy)\\
-\dm- \sum_z\Phi_{zn}\du \quad &\geq \quad 0&(\QSfsel)
+\dm- \piU \quad &\geq \quad 0&(\QSfsel)
 \intertext{For last season $h$, where $h'$ is the first season:}
 \CsSq\QSf + \CsSl +\dh +\dm -\dm[(y+1)h'] \quad &\geq \quad 0&(\QSf)
 \intertext{For other seasons:}
-\CsSq\QSf + \CsSl +\dh +\dm -\dm[y(h+1)] \quad &\geq \quad 0&(\QSf)\nonumber\\
-\du -\piUz \quad& = \quad 0 &(\QSfselAdap)
+\CsSq\QSf + \CsSl +\dh +\dm -\dm[y(h+1)] \quad &\geq \quad 0&(\QSf)\nonumber%\\
+% \du -\piUz \quad& = \quad 0 &(\QSfselAdap)
 \end{align}
 \end{subequations}
 % \pagebreak
@@ -374,24 +383,41 @@ These are again market clearing equations just as in Sec~\ref{sub:adaptation_zon
 % subsection administrative_zones_to_adaptation_zones (end)
 \begin{subequations}
 \begin{align}
-\QUf \quad&=\quad \sum_n \QSfselAdap & (\piUz)%\\
+% \QUf \quad&=\quad \sum_n \QSfselAdap & (\piUz)%\\
+\QSfsel \quad&=\quad \sum_z \QUfnz&(\piU)
 % \piU\QSfsel \quad&=\quad \sum_z\Psi_{nz}\piUz\QUf &(\piU)
 \end{align}
 \end{subequations}
+% \pagebreak
 
-\section{Market Clearing}
+
+
+
+
+\section{Consumers}
+Consumers consume food!
+\subsection{Problem} % (fold)
+\begin{align}
+	\Max \quad &: \quad \sum_{\substack{y\in\Y\\h\in\Se\\ f\in \F}}  \left\{  \sum_n \left( \piU\QUfnz \right) - \DemInt \QUf + \frac{1}{2}\DemSlope\QUf^2 \right\}
+\end{align}
+such that
 \begin{subequations}
 \begin{align}
-% \intertext{Food supply from crop producer and livestock producer should equal to the quantity bought by distributor (demand of distributor):}
-%\QFf \quad &= \quad  \QDbf&(\piF)\\
-\text{{Equation removed}}\\
-\intertext{Ultimate/utility price of $f$ selling to the customer is a function of supply quantity of $f$ and the price of other products $i$ (own elasticity and cross elasticity):}
-\piUz \quad &= \quad \DemInt - \DemSlope\QUf + \sum_{i\in\F}\DemCross \piUz[i]&(\QUf)\\
-\intertext{The quantity storage manager bought in (demand) equals to the quantity sold from the distributor (supply): }
-\QSfbuy \quad &= \quad \QDsf&(\piS)
+\QUf,\,\QUfnz \quad&\geq\quad 0\nonumber\\
+\intertext{Total amount consumed is at most what is purchased from each node}
+\QUf \quad&\leq\quad \sum_n\QUfnz&(\dv)\\
+\intertext{Consumers have to purchase at least $\Psi$ fraction of their consumption from every corresponding node}
+\QUfnz \quad&\geq\quad \Psi_{nz}\QUf&(\du)
+% \piUz \quad &= \quad \DemInt - \DemSlope\QUf + \sum_{i\in\F}\DemCross \piUz[i]&(\QUf)
 \end{align}
 \end{subequations}
-
+\subsection{KKT Conditions} % (fold)
+\begin{subequations}
+	\begin{align}
+		\piU - \dv - \du \quad&\geq\quad 0 &(\QUfnz)\\
+		\DemSlope\QUf - \DemInt + \dv + \sum_n\Psi_{nz}\du \quad&\geq\quad 0 &(\QUf)
+	\end{align}
+\end{subequations}
 
 
 \section{Electricity}

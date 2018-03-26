@@ -39,7 +39,6 @@ Parameter
     df(Year) "Discount factor"
     df_roll(Period) "Discount factor"
     Adapt2Node(Adapt, Node) "Ratios for converting data in adaptation zone to administrative regions"
-    Node2Adapt(Node, Adapt) "Ratios for converting data in administrative region to adaptation regions"
 ;
 
 *** Crop Producer ***
@@ -195,12 +194,10 @@ Positive Variables
     Q_WB(FoodItem, Node, Season, Period) "Quantity bought"
 ;
 
-Variables
-    Q_WU(FoodItem, Node, Adapt, Season, Period) "Transfered to adaptation zones"
-;
 
 *** Consumers ***
 Positive Variables
+    Q_WU(FoodItem, Node, Adapt, Season, Period) "Transfered to adaptation zones"
     Q_U(FoodItem, Adapt, Season, Period) "Quantity of Food consmued"
 ;
 *** Electricity ***
