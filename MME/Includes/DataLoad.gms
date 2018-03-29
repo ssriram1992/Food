@@ -154,14 +154,14 @@ Cap_Elec_Trans(NodeFrom, Node, Season, Year) = 10000;
 $LOAD Production
 $LOAD Produc_Admin
 
-AREA_CROP.FX(FoodItem, Adapt, Season, Period) = Area_init(Adapt, Season,  FoodItem);
-Q_FOOD.FX(FoodItem, Adapt, Season, Period) = Production(Adapt, Season, FoodItem);
-Q_FOOD_TRANS.FX(FoodItem, Adapt, Node, Season, Period) = Adapt2Node(Adapt, Node)*Production(Adapt, Season, FoodItem);
+AREA_CROP.L(FoodItem, Adapt, Season, Period) = Area_init(Adapt, Season,  FoodItem);
+Q_FOOD.L(FoodItem, Adapt, Season, Period) = Production(Adapt, Season, FoodItem);
+Q_FOOD_TRANS.L(FoodItem, Adapt, Node, Season, Period) = Adapt2Node(Adapt, Node)*Production(Adapt, Season, FoodItem);
 QF_DB.L(FoodItem, Node, Season, Period) = sum(Adapt, Adapt2Node(Adapt, Node)*Production(Adapt, Season, FoodItem));
 
 $LOAD Consumption
 $LOAD Consum_Admin
-Q_U.FX(FoodItem, Adapt, Season, Period) = Consumption(Adapt, FoodItem);
+Q_U.L(FoodItem, Adapt, Season, Period) = Consumption(Adapt, FoodItem);
 Q_WS.L(FoodItem, Node, Season, Period) = sum(Adapt, Adapt2Node(Adapt, Node)*Consumption(Adapt, FoodItem) ) ;
 Q_WU.L(FoodItem, Node, Adapt, Season, Period) = Consumption(Adapt, FoodItem)*Adapt2Node(Adapt, Node);
 

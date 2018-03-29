@@ -13,7 +13,7 @@ $SETGLOBAL FutureKnowledge "Current"
 $SETGLOBAL DataFile "Data/DataGdx"
 
 * Remember to specify in Includes/PointLoad.gms on what years to be used with existing point
-$SETGLOBAL UseInitialPoint "*"
+$SETGLOBAL UseInitialPoint ""
 $SETGLOBAL Point "%Scenario%_%FutureKnowledge%"
 $SETGLOBAL Point "Supply_Price"
 
