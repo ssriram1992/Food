@@ -60,7 +60,6 @@ Consum_Admin(Node, FoodItem)
 Production(Adapt, Season, FoodItem)
 Produc_Admin(Node, Season, FoodItem)
 Price(Adapt, FoodItem, Season)
-Price_Admin(Node, FoodItem, Season)
 ;
 
 *** Conversion Factors
@@ -71,14 +70,14 @@ Adapt2Node(Adapt, Node) = Psi(Node, Adapt);
 
 ***Crop Producer***
 $LOAD C_prod1=C_prod
-C_prod(FoodItem, Adapt, Season, Year) = C_prod1(Season, FoodItem, Adapt);
+C_prod(FoodItem, Adapt, Season, Year) = C_prod1(Season, FoodItem, Adapt)/20;
 
 * Change to adaptation zone input when possible
 $LOAD aFAO
 $LOAD C_convert1=C_convert
-C_convert(Adapt, Year) = C_convert1(Adapt);
+C_convert(Adapt, Year) = C_convert1(Adapt)*10;
 $LOAD C_chg1=C_chg
-C_chg(Adapt, Year) = C_chg1(Adapt)*10*100;
+C_chg(Adapt, Year) = C_chg1(Adapt);
 
 $LOAD Cyf
 $LOAD TotArea
@@ -160,13 +159,12 @@ Q_FOOD_TRANS.L(FoodItem, Adapt, Node, Season, Period) = Adapt2Node(Adapt, Node)*
 QF_DB.L(FoodItem, Node, Season, Period) = sum(Adapt, Adapt2Node(Adapt, Node)*Production(Adapt, Season, FoodItem));
 
 $LOAD Consumption
-$LOAD Consum_Admin
+*$LOAD Consum_Admin
 Q_U.L(FoodItem, Adapt, Season, Period) = Consumption(Adapt, FoodItem);
 Q_WS.L(FoodItem, Node, Season, Period) = sum(Adapt, Adapt2Node(Adapt, Node)*Consumption(Adapt, FoodItem) ) ;
 Q_WU.L(FoodItem, Node, Adapt, Season, Period) = Consumption(Adapt, FoodItem)*Adapt2Node(Adapt, Node);
 
 $LOAD Price
-$LOAD Price_Admin
 
 $GDXIN
 
