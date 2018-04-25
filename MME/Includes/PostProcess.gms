@@ -12,7 +12,7 @@ Cows("Number", Adapt, Season, Year2Loop) = Q_CATTLE.L("Milk", Adapt, Season, "Pe
 Cows("Slaughter", Adapt, Season, Year2Loop) = Q_CATTLE_SL.L(Adapt, Season, "Period1");
 
 
-Prices("Farmer", FoodItem, Adapt, Season, Year2Loop) = PI_FOOD.L(FoodItem, Adapt, Season, "Period1");
+*Prices("Farmer", FoodItem, Adapt, Season, Year2Loop) = PI_FOOD.L(FoodItem, Adapt, Season, "Period1");
 Prices("Distribution", FoodItem, Node, Season, Year2Loop) = PI_W.L(FoodItem, Node, Season, "Period1");
 Prices("Store", FoodItem, Node, Season, Year2Loop) = PI_U.L(FoodItem, Node, Season, "Period1");
 Prices("Cow", "Animal", Adapt, Season, Year2Loop) = PI_COW.L(Adapt, Season, "Period1");
