@@ -27,6 +27,9 @@ Scalar Infinity /10000/;
 alias(Node, NodeFrom);
 Alias(Adapt, AdaptFrom)
 alias(FoodItem, FoodItem2);
+alias(node, NodeTo);
+Alias(Adapt, Adapt2);
+Alias(Season, Season2);
 *Road(NodeFrom, Node)$(Ord(NodeFrom)<Ord(Node))=yes;
 *Eline(NodeFrom, Node)$(Ord(NodeFrom)<Ord(Node))=yes;
 
