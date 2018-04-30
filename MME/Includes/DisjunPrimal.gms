@@ -1,7 +1,8 @@
+Scalar PrimalM /100000000000000000/;
+
 ************************************************************************
 ***********************       CROP PRODUCER       **********************
 ************************************************************************
-Scalar PrimalM /100000/;
 
 Equations
     E1_2b_M1(Adapt, Season, Period)
@@ -9,6 +10,7 @@ Equations
     E1_2cd_M1(FoodItem, Adapt, Season, Period)
     E1_2cd_M2(FoodItem, Adapt, Season, Period)
     E1_2e_M1(FoodItem, Adapt, Node, Season, Period)
+    E1_2e_M2(FoodItem, Adapt, Node, Season, Period)
 * Fallow Constraint
 * E1_2f(Adapt, Period)
 * Crop Rotation Constraint
@@ -42,9 +44,11 @@ E1_2cd_M2(FoodItem, Adapt, Season, Period)..D2(FoodItem, Adapt, Season, Period)
 
 
 * Written together for livestock also
-E1_2e_M1(FoodItem, Adapt, Node, Season, Period).. Q_FOOD_TRANS(FoodItem, Adapt, Node, Season, Period)
-                                                 =e= 
+E1_2e_M1(FoodItem, Adapt, Node, Season, Period).. B1_2e(FoodItem, Adapt, Node, Season, Period)*PrimalM + 
+                                                        Q_FOOD_TRANS(FoodItem, Adapt, Node, Season, Period)
+                                                 =g= 
                                                 Adapt2Node(Adapt, Node)*Q_FOOD(FoodItem, Adapt, Season, Period); 
+E1_2e_M2(FoodItem, Adapt, Node, Season, Period).. D18(FoodItem, Adapt, Node, Season, Period) =l= (1-B1_2e(FoodItem, Adapt, Node, Season, Period))*PrimalM;
 
 ************************************************************************
 ********************       LIVESTOCK PRODUCER       ********************
@@ -116,6 +120,7 @@ E2_2f_M2(Adapt, Season, Period)..D10(Adapt, Season, Period)
 ************************************************************************
 Equations
     E2_4a_M1(FoodItem, Node, Season, Period)
+    E2_4a_M2(FoodItem, Node, Season, Period)
 ;
 
 Binary Variables
@@ -124,8 +129,10 @@ Binary Variables
 
 
 
-E2_4a_M1(FoodItem, Node, Season, Period).. QF_DB(FoodItem, Node, Season, Period) =e=  sum(Adapt, Q_FOOD_TRANS(FoodItem, Adapt, Node, Season, Period));
+E2_4a_M1(FoodItem, Node, Season, Period).. B2_4a(FoodItem, Node, Season, Period)*PrimalM + 
+                        QF_DB(FoodItem, Node, Season, Period) =g=  sum(Adapt, Q_FOOD_TRANS(FoodItem, Adapt, Node, Season, Period));
  
+E2_4a_M2(FoodItem, Node, Season, Period)..  PI_FOOD_ADMIN(FoodItem, Node, Season, Period) =l= (1-B2_4a(FoodItem, Node, Season, Period))*PrimalM;
  
 ************************************************************************
 ***********************       DISTRIBUTORS       ***********************
@@ -139,6 +146,7 @@ Equations
     E3_2d_M1(NodeFrom, Node, Season, Period)
     E3_2d_M2(NodeFrom, Node, Season, Period)
     E3_4a_M1(FoodItem, Node, Season, Period)
+    E3_4a_M2(FoodItem, Node, Season, Period)
 ;
 
 Binary Variables
@@ -159,7 +167,7 @@ E3_2b_M2(FoodItem, Node, Season, Period)..D6(FoodItem, Node, Season, Period)
 E3_2c_M1(FoodItem, NodeFrom, Node, Season, Period)$((FoodDistrCap AND Road(NodeFrom, Node))).. -QF_ROAD(FoodItem, NodeFrom, Node, Season, Period)
                                         =l= B3_2c(FoodItem, NodeFrom, Node, Season, Period)*PrimalM
                                         -Cap_Road(FoodItem, NodeFrom, Node);
-E3_2c_M2(FoodItem, NodeFrom, Node, Season, Period)..D7(FoodItem, NodeFrom, Node, Season, Period)
+E3_2c_M2(FoodItem, NodeFrom, Node, Season, Period)$((FoodDistrCap AND Road(NodeFrom, Node)))..D7(FoodItem, NodeFrom, Node, Season, Period)
         =l= (1 - B3_2c(FoodItem, NodeFrom, Node, Season, Period))*PrimalM ;
 
 
@@ -170,7 +178,11 @@ E3_2d_M2(NodeFrom, Node, Season, Period)..D16(NodeFrom, Node, Season, Period)
         =l= (1 - B3_2d(NodeFrom, Node, Season, Period))*PrimalM ;
 
 
-E3_4a_M1(FoodItem, Node, Season, Period).. Q_WB(FoodItem, Node, Season, Period) =e= QF_DS(FoodItem, Node, Season, Period);
+E3_4a_M1(FoodItem, Node, Season, Period).. Q_WB(FoodItem, Node, Season, Period) + B3_4a(FoodItem, Node, Season, Period)*PrimalM =g= QF_DS(FoodItem, Node, Season, Period);
+
+E3_4a_M2(FoodItem, Node, Season, Period).. PI_W(FoodItem, Node, Season, Period) =l= (1-B3_4a(FoodItem, Node, Season, Period))*PrimalM;
+
+
 
 ************************************************************************
 ***********************       STORE/RETAIL       ***********************
@@ -179,6 +191,7 @@ Equations
     E4_2a_M1(FoodItem, Node, Season, Period)
     E4_2a_M2(FoodItem, Node, Season, Period)
     E4_2b_M1(FoodItem, Node, Season, Period)
+    E4_2b_M2(FoodItem, Node, Season, Period)
 ;
 
 Binary Variables
@@ -194,7 +207,9 @@ E4_2a_M2(FoodItem, Node, Season, Period)..D8(FoodItem, Node, Season, Period)
 
 E4_2b_M1(FoodItem, Node, Season, Period).. Q_W(FoodItem, Node, Season-1, Period)$(Ord(Season)>1) +
         (Q_WInit(FoodItem, Node)$(ORD(Period)=1) +Q_W(FoodItem, Node, Season + (Card(Season)-1), Period-1))$(Ord(Season)=1) + Q_WB(FoodItem, Node, Season, Period)
-        -Q_WS(FoodItem, Node, Season, Period) =e= Q_W(FoodItem, Node, Season, Period);
+        -Q_WS(FoodItem, Node, Season, Period) =l= Q_W(FoodItem, Node, Season, Period) + B4_2b(FoodItem, Node, Season, Period)*PrimalM;
+
+E4_2b_M2(FoodItem, Node, Season, Period).. D11(FoodItem, Node, Season, Period) =l= (1-B4_2b(FoodItem, Node, Season, Period))*PrimalM;
 
 
 
@@ -203,15 +218,18 @@ E4_2b_M1(FoodItem, Node, Season, Period).. Q_W(FoodItem, Node, Season-1, Period)
 ************************************************************************
 Equations
     E4_4a_M1(FoodItem, Node, Season, Period)
+    E4_4a_M2(FoodItem, Node, Season, Period)
 ;
 
 Binary Variables
     B4_4a(FoodItem, Node, Season, Period)
 ;
 
-E4_4a_M1(FoodItem, Node, Season, Period).. Q_WS(FoodItem, Node, Season, Period) =e= sum(Adapt,
+E4_4a_M1(FoodItem, Node, Season, Period).. Q_WS(FoodItem, Node, Season, Period) =l= sum(Adapt,
                                                 Q_WU(FoodItem, Node, Adapt, Season, Period)
-                                                        );
+                                                        ) + B4_4a(FoodItem, Node, Season, Period)*PrimalM;
+E4_4a_M2(FoodItem, Node, Season, Period).. PI_U(FoodItem, Node, Season, Period) =l= (1-B4_4a(FoodItem, Node, Season, Period))*PrimalM;
+    
 
 
 $ontext
@@ -304,9 +322,3 @@ E_ElecDem_M1(Node, Season, Period).. Q_ELEC_DEM(Node, Season, Period) =l= B_Elec
 E_ElecDem_M2(Node, Season, Period)..Q_ELEC_DEM(Node, Season, Period)
         =l= (1 - B_ElecDem(Node, Season, Period))*PrimalM ;
 
-**************************************************************
-*********OBJECTIVE********************************************
-**************************************************************
-Equation objEq;
-Variable obj;
-objEq.. obj =e= 0;

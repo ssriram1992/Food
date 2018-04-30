@@ -10,29 +10,17 @@ $offtext
 ***** Variables *****
 *********************
 
-*** Crop Producer ***
-Variables
+%MIP%Variables
     PI_FOOD(FoodItem, Adapt, Season, Period) "Price of Food item"
     PI_FOOD_ADMIN(FoodItem, Node, Season, Period) "Price of Food item"
-;
-
-*** Livestock ***
-Variable PI_COW(Adapt, Season, Period) "price of a cow";
-
-*** Distributors ***
-Variable PI_W(FoodItem, Node, Season, Period);
-
-*** Storage ***
-Variables
+    PI_W(FoodItem, Node, Season, Period)
+    PI_COW(Adapt, Season, Period) "price of a cow"
     PI_U(FoodItem, Node, Season, Period)
     PI_U_ADAPT(FoodItem, Adapt, Season, Period)
-;
-
-*** Electricity ***
-Variables
     D11(FoodItem, Node, Season, Period) "Dual to E4_2b"
     D18(FoodItem, Adapt, Node, Season, Period) "Dual to E1_2e"
 ;
+
 
 *** Dual Variables ***
 Positive Variables

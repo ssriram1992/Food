@@ -197,7 +197,6 @@ $LOAD Price
 
 $GDXIN
 
-$INCLUDE Includes/Calibration.gms
 *QF_ROAD.L("Teff", "BahirDar", "AddisAbaba", "Kremt", "Period1") = 2557.50818564473;
 
 

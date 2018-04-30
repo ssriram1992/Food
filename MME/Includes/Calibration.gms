@@ -1,4 +1,3 @@
-$ontext
 Parameters
 p_area_crop(Adapt, Season)
 p_q_food(Adapt, Season)
@@ -30,4 +29,3 @@ P_E_BAL
 P_E_obj
 /
 ;
-$offtext
