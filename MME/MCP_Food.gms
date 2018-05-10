@@ -5,17 +5,20 @@ $TITLE "INFEWS FOOD MODEL"
 ************************************************************************
 
 $SETGLOBAL Limit_Listing ""
-$SETGLOBAL RunningOnCluster "*"
+$SETGLOBAL RunningOnCluster ""
 
-$SETGLOBAL Scenario "Base"
+$SETGLOBAL Scenario "Multi"
 $SETGLOBAL FutureKnowledge "Current"
 
 $SETGLOBAL DataFile "Data/DataGdx"
+$SETGLOBAL RemoveLiveStock ""
 
 * Remember to specify in Includes/PointLoad.gms on what years to be used with existing point
 $SETGLOBAL UseInitialPoint "*"
 $SETGLOBAL Point "%Scenario%_%FutureKnowledge%"
 $SETGLOBAL Point "Food_Base"
+*$SETGLOBAL Point "Base2_Current"
+$SETGLOBAL MIP ""
 
 
 
@@ -34,7 +37,7 @@ $OFFTEXT
 *option solvelink=5;
 
 Sets
-Year "Years" /2015*2017/
+Year "Years" /2015*2027/
 ;
 
 $INCLUDE Includes/ControlPanel.gms
@@ -100,7 +103,7 @@ Food1y.savepoint = 2;
 
 $INCLUDE Includes/PointLoad.gms
 option reslim=10000000;
-
+scalar oldWt /0.5/;
 
 
 
@@ -120,7 +123,9 @@ $OFFTEXT
 
 $INCLUDE Includes/RollingParam.gms
 $INCLUDE Includes/RollRules/%FutureKnowledge%
-*$INCLUDE Includes/EstimTransp.gms
+if(Ord(Year2Loop)>=2,
+$INCLUDE Includes/EstimTransp.gms
+);
 
         Solve Food1y using MCP;
         SolveCount = SolveCount + 1;
@@ -136,28 +141,13 @@ option Prices:2:1:2;
 Display Prices;
 option produce:2:1:3;
 Display produce;
+$ontext
+$offtext
 
 * Exporting results
 execute_unload 'Results/%Scenario%';
 
-$ontext
-Parameters t1,t2,t3(Node),t4(Node),t5,t6, t7, t8, t9;
-t1 = QF_DB.L("Teff", "AddisAbaba","Kremt", "Period1");
-t2 = QF_DS.L("Teff", "AddisAbaba","Kremt", "Period1");
-t3(NodeFrom) = QF_ROAD.L("Teff", NodeFrom, "AddisAbaba", "Kremt", "Period1");
-t4(Node) = QF_ROAD.L("Teff", "AddisAbaba", Node, "Kremt", "Period1");
-t5 = sum(Node, t3(Node));
-t6 = sum(Node, t4(Node));
-t7 = t1+t5 - t2-t6;
-Parameters start(node), end(node);
-start(node) = QF_DB.L("Teff", Node,"Kremt", "Period1");
-end(node) = QF_DS.L("Teff", Node,"Kremt", "Period1");
-
-t8 = sum(Node, QF_DB.L("Teff", Node, "Kremt", "Period1"));
-t9 = sum(Node, QF_DS.L("Teff", Node, "Kremt", "Period1"));
-Display t1,t2,t3,t4,t5,t6,t7, t8,t9;
-Parameters t1(FoodItem, Adapt), t2(FoodItem, Adapt);
-t1(FoodItem, Adapt) = DemInt1('Kremt', FoodItem, Adapt);
-t2(FoodItem, Adapt) = DemInt1('Belg', FoodItem, Adapt);
-Display t1, t2;
-$offtext
+Parameters t1(Adapt, Season, FoodItem);
+t1(Adapt, Season, FoodItem) = Area_Crop.L(FoodItem, Adapt, Season, 'Period1');
+Display t1, Area_init;
+Display q_WInit;

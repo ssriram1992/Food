@@ -2,7 +2,7 @@
 ***********************       DATA LOADING       ***********************
 ************************************************************************
 *Whether the input data has to be rounded
-$SETGLOBAL NoRound ""
+$SETGLOBAL NoRound "*"
 
 *Call from GDX to here
 $GDXIN %DataFile%

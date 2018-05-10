@@ -4,18 +4,18 @@
 
 
 produce(FoodItem, Adapt, Season, Year2Loop) = Q_FOOD.L(FoodItem, Adapt, Season, "Period1");
-produce("Hide", Adapt, Season, Year2Loop) = Q_HIDE.L(Adapt, Season, "Period1");
+%RemoveLiveStock%produce("Hide", Adapt, Season, Year2Loop) = Q_HIDE.L(Adapt, Season, "Period1");
 
 
 
-Cows("Number", Adapt, Season, Year2Loop) = Q_CATTLE.L("Milk", Adapt, Season, "Period1");
-Cows("Slaughter", Adapt, Season, Year2Loop) = Q_CATTLE_SL.L(Adapt, Season, "Period1");
+%RemoveLiveStock%Cows("Number", Adapt, Season, Year2Loop) = Q_CATTLE.L("Milk", Adapt, Season, "Period1");
+%RemoveLiveStock%Cows("Slaughter", Adapt, Season, Year2Loop) = Q_CATTLE_SL.L(Adapt, Season, "Period1");
 
 
 *Prices("Farmer", FoodItem, Adapt, Season, Year2Loop) = PI_FOOD.L(FoodItem, Adapt, Season, "Period1");
 Prices("Distribution", FoodItem, Node, Season, Year2Loop) = PI_W.L(FoodItem, Node, Season, "Period1");
 Prices("Store", FoodItem, Node, Season, Year2Loop) = PI_U.L(FoodItem, Node, Season, "Period1");
-Prices("Cow", "Animal", Adapt, Season, Year2Loop) = PI_COW.L(Adapt, Season, "Period1");
+%RemoveLiveStock%Prices("Cow", "Animal", Adapt, Season, Year2Loop) = PI_COW.L(Adapt, Season, "Period1");
 Prices("Grid", "Electricity", Node, Season, Year2Loop) = D14.L(Node, Season, "Period1");
 
 
@@ -41,6 +41,6 @@ Storage("Stored", FoodItem, Node, Season, Year2Loop) = Q_W.L(FoodItem, Node, Sea
 
 
 *Storing the GDX
-put_utility  'shell' / 'mv Food1y_p'SolveCount:0:0'.gdx auxiliary/%Scenario%_%FutureKnowledge%_'Year2Loop.tl:0'.gdx';
+put_utility  'shell' / 'cp Food1y_p'SolveCount:0:0'.gdx auxiliary/%Scenario%_%FutureKnowledge%_'Year2Loop.tl:0'.gdx';
 
 

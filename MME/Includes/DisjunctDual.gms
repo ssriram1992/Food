@@ -1,4 +1,4 @@
-Scalar DualM /1000000000000000000/;
+Scalar DualM /10000000/;
 
 ************************************************************************
 ***********************       CROP PRODUCER       **********************
@@ -48,6 +48,7 @@ E1_3c_M2(FoodItem, Adapt, Node, Season, Period)..Q_FOOD_TRANS(FoodItem, Adapt, N
     (1-B1_3c(FoodItem, Adapt, Node, Season, Period))*DualM;
 
 
+$ontext
 
 ************************************************************************
 ********************       LIVESTOCK PRODUCER       ********************
@@ -57,7 +58,7 @@ E1_3c_M2(FoodItem, Adapt, Node, Season, Period)..Q_FOOD_TRANS(FoodItem, Adapt, N
 Equations
     E2_3a_M1(FoodItem, Adapt, Season, Period)
     E2_3a_M2(FoodItem, Adapt, Season, Period)
-*E2_3b_M1(AdaptFrom, Adapt, Season, Period)
+    E2_3b_M1(AdaptFrom, Adapt, Season, Period)
     E2_3b_M2(AdaptFrom, Adapt, Season, Period)
     E2_3c_M1(Adapt, Season, Period)
     E2_3c_M2(Adapt, Season, Period)
@@ -86,17 +87,17 @@ E2_3a_M2(FoodItem, Adapt, Season, Period)..Q_CATTLE(FoodItem, Adapt, Season, Per
 *Q_CATTLE.fx(FoodItem, Adapt, Season, Period)$(NOT(sameas(FoodItem,"Milk"))) = 0;
 
 
-$ontext
+*$ontext
 
 E2_3b_M1(AdaptFrom, Adapt, Season, Period)$(NOT(sameas(Adapt, AdaptFrom)))..   df_roll(Period)*(C_cow_tr_roll(AdaptFrom, Adapt, Season, Period)+
     PI_COW(AdaptFrom, Season, Period) - PI_COW(Adapt, Season, Period))+
     (PI_COW(AdaptFrom, Season, Period)-PI_COW(Adapt, Season, Period))
     =l=
     B2_3b(AdaptFrom, Adapt, Season, Period)*DualM;
-$offtext
+*$offtext
 E2_3b_M2(AdaptFrom, Adapt, Season, Period)..Q_CATTLE_BUY(AdaptFrom, Adapt, Season, Period)
     =e=
-    (1-B2_3b(AdaptFrom, Adapt, Season, Period))*DualM*0;
+    (1-B2_3b(AdaptFrom, Adapt, Season, Period))*DualM;
 
 
 E2_3c_M1(Adapt, Season, Period).. D3(Adapt, Season, Period)-df_roll(Period)*pr_Hide_roll(Adapt, Season, Period) =l= B2_3c(Adapt, Season, Period)*DualM;
@@ -113,6 +114,7 @@ E2_3d_M2(Adapt, Season, Period).. Q_CATTLE_SL(Adapt, Season, Period)
     =l=
     (1-B2_3d(Adapt, Season, Period))*DualM;
 
+$offtext
 
 ************************************************************************
 ***********************       DISTRIBUTORS       ***********************

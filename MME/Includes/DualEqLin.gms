@@ -28,6 +28,7 @@ E1_3c(FoodItem, Adapt, Node, Season, Period).. D18(FoodItem, Adapt, Node, Season
 
 
 
+$ontext
 ************************************************************************
 ********************       LIVESTOCK PRODUCER       ********************
 ************************************************************************
@@ -57,6 +58,7 @@ E2_3d(Adapt, Season, Period).. D4(Adapt, Season, Period) - sum(FoodItem$sameas(F
         D3(Adapt, Season, Period)*Yld_H_roll(Adapt, Season, Period) + PI_COW(Adapt, Season+1, Period)$(ORD(Season)<CARD(Season)) + PI_COW(Adapt, Season-(CARD(Season)-1), Period+1)$(ORD(Season)=CARD(Season))-D9(Adapt, Season, Period)
                         =g=
                         0;
+$offtext
 
 
 ************************************************************************

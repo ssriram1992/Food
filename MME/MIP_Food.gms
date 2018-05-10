@@ -17,6 +17,7 @@ $SETGLOBAL UseInitialPoint "*"
 $SETGLOBAL Point "%Scenario%_%FutureKnowledge%"
 $SETGLOBAL Point "Food_Base"
 $SETGLOBAL MIP "Positive "
+$SETGLOBAL RemoveLiveStock "*"
 
 
 %Limit_Listing%$ONTEXT
@@ -85,7 +86,7 @@ Loop(Year2Loop$(ORD(Year2Loop)+card(Period)-1<=Card(Year2Loop)),
 put_utility 'gdxin' / 'auxiliary/%Point%_'Year2Loop.tl:0 ;
 
 if(Years2PtLoad(Year2Loop),
-execute_load  D1, D2, D18, Q_FOOD, AREA_CROP, Q_FOOD_TRANS, D3, D4, PI_COW, D9, D10, Q_CATTLE, Q_CATTLE_BUY, Q_HIDE, Q_CATTLE_SL, PI_FOOD_ADMIN, D6, D16, QF_DB, QF_ROAD, QF_DS, PI_W, D8, D11, Q_WB, Q_WS, Q_W, PI_U, D19, D17, Q_WU, Q_U, D13, D14, D15, Q_ELEC, Q_ELEC_TRANS, Q_ELEC_DEM ;
+*execute_load  D1, D2, D18, Q_FOOD, AREA_CROP, Q_FOOD_TRANS, D3, D4, PI_COW, D9, D10, Q_CATTLE, Q_CATTLE_BUY, Q_HIDE, Q_CATTLE_SL, PI_FOOD_ADMIN, D6, D16, QF_DB, QF_ROAD, QF_DS, PI_W, D8, D11, Q_WB, Q_WS, Q_W, PI_U, D19, D17, Q_WU, Q_U, D13, D14, D15, Q_ELEC, Q_ELEC_TRANS, Q_ELEC_DEM ;
 *execute_load  E1_2b, D1, E1_2cd, D2, E1_2e, D18, E1_3a, Q_FOOD, E1_3b, AREA_CROP, E1_3c, Q_FOOD_TRANS, E2_2b, D3, E2_2c, D4, E2_2d, PI_COW, E2_2e, D9, E2_2f, D10, E2_3a, Q_CATTLE, E2_3b, Q_CATTLE_BUY, E2_3c, Q_HIDE, E2_3d, Q_CATTLE_SL, E2_4a, PI_FOOD_ADMIN, E3_2b, D6, E3_2c, D7, E3_2d, D16, E3_3a, QF_DB, E3_3b, QF_ROAD, E3_3c, QF_DS, E3_4a, PI_W, E4_2a, D8, E4_2b, D11, E4_3a, Q_WB, E4_3b, Q_WS, E4_3c, Q_W, E4_4a, PI_U, E5_2a, D19, E5_2b, D17, E5_3a, Q_WU, E5_3b, Q_U, E6_2a, D13, E6_2b, D14, E6_2c, D15, E6_3a, Q_ELEC, E6_3b, Q_ELEC_TRANS, E_ElecDem, Q_ELEC_DEM ;
 );
 $ONTEXT
@@ -105,13 +106,13 @@ $INCLUDE Includes/PostProcess.gms
 
 
 Parameter dbgPrn(*);
-dbgPrn('CowTr ExtA1') = C_cow_tr_roll('External', 'A1', 'Kremt', 'Period1');
-dbgPrn('CowTr A1Ext') = C_cow_tr_roll('A1', 'External', 'Kremt', 'Period1');
-dbgPrn('CowpriceA1') = PI_COW.L('A1', 'Kremt', 'Period1');
-dbgPrn('CowpriceExt') = PI_COW.L('External', 'Kremt', 'Period1');
+%RemoveLiveStock%dbgPrn('CowTr ExtA1') = C_cow_tr_roll('External', 'A1', 'Kremt', 'Period1');
+%RemoveLiveStock%dbgPrn('CowTr A1Ext') = C_cow_tr_roll('A1', 'External', 'Kremt', 'Period1');
+%RemoveLiveStock%dbgPrn('CowpriceA1') = PI_COW.L('A1', 'Kremt', 'Period1');
+%RemoveLiveStock%dbgPrn('CowpriceExt') = PI_COW.L('External', 'Kremt', 'Period1');
 
 
-Display dbgPrn;
+%RemoveLiveStock%Display dbgPrn;
 
 
 

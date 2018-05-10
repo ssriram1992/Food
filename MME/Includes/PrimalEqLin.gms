@@ -20,16 +20,18 @@ E1_2b(Adapt, Season, Period).. TotArea(Adapt, Season)
 E1_2cd(FoodItem, Adapt, Season, Period).. -Q_FOOD(FoodItem, Adapt, Season, Period)
             =g=
             -(aFAO_roll(FoodItem, Adapt, Season, Period)*Cyf_roll(FoodItem, Adapt, Season, Period)*AREA_CROP(FoodItem, Adapt, Season, Period))$Crop(FoodItem)
-            -Yield_roll(FoodItem, Adapt, Season, Period)*(
-                            Q_CATTLE(FoodItem, Adapt, Season, Period)$(sameas(FoodItem,"milk"))+
-                            Q_CATTLE_SL(Adapt, Season, Period)$(sameas(FoodItem,"beef"))
-                            );
+*            -Yield_roll(FoodItem, Adapt, Season, Period)*(
+*                            Q_CATTLE(FoodItem, Adapt, Season, Period)$(sameas(FoodItem,"milk"))+
+*                            Q_CATTLE_SL(Adapt, Season, Period)$(sameas(FoodItem,"beef"))
+*                            )
+;
 
 * Written together for livestock also
 E1_2e(FoodItem, Adapt, Node, Season, Period).. Q_FOOD_TRANS(FoodItem, Adapt, Node, Season, Period)
                                                  =l= 
                                                 Adapt2Node(Adapt, Node)*Q_FOOD(FoodItem, Adapt, Season, Period); 
 
+$ontext
 ************************************************************************
 ********************       LIVESTOCK PRODUCER       ********************
 ************************************************************************
@@ -64,6 +66,7 @@ E2_2d(Adapt, Season, Period).. ((1+k_roll(Adapt, Season, Period)-kappa_roll(Adap
 E2_2e(Adapt, Season, Period).. Q_CATTLE_SL(Adapt, Season, Period) =g= CowDeath_roll(Adapt, Season, Period)*sum(FoodItem, Q_CATTLE(FoodItem, Adapt, Season, Period));
 E2_2f(Adapt, Season, Period).. sum(FoodItem, Q_CATTLE(FoodItem, Adapt, Season, Period)) =g= Herdsize(Adapt);
 
+$offtext
 
 ************************************************************************
 ************************       Adapt2Node       ************************

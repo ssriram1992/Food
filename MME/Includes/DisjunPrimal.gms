@@ -1,4 +1,4 @@
-Scalar PrimalM /100000000000000000/;
+Scalar PrimalM /10000000/;
 
 ************************************************************************
 ***********************       CROP PRODUCER       **********************
@@ -34,10 +34,11 @@ E1_2b_M2(Adapt, Season, Period)..D1(Adapt, Season, Period)
 E1_2cd_M1(FoodItem, Adapt, Season, Period).. -Q_FOOD(FoodItem, Adapt, Season, Period)
             =l= B1_2cd(FoodItem, Adapt, Season, Period)*PrimalM
             -(aFAO_roll(FoodItem, Adapt, Season, Period)*Cyf_roll(FoodItem, Adapt, Season, Period)*AREA_CROP(FoodItem, Adapt, Season, Period))$Crop(FoodItem)
-            -Yield_roll(FoodItem, Adapt, Season, Period)*(
-                            Q_CATTLE(FoodItem, Adapt, Season, Period)$(sameas(FoodItem,"milk"))+
-                            Q_CATTLE_SL(Adapt, Season, Period)$(sameas(FoodItem,"beef"))
-                            );
+*            -Yield_roll(FoodItem, Adapt, Season, Period)*(
+*                            Q_CATTLE(FoodItem, Adapt, Season, Period)$(sameas(FoodItem,"milk"))+
+*                            Q_CATTLE_SL(Adapt, Season, Period)$(sameas(FoodItem,"beef"))
+*                            )
+;
 E1_2cd_M2(FoodItem, Adapt, Season, Period)..D2(FoodItem, Adapt, Season, Period)
         =l= (1 - B1_2cd(FoodItem, Adapt, Season, Period))*PrimalM ;
 
@@ -50,6 +51,7 @@ E1_2e_M1(FoodItem, Adapt, Node, Season, Period).. B1_2e(FoodItem, Adapt, Node, S
                                                 Adapt2Node(Adapt, Node)*Q_FOOD(FoodItem, Adapt, Season, Period); 
 E1_2e_M2(FoodItem, Adapt, Node, Season, Period).. D18(FoodItem, Adapt, Node, Season, Period) =l= (1-B1_2e(FoodItem, Adapt, Node, Season, Period))*PrimalM;
 
+$ontext
 ************************************************************************
 ********************       LIVESTOCK PRODUCER       ********************
 ************************************************************************
@@ -112,6 +114,7 @@ E2_2f_M1(Adapt, Season, Period).. sum(FoodItem, Q_CATTLE(FoodItem, Adapt, Season
 E2_2f_M2(Adapt, Season, Period)..D10(Adapt, Season, Period)
         =l= (1 - B2_2f(Adapt, Season, Period))*PrimalM ;
 
+$offtext
 
 
 
