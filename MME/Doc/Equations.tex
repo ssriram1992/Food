@@ -63,6 +63,7 @@
 \newcommand{\QSfselAdap}    {\textcolor{blue} {\Q^{\S\U}_{yhnzf}}}
 \newcommand{\QUf}			{\textcolor{blue} {\Q^{\U}_{yhzf}}}
 \newcommand{\QUfnz}			{\textcolor{blue} {\Q^{\U}_{yhnzf}}}
+\newcommand{\QUlim}			{\overline{\QUf}}
 \newcommand{\QE}			{\textcolor{blue} {\Q^{\E-gen}_{yhn}}}
 \newcommand{\QEDem}			{\textcolor{blue} {\Q^{\E-dem}_{yhn}}}
 \newcommand{\QEr}			{\textcolor{blue} {\Q^{\E}_{yhr}}}
@@ -404,6 +405,8 @@ such that
 \begin{subequations}
 \begin{align}
 \QUf,\,\QUfnz \quad&\geq\quad 0\nonumber\\
+\intertext{There could be an export ban or limit where this constraint can become active.}
+\QUf \quad&\leq\quad \QUlim&(\dx)\\
 \intertext{Total amount consumed is at most what is purchased from each node}
 \QUf \quad&\leq\quad \sum_n\QUfnz&(\dv)\\
 \intertext{Consumers have to purchase at least $\Psi$ fraction of their consumption from every corresponding node}
@@ -415,7 +418,7 @@ such that
 \begin{subequations}
 	\begin{align}
 		\piU - \dv - \du \quad&\geq\quad 0 &(\QUfnz)\\
-		\DemSlope\QUf - \DemInt + \dv + \sum_n\Psi_{nz}\du \quad&\geq\quad 0 &(\QUf)
+		\DemSlope\QUf - \DemInt + \dv + \dx + \sum_n\Psi_{nz}\du \quad&\geq\quad 0 &(\QUf)
 	\end{align}
 \end{subequations}
 
