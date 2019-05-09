@@ -19,17 +19,19 @@ E1_2b(Adapt, Season, Period).. TotArea(Adapt, Season)
 * Yield of livestock also defined
 E1_2cd(FoodItem, Adapt, Season, Period).. -Q_FOOD(FoodItem, Adapt, Season, Period)
             =g=
-            -(aFAO_roll(FoodItem, Adapt, Season, Period)*Cyf_roll(FoodItem, Adapt, Season, Period)*(1+(rPower(PI_FOOD(FoodItem, Adapt, Season, Period),Elas_roll(FoodItem, Adapt, Season, Period))-1)$(Elas_roll(FoodItem, Adapt, Season, Period)))*AREA_CROP(FoodItem, Adapt, Season, Period))$Crop(FoodItem)
-            -Yield_roll(FoodItem, Adapt, Season, Period)*(
-                            Q_CATTLE(FoodItem, Adapt, Season, Period)$(sameas(FoodItem,"milk"))+
-                            Q_CATTLE_SL(Adapt, Season, Period)$(sameas(FoodItem,"beef"))
-                            );
+            -(aFAO_roll(FoodItem, Adapt, Season, Period)*Cyf_roll(FoodItem, Adapt, Season, Period)*AREA_CROP(FoodItem, Adapt, Season, Period))$Crop(FoodItem)
+*            -Yield_roll(FoodItem, Adapt, Season, Period)*(
+*                            Q_CATTLE(FoodItem, Adapt, Season, Period)$(sameas(FoodItem,"milk"))+
+*                            Q_CATTLE_SL(Adapt, Season, Period)$(sameas(FoodItem,"beef"))
+*                            )
+;
 
 * Written together for livestock also
 E1_2e(FoodItem, Adapt, Node, Season, Period).. Q_FOOD_TRANS(FoodItem, Adapt, Node, Season, Period)
-                                                 =e= 
+                                                 =l= 
                                                 Adapt2Node(Adapt, Node)*Q_FOOD(FoodItem, Adapt, Season, Period); 
 
+$ontext
 ************************************************************************
 ********************       LIVESTOCK PRODUCER       ********************
 ************************************************************************
@@ -64,6 +66,7 @@ E2_2d(Adapt, Season, Period).. ((1+k_roll(Adapt, Season, Period)-kappa_roll(Adap
 E2_2e(Adapt, Season, Period).. Q_CATTLE_SL(Adapt, Season, Period) =g= CowDeath_roll(Adapt, Season, Period)*sum(FoodItem, Q_CATTLE(FoodItem, Adapt, Season, Period));
 E2_2f(Adapt, Season, Period).. sum(FoodItem, Q_CATTLE(FoodItem, Adapt, Season, Period)) =g= Herdsize(Adapt);
 
+$offtext
 
 ************************************************************************
 ************************       Adapt2Node       ************************
@@ -72,7 +75,7 @@ Equations
 E2_4a(FoodItem, Node, Season, Period)
 ;
 
-E2_4a(FoodItem, Node, Season, Period).. QF_DB(FoodItem, Node, Season, Period) =e=  sum(Adapt, Q_FOOD_TRANS(FoodItem, Adapt, Node, Season, Period));
+E2_4a(FoodItem, Node, Season, Period).. QF_DB(FoodItem, Node, Season, Period) =l=  sum(Adapt, Q_FOOD_TRANS(FoodItem, Adapt, Node, Season, Period));
  
  
 ************************************************************************
@@ -97,7 +100,7 @@ E3_2d(NodeFrom, Node, Season, Period)$Road(NodeFrom, Node).. -sum(FoodItem,QF_RO
                                         =g=
                                         -Cap_Road_Tot(NodeFrom, Node);
 
-E3_4a(FoodItem, Node, Season, Period).. Q_WB(FoodItem, Node, Season, Period) =e= QF_DS(FoodItem, Node, Season, Period);
+E3_4a(FoodItem, Node, Season, Period).. Q_WB(FoodItem, Node, Season, Period) =l= QF_DS(FoodItem, Node, Season, Period);
 
 ************************************************************************
 ***********************       STORE/RETAIL       ***********************
@@ -105,7 +108,6 @@ E3_4a(FoodItem, Node, Season, Period).. Q_WB(FoodItem, Node, Season, Period) =e=
 Equations
     E4_2a(FoodItem, Node, Season, Period)
     E4_2b(FoodItem, Node, Season, Period)
-    E4_2c(FoodItem, Node, Adapt, Season, Period)
 ;
 
 E4_2a(FoodItem, Node, Season, Period).. -Q_W(FoodItem, Node, Season, Period) =g= -CAP_Store_roll(FoodItem, Node, Season, Period);
@@ -122,7 +124,7 @@ Equations
     E4_4a(FoodItem, Node, Season, Period)
 ;
 
-E4_4a(FoodItem, Node, Season, Period).. Q_WS(FoodItem, Node, Season, Period) =e= sum(Adapt,
+E4_4a(FoodItem, Node, Season, Period).. Q_WS(FoodItem, Node, Season, Period) =g= sum(Adapt,
                                                 Q_WU(FoodItem, Node, Adapt, Season, Period)
                                                         );
 

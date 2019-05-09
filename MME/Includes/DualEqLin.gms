@@ -14,8 +14,7 @@ E1_3a(FoodItem, Adapt, Season, Period).. D2(FoodItem, Adapt, Season, Period) - s
                             0;
 * Fallow and crop rotation costraints not yet added
 E1_3b(FoodItem, Adapt, Season, Period)$Crop(FoodItem).. D1(Adapt, Season, Period)
-        -D2(FoodItem, Adapt, Season, Period)*aFAO_roll(FoodItem, Adapt, Season, Period)*Cyf_roll(FoodItem, Adapt, Season, Period)*(1+(rPower(PI_FOOD(FoodItem, Adapt, Season, Period),Elas_roll(FoodItem, Adapt, Season, Period))-1)$(Elas_roll(FoodItem, Adapt, Season, Period)))
-        + df_roll(Period)*(
+        -D2(FoodItem, Adapt, Season, Period)*aFAO_roll(FoodItem, Adapt, Season, Period)*Cyf_roll(FoodItem, Adapt, Season, Period) + df_roll(Period)*(
             C_prod_roll(FoodItem, Adapt, Season, Period) +
 *            C_convert(Adapt, Period) - C_convert(Adapt, Period+1) +
             C_chg_roll(Adapt, Period)*(AREA_CROP(FoodItem, Adapt, Season, Period) - AREA_CROP(FoodItem, Adapt, Season, Period-1) - Area_init(Adapt, Season,  FoodItem)$(Ord(Period)=1))-
@@ -29,6 +28,7 @@ E1_3c(FoodItem, Adapt, Node, Season, Period).. D18(FoodItem, Adapt, Node, Season
 
 
 
+$ontext
 ************************************************************************
 ********************       LIVESTOCK PRODUCER       ********************
 ************************************************************************
@@ -58,6 +58,7 @@ E2_3d(Adapt, Season, Period).. D4(Adapt, Season, Period) - sum(FoodItem$sameas(F
         D3(Adapt, Season, Period)*Yld_H_roll(Adapt, Season, Period) + PI_COW(Adapt, Season+1, Period)$(ORD(Season)<CARD(Season)) + PI_COW(Adapt, Season-(CARD(Season)-1), Period+1)$(ORD(Season)=CARD(Season))-D9(Adapt, Season, Period)
                         =g=
                         0;
+$offtext
 
 
 ************************************************************************
@@ -89,7 +90,6 @@ Equations
     E4_3a(FoodItem, Node, Season, Period)
     E4_3b(FoodItem, Node, Season, Period)
     E4_3c(FoodItem, Node, Season, Period)
-    E4_3d(FoodItem, Node, Adapt, Season, Period)
 ;
 
 

@@ -1,1 +1,241 @@
 [PROJECT]
+
+[GDXDISP: d2 Var 4]
+PlaneDim=0
+RowDim=4
+Squeeze=1
+Order=1,2,3,4,5
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: Consumption Par 4]
+PlaneDim=0
+RowDim=4
+Squeeze=1
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: SameAs Set 2]
+PlaneDim=0
+RowDim=2
+Squeeze=1
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: Storage Par 5]
+PlaneDim=1
+RowDim=3
+Squeeze=1
+Order=1,2,3,4,5
+Decim=7
+PlaneRownr=2
+PlaneFilter1=Stored
+
+[RP:PRIMALDECL]
+1=
+
+[RP:INCLUDES/PRIMALEQ]
+1=
+
+[RP:INCLUDES/POSTPROCESS]
+1=
+
+[RP:INCLUDES/DUALEQ]
+1=
+
+[RP:DATAEXPORT]
+1=
+
+[GDXDISP: CF_Road_data Par 2]
+PlaneDim=0
+RowDim=2
+Squeeze=1
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: aFAO Par 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+Order=1,2,3
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: Area_init Par 3]
+PlaneDim=1
+RowDim=1
+Squeeze=1
+Order=2,1,3
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: Base_Elec_Dem1 Par 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+Order=1,2,3
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: C_chg Par 2]
+PlaneDim=0
+RowDim=2
+Squeeze=1
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: C_Cow Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: Cap_Road Par 2]
+PlaneDim=0
+RowDim=2
+Squeeze=1
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: Crop Set 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: CYF Par 4]
+PlaneDim=0
+RowDim=4
+Squeeze=1
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: DemElas Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: DemSlope Par 4]
+PlaneDim=0
+RowDim=4
+Squeeze=1
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: Phi Par 2]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: DemCrossElas Par 2]
+PlaneDim=0
+RowDim=2
+Squeeze=1
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: DemInt Par 4]
+PlaneDim=0
+RowDim=4
+Squeeze=1
+Order=1,2,3,4
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: DemInt Par 3]
+PlaneDim=0
+RowDim=3
+Squeeze=1
+Order=1,2,3
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: Psi Par 2]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1,2
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: Node Set 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[RP:DATAIMPORT]
+1=
+
+[GDXDISP: Adapt Par 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[GDXDISP: Adapt Set 1]
+PlaneDim=0
+RowDim=1
+Squeeze=1
+Order=1
+Decim=7
+PlaneRownr=-1
+
+[SOLVERS]
+MINLP=BARON
+CNS=CONOPT
+DNLP=CONOPT
+NLP=CONOPT
+RMINLP=CONOPT
+LP=CPLEX
+MIP=CPLEX
+MIQCP=CPLEX
+QCP=CPLEX
+RMIP=CPLEX
+RMIQCP=CPLEX
+MCP=PATH
+
+[RP:MCP_FOOD]
+1=
+
+[MRUFILES]
+1=C:\Users\Sriram\Dropbox\code\Food\MME\DataExport.gms
+2=C:\Users\Sriram\Dropbox\code\Food\MME\DataExport.lst
+3=C:\Users\Sriram\Dropbox\code\Food\MME\Includes/DualEq.gms
+4=C:\Users\Sriram\Dropbox\code\Food\MME\Includes/PostProcess.gms
+5=C:\Users\Sriram\Dropbox\code\Food\MME\Includes/PrimalEq.gms
+6=C:\Users\Sriram\Dropbox\code\Food\MME\Includes/PrimalEq.lst
+7=C:\Users\Sriram\Dropbox\code\Food\MME\Includes\PrimalDecl.gms
+
+[OPENWINDOW_1]
+FILE0=C:\Users\ssrir\Dropbox\code\Food\MME\Data\DataGdx.gdx
+FILE1=C:\Users\ssrir\Dropbox\code\Food\MME\MCP_Food.gms
+FILE2=C:\Users\ssrir\Dropbox\code\Food\MME\MCP_Food.lst
+FILE3=C:\Users\ssrir\Dropbox\code\Food\MME\MCP_Food.lst
+MAXIM=0
+TOP=50
+LEFT=-155
+HEIGHT=876
+WIDTH=1548

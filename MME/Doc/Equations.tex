@@ -38,9 +38,11 @@
 \newcommand{\B}			{B} % Beef
 \renewcommand{\H}		{L} % Hide
 \newcommand{\N}			{N} % Nodes
+\newcommand{\Z}			{Z} % Adaptation zones
 
 \newcommand{\cow}			{\mathcal{B}}
 \newcommand{\Yld}			{\mathcal{Y}_{yhnf}}
+\newcommand{\Yldz}			{\mathcal{Y}_{yhzf}}
 \newcommand{\YldH}			{\mathcal{Y}^{\H}}
 
 \newcommand{\CAP}			{\textcolor{black} {\text{CAP}}}
@@ -49,25 +51,30 @@
 \newcommand{\SCap}			{\textcolor{black} {\Q_{yhnf}^{\S,\CAP}}}
 
 \newcommand{\QFf}			{\textcolor{blue} {\Q^{\F}_{yhnf}}}
-\newcommand{\QH}			{\textcolor{blue} {\Q^{\H}_{yhn}}}
+\newcommand{\QFfz}			{\textcolor{blue} {\Q^{\F}_{yhzf}}}
+\newcommand{\QFfzSel}		{\textcolor{blue} {\Q^{\F\D}_{yhznf}}}
+\newcommand{\QH}			{\textcolor{blue} {\Q^{\H}_{yhz}}}
 \newcommand{\QDr}			{\textcolor{blue} {\Q^{\D}_{yhrf}}}
 \newcommand{\QDbf}			{\textcolor{blue} {\Q^{\D_b}_{yhnf}}}
 \newcommand{\QDsf}			{\textcolor{blue} {\Q^{\D_s}_{yhnf}}}
 \newcommand{\QSf}[1][yh]	{\textcolor{blue} {\Q^{\S}_{#1nf}}}
 \newcommand{\QSfbuy}		{\textcolor{blue} {\Q^{\S_b}_{yhnf}}}
 \newcommand{\QSfsel}		{\textcolor{blue} {\Q^{\S_s}_{yhnf}}}
-\newcommand{\QUf}			{\textcolor{blue} {\Q^{\U}_{yhnf}}}
+\newcommand{\QSfselAdap}    {\textcolor{blue} {\Q^{\S\U}_{yhnzf}}}
+\newcommand{\QUf}			{\textcolor{blue} {\Q^{\U}_{yhzf}}}
+\newcommand{\QUfnz}			{\textcolor{blue} {\Q^{\U}_{yhnzf}}}
+\newcommand{\QUlim}			{\overline{\QUf}}
 \newcommand{\QE}			{\textcolor{blue} {\Q^{\E-gen}_{yhn}}}
 \newcommand{\QEDem}			{\textcolor{blue} {\Q^{\E-dem}_{yhn}}}
 \newcommand{\QEr}			{\textcolor{blue} {\Q^{\E}_{yhr}}}
 
 
-\newcommand{\Qcow}[1][yh]		{\textcolor{blue} {\cow_{#1n}}}
-\newcommand{\Qcowsl}[1][yh]		{\textcolor{blue}{\cow_{#1n}^{\text{slg}}}}
-\newcommand{\Qcowbuy}[1][in]	{\textcolor{blue} {\cow_{yh#1}^{\text{buy}}}}
-\newcommand{\picow}[1][yhn]		{\textcolor{dgreen}{\pr^{\text{cow}}_{#1}}}
-\newcommand{\CowDeath}			{{\kappa^{\text{death}}_{yhn}}}
-\newcommand{\Herdsize}			{\textcolor{black} {\cow_{n}^{\text{herd}}}}
+\newcommand{\Qcow}[1][yh]		{\textcolor{blue} {\cow_{#1z}}}
+\newcommand{\Qcowsl}[1][yh]		{\textcolor{blue}{\cow_{#1z}^{\text{slg}}}}
+\newcommand{\Qcowbuy}[1][iz]	{\textcolor{blue} {\cow_{yh#1}^{\text{buy}}}}
+\newcommand{\picow}[1][yhz]		{\textcolor{dgreen}{\pr^{\text{cow}}_{#1}}}
+\newcommand{\CowDeath}			{{\kappa^{\text{death}}_{yhz}}}
+\newcommand{\Herdsize}			{\textcolor{black} {\cow_{z}^{\text{herd}}}}
 
 \newcommand{\QEmin}				{\textcolor{black} {\underline{\Q}^{\E}_{yhn}}}
 \newcommand{\QEmax}				{\textcolor{black} {\overline{\Q}^{\E}_{yhn}}}
@@ -75,17 +82,22 @@
 
 
 \newcommand{\piF}				{\textcolor{dgreen} {\pr^{\F}_{yhnf}}}
+\newcommand{\piFz}				{\textcolor{dgreen} {\pr^{\F}_{yhzf}}}
 \newcommand{\piS}				{\textcolor{dgreen} {\pr^{\S}_{yhnf}}}
 \newcommand{\piU}[1][f]			{\textcolor{dgreen} {\pr^{\U}_{yhn#1}}}
-\newcommand{\piH}				{\textcolor{dgreen} {p^{\H}_{yhn}}}
+\newcommand{\piUz}[1][f]		{\textcolor{dgreen} {\pr^{\U}_{yhz#1}}}
+\newcommand{\piH}				{\textcolor{dgreen} {p^{\H}_{yhz}}}
 
 
 \newcommand{\CsF}				{\textcolor{red} {\Cost^{\F}_{yhnf}}}
+\newcommand{\CsFz}				{\textcolor{red} {\Cost^{\F}_{yhzf}}}
 \newcommand{\CsR}				{\textcolor{red} {\Cost^{\R}_{yhrf}}}
 \newcommand{\CsConv}[1][yh]		{\textcolor{red} {\Cost^{\text{conv}}_{#1n}}}
 \newcommand{\CsChg}[1][yh]		{\textcolor{red} {\Cost^{\text{change}}_{#1n}}}
-\newcommand{\CsCow}				{\textcolor{red} {\Cost^{\text{cow}}_{yhn} }}
-\newcommand{\Cscowtrans}[1][i]	{\textcolor{red}{\Cost^{\text{cow,trans}}_{yh#1n}}}
+\newcommand{\CsConvz}[1][yh]	{\textcolor{red} {\Cost^{\text{conv}}_{#1z}}}
+\newcommand{\CsChgz}[1][yh]		{\textcolor{red} {\Cost^{\text{change}}_{#1z}}}
+\newcommand{\CsCow}				{\textcolor{red} {\Cost^{\text{cow}}_{yhz} }}
+\newcommand{\Cscowtrans}[1][i]	{\textcolor{red}{\Cost^{\text{cow,trans}}_{yh#1z}}}
 \newcommand{\CsSq}				{\textcolor{red} {\Cost^{\S q}_{yhnf}}}
 \newcommand{\CsSl}				{\textcolor{red} {\Cost^{\S l}_{yhnf}}}
 \newcommand{\CsEl}				{\textcolor{red} {\Cost^{\E l}_{yhn}}}
@@ -93,35 +105,37 @@
 \newcommand{\CsER}				{\textcolor{red} {\Cost^{\E \R}_{yhr}}}
 
 \newcommand{\AF}[1][yhnf]		{\textcolor{cyan}{\Area^{\F}_{{#1}}}}
+\newcommand{\AFz}[1][yhzf]		{\textcolor{cyan}{\Area^{\F}_{{#1}}}}
 \newcommand{\An}				{\textcolor{cyan} {\Area_n}}
+\newcommand{\Anz}				{\textcolor{cyan} {\Area_z}}
 
 % Losses
 \newcommand{\Loss}				{\textcolor{cyan} {\mathscr{L}}}
 \newcommand{\LEr}				{\textcolor{cyan} {\Loss^{\E}_{yhr}}}
 
-\newcommand{\DemInt}			{{\alpha_{yhnf}}}
-\newcommand{\DemSlope}			{{\beta_{yhnf}}}
-\newcommand{\DemCross}			{{\chi_{yhnfi}}}
+\newcommand{\DemInt}			{{\alpha_{yhzf}}}
+\newcommand{\DemSlope}			{{\beta_{yhzf}}}
+\newcommand{\DemCross}			{{\chi_{yhzfi}}}
 
 
-\newcommand{\CYF}			{\textcolor{red} {\mathsf{CYF}}}
+\newcommand{\CYF}			{\textcolor{red} {\mathsf{CYF}_{yhzf}}}
 \newcommand{\elasticity}	{\textcolor{red} {\mathsf{e}}}
-\newcommand{\aInCYF}		{\textcolor{red} {\mathsf{a}}}
+\newcommand{\aInCYF}		{\textcolor{red} {\mathsf{a}_{yhzf}}}
 \newcommand{\YieldBoost}	{\textcolor{dgreen} {\Yld^{\text{Inc}}}}
 
 \numberwithin{equation}			{section}
 
 
-\newcommand{\da}			{\textcolor{teal} {\delta^1_{yn}}}
-\newcommand{\db}			{\textcolor{teal} {\delta^2_{yhnf}}}
-\newcommand{\dc}			{\textcolor{teal} {\delta^3_{yhn}}}
-\newcommand{\dd}			{\textcolor{teal} {\delta^4_{yhn}}}
+\newcommand{\da}			{\textcolor{teal} {\delta^1_{yz}}}
+\newcommand{\db}			{\textcolor{teal} {\delta^2_{yhzf}}}
+\newcommand{\dc}			{\textcolor{teal} {\delta^3_{yhz}}}
+\newcommand{\dd}			{\textcolor{teal} {\delta^4_{yhz}}}
 \newcommand{\de}			{\textcolor{teal} {\delta^5_{yhn}}}
 \newcommand{\df}[1][n]		{\textcolor{teal} {\delta^6_{yh#1f}}}
 \newcommand{\dg}			{\textcolor{teal} {\delta^7_{yhrf}}}
 \renewcommand{\dh}			{\textcolor{teal} {\delta^8_{yhnf}}}
-\newcommand{\di}			{\textcolor{teal} {\delta^9_{yhn}}}
-\renewcommand{\dj}			{\textcolor{teal} {\delta^{10}_{yhn}}}
+\newcommand{\di}			{\textcolor{teal} {\delta^9_{yhz}}}
+\renewcommand{\dj}			{\textcolor{teal} {\delta^{10}_{yhz}}}
 \newcommand{\dk}			{\textcolor{teal} {\delta^{\OFal}_{yn}}}
 \newcommand{\dl}[1][ff']	{\textcolor{teal} {\delta^{\OCr}_{yn#1}}}
 \newcommand{\dm}[1][yh]		{\textcolor{teal} {\delta^{11}_{#1nf}}}
@@ -130,6 +144,10 @@
 \newcommand{\dr}			{\textcolor{teal} {\delta^{13}_{yhn}}}
 \newcommand{\ds}[1][n]		{\textcolor{teal} {\delta^{14}_{yh#1}}}
 \newcommand{\dt}			{\textcolor{teal} {\delta^{16}_{yhr}}}
+\newcommand{\du}			{\textcolor{teal} {\delta^{17}_{yhnzf}}}
+\newcommand{\dv}			{\textcolor{teal} {\delta^{19}_{yhzf}}}
+\newcommand{\dw}			{\textcolor{teal} {\delta^{18}_{yhznf}}}
+\newcommand{\dx}			{\textcolor{teal} {\delta^{20}_{yhnf}}}
 
 
 % Settings Information
@@ -151,128 +169,140 @@
 \begin{document}
 \maketitle
 \section{Crop Producer} % (fold)
-A crop producer makes decisions on the land allotted for various crops. He has an ``expectation'' for the price of crops under equilibrium condition. Yield function is now is based on the Climate Yield Factor (CYF). Note that the model assumes perfect insight for all the roles (crop producer, livestock producer, distributor, and storage manager), i.e. each role optimizes the summation of all years' profit/utility function. The model setup includes two growing seasons, which can be switch on and off if needed. Under assumptions of the model design, the area is \textit{not} convertible between seasons within one year; i.e. one can only convert unused land to farm land from yearly. Change of crop type to grow for the same cropping area also only occur yearly, as the land used in the first season is assumed not to be used in the second season within a year.   
+A crop producer makes decisions on the land allotted for various crops. She has an ``expectation'' for the price of crops under equilibrium condition. Yield function is now is based on the Climate Yield Factor (CYF). Note that the model assumes perfect insight for all the roles (crop producer, livestock producer, distributor, and storage manager), i.e. each role optimizes the summation of all years' profit/utility function. The model setup includes two growing seasons, which can be switch on and off if needed. Under assumptions of the model design, the area is \textit{not} convertible between seasons within one year; i.e. one can only convert unused land to farm land from yearly. Change of crop type to grow for the same cropping area also only occur yearly, as the land used in the first season is assumed not to be used in the second season within a year.
 \subsection{Problem} % (fold)
 A farmer maximizes his profit, which is the benefit given production and unit price minus the cost of cropping area, expanding area, and converting cropping area for different crop types.
 \begin{align}
 \Max \quad &: \quad  \sum_{\substack{y\in\Y\\h\in\Se}} \DiscFact \left \{ \sum_{f\in \C}\left (
-	{\piF}{\QFf} - \CsF\AF - \frac{1}{2}\CsChg \left( \AF - \AF[(y-1)hnf] \right)^2
+	\left(\sum_n {\piF}{\QFfzSel} \right)  - \CsFz\AFz - \frac{1}{2}\CsChg \left( \AF - \AF[(y-1)hzf] \right)^2
  \right)\right .\nonumber\\
- \quad &\quad \quad \qquad \qquad \left .- \CsConv  \sum_{\substack{f\in\C}} \left(\AF - \AF[(y-1)hnf]\right) \right \}
-\end{align} 
-where $\Y$ is year; $\H$ is crop season; $\C$ is crop type; $n$ is node/region; $\F$ in superscript stands for food products; $\DiscFact$ is a discount factor for year $y$'s present value; $\pi$ is unit price of production; $\Q$ is production quantity; $\C$ is cost; $A$ is cropping area.\\\\
+ \quad &\quad \quad \qquad \qquad \left .- \CsConv  \sum_{\substack{f\in\C}} \left(\AF - \AF[(y-1)hzf]\right) \right \}
+\end{align}
+where $\Y$ is year; $\H$ is crop season; $\C$ is crop type; $n$ is node/region; $z$ is adaptation zone; $\F$ in superscript stands for food products; $\DiscFact$ is a discount factor for year $y$'s present value; $\pi$ is unit price of production; $\Q$ is production quantity; $\C$ is cost; $A$ is cropping area.\\\\
 \textit{Note: the parameters and variables are color coded (black - fixed parameter from input; red - calibrated parameter; other colors - variables)} \\\\
 such that for $f\in \C$
 \begin{subequations}
 	\begin{align}
-\QFf,\,\AF \quad &\geq \quad 0\\
+\QFfz,\,\AFz \quad &\geq \quad 0\\
 \intertext{Total area used for crops is less than land available:}
-\An \quad &\geq \quad  \sum_{\substack{f\in\C\\h\in\Se}}\AF & (\da)\\
-\intertext{\textit{Note: variable in the parenthesis is the dual variable for the corresponding constraint, same for the rest of the document.}} 
+\Anz \quad &\geq \quad  \sum_{\substack{f\in\C\\h\in\Se}}\AFz & (\da)\\
+\intertext{\textit{Note: variable in the parenthesis is the dual variable for the corresponding constraint, same for the rest of the document.}}
 \intertext{Total Quantity is yield times area for that crop:}
-\QFf \quad &\leq \quad \Yld\AF &(\db)\\
+\QFfz \quad &\leq \quad \Yldz\AFz &(\db)\\
 \intertext{Linking yield with climate yield factor:}
-\Yld \quad &= \quad \aInCYF\CYF \left( \piF \right)  ^{\elasticity}%\left( 1+\YieldBoost \right) \\
+\Yld \quad &= \quad \aInCYF\CYF \left( \piFz \right)  ^{\elasticity}%\left( 1+\YieldBoost \right) \\
 &(\Yld)
 \intertext{where $\Yld$ is yield; $\aInCYF$ is a adjustment factor; $\CYF$ is Climate Yield Factor; $\elasticity$ is crop own elasticity.}
+\QFfzSel \quad&= \quad \Psi_{nz}\QFfz&(\dw)\\
 \intertext{Fallow constraint (farmers put a land to rest after a period of usage before reusing it):}
 \sum_{\substack{f\in\C\\h\in\Se}}\sum_{y'=y}^{y+\OFalDur}\AF[y'snf] \quad &\leq \quad {\OFalDur}\An - \OFal\An&(\dk)\\
 \intertext{where $\OFal$ is a number between 0 and 1 indicating the fraction of land that gets fallowed. $\OFalDur$ is the duration of fallow cycle.}
 \intertext{Crop rotation constraint (total area put into rotation using crop $f'$ after a period should be smaller than the total area of $f'$ as some $f'$ is not planted for rotation):}
 \OCr\sum_{y'=y}^{y+\OCrDur}\sum_{h\in\Se}\AF[y'snf] \quad &\leq \quad \OCrDur\sum_{y'=y}^{y+\OCrDur}\sum_{h\in\Se}\AF[y'snf']&(\dl)
-\end{align} 
+\end{align}
 \end{subequations}
 where $f$ is the primary crop rotated with $f'$.
 \subsection{KKT Conditions} % (fold)
 These KKT conditions for this problem hold for $f\in \C$
 \begin{subequations}
 \begin{align}
-\db - \DiscFact\piF \quad &\geq \quad 0&(\QFf)\\
+\db - \sum_n\Psi_{nz}\dw \quad &\geq \quad 0&(\QFfz)\\
 \left .
 \begin{aligned}
-	  \da+\DiscFact \left( \CsF+\CsConv[yh] - \CsConv[(y+1)h] + \CsChg\AF + \CsChg[(y+1)h]\AF \right)  \\
-	-\db\Yld  - \DiscFact\left( \CsChg\AF[(y-1)hnf] + \CsChg[(y+1)h]\AF[(y+1)hnf]  \right) \\
+	  \da+\DiscFact \left( \CsFz+\CsConvz[yh] - \CsConvz[(y+1)h] + \CsChgz\AF + \CsChgz[(y+1)h]\AF \right)  \\
+	-\db\Yldz  - \DiscFact\left( \CsChgz\AFz[(y-1)hzf] + \CsChgz[(y+1)h]\AFz[(y+1)hzf]  \right) \\
 	+\OFal\sum_{\substack{y'=y-\OCrDur}}^y\dk \\
-	\pm\OCr \sum_{\substack{y'=y-\OFalDur}}^y\dl 
+	\pm\OCr \sum_{\substack{y'=y-\OFalDur}}^y\dl
 \end{aligned}
-\right \} \quad &\geq \quad 0 &(\AF)
-\end{align} 	
+\right \} \quad &\geq \quad 0 &(\AFz)\\
+\dw - \DiscFact\piF \quad&\geq\quad 0&(\QFfzSel)
+\end{align}
 where the sign of the last term depends upon whether $f$ is the main crop or the secondary crop used for rotation.
 \end{subequations}
-% \pagebreak
-\\
-
 
 
 \section{Livestock producer} % (fold)
-A livestock producer produces and manages livestock. He makes decisions on selling/purchasing livestock, selling milk, and slaughtering livestock for selling leather and meat. 
+A livestock producer produces and manages livestock. She makes decisions on selling/purchasing livestock, selling milk, and slaughtering livestock for selling leather and meat.
 \subsection{Problem} % (fold)
-A livestock producer maximizes his profit, which is the benefit given the production (food and leather) and corresponding unit prices, minus the cost of buying and shipping the livestocks himself, plus the income from selling the livestocks, and minus the cost of managing the livestocks he owns.  
+A livestock producer maximizes his profit, which is the benefit given the production (food and leather) and corresponding unit prices, minus the cost of buying and shipping the livestocks himself, plus the income from selling the livestocks, and minus the cost of managing the livestocks she owns.
 \begin{align}
-\Max \quad &: \quad \sum_{\substack{y\in Y\\h\in\Se\\ f\not\in \C}} \DiscFact \left( 
-\piF\QFf + \piH \QH - \sum_{i\in \N} (\Cscowtrans + \picow[yhi])\Qcowbuy \right . \nonumber\\
-& \qquad+\left . \sum_{i\in \N}  \picow[yhn]\Qcowbuy[ni] - \Qcow\CsCow
- \right) 
-\end{align} 
-where $\H$ in superscript stands for leather; $\Qcowbuy$ is the number of Bovine (cow) he buys from node $i$ and transports to his location at node $n$; $\Cscowtrans$ is the cost of transporting the livestock from node $i$ to node $n$; $\picow[yhi]$ is the price of cow at node $i$; $\CsCow$ is the general management cost of cow.\\\\
+\Max \quad &: \quad \sum_{\substack{y\in Y\\h\in\Se\\ f\not\in \C}} \DiscFact \left(
+\left(\sum_n {\piF}{\QFfzSel} \right ) + \piH \QH - \sum_{i\in \Z} (\Cscowtrans + \picow[yhi])\Qcowbuy \right . \nonumber\\
+& \qquad+\left . \sum_{i\in \Z}  \picow[yhz]\Qcowbuy[zi] - \Qcow\CsCow
+ \right)
+\end{align}
+where $\H$ in superscript stands for leather; $\Qcowbuy$ is the number of Bovine (cow) she buys from node $i$ and transports to his location at node $n$; $\Cscowtrans$ is the cost of transporting the livestock from node $i$ to node $n$; $\picow[yhi]$ is the price of cow at node $i$; $\CsCow$ is the general management cost of cow.\\\\
 such that for $f\not\in \C$
 \begin{subequations}
 	\begin{align}
 \Qcowbuy,\, \Qcow,\,  \Qcowsl \quad &\geq \quad 0\\
-\QFf,\, \QH \quad &\geq \quad 0\nonumber\\
+\QFfz,\, \QH \quad &\geq \quad 0\nonumber\\
 \intertext{Production quantity is yield of milk, beef, or leather per Bovine times the number of Bovine owned or slaughtered:}
-\QFf \quad &\leq \quad \Yld\Qcow \qquad \qquad(f=\text{Milk})&(\db)\nonumber\\
-\QFf \quad &\leq \quad \Yld\Qcowsl \qquad \qquad(f=\text{Beef})&(\db)\nonumber\\
+\QFfz \quad &\leq \quad \Yldz\Qcow \qquad \qquad(f=\text{Milk})&(\db)\nonumber\\
+\QFfz \quad &\leq \quad \Yldz\Qcowsl \qquad \qquad(f=\text{Beef})&(\db)\nonumber\\
 \QH \quad &\leq \quad \YldH\Qcowsl&(\dc)\\
 \intertext{Number of Bovine slaughtered should not exceed the number owned:}
 \Qcowsl \quad &\leq \quad \Qcow&(\dd)\\
 \intertext{Quantity balance of Bovine:}
-\Qcow \quad &\leq \quad (1+k-\kappa)\Qcow[(y-1)h] - \Qcowsl[(y-1)h] + \sum_{i\in\N}\left( \Qcowbuy - 
-\Qcowbuy[ni] \right) &(\picow[yhn])\\
+\Qcow \quad &\leq \quad (1+k-\kappa)\Qcow[(y-1)h] - \Qcowsl[(y-1)h] + \sum_{i\in\Z}\left( \Qcowbuy -
+\Qcowbuy[zi] \right) &(\picow[yhz])\\
 \intertext{where $k$ is the birth rate; $\kappa$ is the death rate.}
 \intertext{Number of Bovine should not be fewer than the natural deaths:}
 \Qcowsl \quad &\geq \quad \CowDeath\Qcow&({\di})\\
 \intertext{Number of Bovine owned should be above certain level for reproduction (cannot slaughter all the livestocks):}
-\Qcow \quad &\geq \quad \Herdsize&(\dj)
-\end{align} 
+\Qcow \quad &\geq \quad \Herdsize&(\dj)\\
+\QFfzSel \quad&= \quad \Psi_{nz}\QFfz&(\dw)\nonumber
+\end{align}
 \end{subequations}
 \subsection{KKT Conditions} % (fold)
 \begin{subequations}
 \begin{align}
  \left .
 \begin{aligned}
-\DiscFact\CsCow - \db\Yld-\dd + \CowDeath\di &\\	
+\DiscFact\CsCow - \db\Yld-\dd + \CowDeath\di &\\
 - \dj+\picow[yhn] - (1+k-\kappa)\picow[(y+1)hn] &
 \end{aligned} \right \}
 \quad &\geq \quad 0
 \qquad (f=\text{Milk})&(\Qcow)\\
-\DiscFact\left( \Cscowtrans+\picow[yhi]-\picow[yhn] \right)  +\left( \picow[yhi]-\picow \right)
+\DiscFact\left( \Cscowtrans+\picow[yhi]-\picow[yhz] \right)  +\left( \picow[yhi]-\picow \right)
 \quad &\geq \quad 0&(\Qcowbuy)\\
-\db-\DiscFact\piF  \quad &\geq \quad 0 &(\QFf) \nonumber\\
+\db-\DiscFact\Psi_{nz}\dw  \quad &\geq \quad 0 &(\QFfz) \nonumber\\
 \dc-\DiscFact\piH\quad &\geq \quad 0&(\QH)\\
-\dd-\di-\db\Yld - \dc\YldH +\picow[(y+1)hn] \quad &\geq \quad 0 \qquad (f=\text{Beef})&(\Qcowsl)
-\end{align} 
+\dd-\di-\db\Yldz - \dc\YldH +\picow[(y+1)hz] \quad &\geq \quad 0 \qquad (f=\text{Beef})&(\Qcowsl)\\
+\dw - \DiscFact\piF \quad&\geq 0 &(\QFfzSel)
+\end{align}
 \end{subequations}
 % \pagebreak
-\\
 
 
-
-
-
-
-\section{Distribution} 
-A distributor distributes food products from node to node. He buys food from crop producer and livestock producer (milk and beef, not leather) and sell it to storage manager. Therefore, he makes decisions on the quantity to distribute and from where to where.
-\subsection{Problem} 
-A distributer maximizes his profit, which is the benefit given the quantity of food products he sells to storage manager times the unit price, minus the cost he paid to purchase the quantity of food products, and minus the total transportation/distribution cost of the quantity.
+\subsection{Adaptation zones to administrative regions} % (fold)
+\label{sub:adaptation_zones_to_administrative_regions}
+Here we convert production data from adaptation zone level to administrative region level to model transportation. These are indeed market clearing equations.\\
+% subsection adaptation_zones_to_administrative_regions (end)
+% \pagebreak
+Let $\Phi$ and $\Psi$ be matrices of size $|z|\times|z| = |n| \times |n|$. (Note that $\Psi = \Phi^{-1}$)  They contain the ratios used to convert data back and forth between administrave zones ($n$) and adaptation zone ($z$). %{\bf\color{red} To add duals, or think about removing the non-linear equality constraint (1.4b) and instead have the RHS embedded directly in (1.1)}.
+\begin{subequations}
 \begin{align}
-\Max \quad &: \quad \sum_{\substack{y\in \Y\\h\in\Se\\ f\in\F}} \DiscFact \left\{ 
-	\sum_{n\in \N}\left( 
-		 \QDsf\piS - \QDbf\piF 
+	\QDbf \quad&=\quad \sum_z \QFfzSel &\left( \piF \right) 
+\end{align}
+\end{subequations}
+
+
+
+
+
+\section{Distribution}
+A distributor distributes food products from node to node. She buys food from crop producer and livestock producer (milk and beef, not leather) and sell it to storage manager. Therefore, she makes decisions on the quantity to distribute and from where to where.
+\subsection{Problem}
+A distributer maximizes his profit, which is the benefit given the quantity of food products she sells to storage manager times the unit price, minus the cost she paid to purchase the quantity of food products, and minus the total transportation/distribution cost of the quantity.
+\begin{align}
+\Max \quad &: \quad \sum_{\substack{y\in \Y\\h\in\Se\\ f\in\F}} \DiscFact \left\{
+	\sum_{n\in \N}\left(
+		 \QDsf\piS - \QDbf\piF
 	 \right) - \sum_{r\in \R}\CsR\QDr
  \right\}
 \end{align}
-where $\D$ in superscript stands for distributor; $W$ in superscript stands for warehouse (storage manager); $R$ stands for road and represents the linkages between nodes; $\CsR$ is the transportation cost per unit of quantity distributed.\\\\ 
+where $\D$ in superscript stands for distributor; $W$ in superscript stands for warehouse (storage manager); $R$ stands for road and represents the linkages between nodes; $\CsR$ is the transportation cost per unit of quantity distributed.\\\\
 such that
 \begin{subequations}
 	\begin{align}
@@ -283,10 +313,10 @@ such that
 \QDr \quad &\leq \quad \RCap&(\dg)
 \intertext{Road capacity constraint:}
 \sum_{f}\QDr \quad &\leq \quad \RCapTot&(\dt)
-\end{align} 
+\end{align}
 \end{subequations}
 Note that equation (3.2c) will be active depending upon the \verb+FoodDistrCap+ setting.
-\subsection{KKT Conditions} 
+\subsection{KKT Conditions}
 Representing $s_r$ and $d_r$ as the source and destination nodes of the transport system $r\in\R$, we have the following KKT conditions.
 \begin{subequations}
 \begin{align}
@@ -295,19 +325,27 @@ Representing $s_r$ and $d_r$ as the source and destination nodes of the transpor
 \df-\DiscFact \piS \quad &\geq \quad 0&(\QDsf)
 \end{align}
 \end{subequations}
+
+
+
+\subsection{Market Clearing between distribution and Storage} % (fold)
+\label{sub:market_clearing_between_distribution_and_storage}
+{The quantity storage manager bought in (demand) equals to the quantity sold from the distributor (supply): }
+\begin{subequations}
+	\begin{align}	
+		\QSfbuy \quad &= \quad \QDsf&(\piS)
+	\end{align}
+\end{subequations}
+% subsection market_clearing_between_distribution_and_storage (end)
 % \pagebreak
-\\
 
-
-
-
-\section{Storage} 
-A storage manager buys food products from distributor and sells them to customers. He can also store food over years. Therefore, he makes decision on the quantity to buy, sell, and store.
-\subsection{Problem} 
-A storage manager maximize his profit, which is the quantity of food products he sells to customers times the corresponding unit price, minus the quantity he buys from distributor times the corresponding unit price (cost), minus a quadratic and linear cost function times the quantity stored.  
+\section{Storage}
+A storage manager buys food products from distributor and sells them to customers. She can also store food over years. Therefore, she makes decision on the quantity to buy, sell, and store.
+\subsection{Problem}
+A storage manager maximize his profit, which is the quantity of food products she sells to customers times the corresponding unit price, minus the quantity she buys from distributor times the corresponding unit price (cost), minus a quadratic and linear cost function times the quantity stored.
 \begin{align}
-\Max \quad &: \quad \sum_{\substack{y\in\Y\\h\in\Se\\ f\in \F}}  \piU\QSfsel-\piS\QSfbuy -\left( \frac{1}{2}\CsSq\QSf  + \CsSl \right)  \QSf  
-\end{align} 
+\Max \quad &: \quad \sum_{\substack{y\in\Y\\h\in\Se\\ f\in \F}}  \left\{  \piU\QSfsel  -\piS\QSfbuy -\left( \frac{1}{2}\CsSq\QSf  + \CsSl \right)  \QSf \right\}
+\end{align}
 where $U$ in superscript stands for ultimate or utility price selling to the customers;$W_s$ in superscript stands for the quantity sell out from the warehouse and $W_b$ stands for the quantity buy into the warehouse; $W q$ and $W l$ stand for the quadratic and linear storage cost factors; $\QSf$ is the quantity of food $f$ stored in year $y$ season $h$ at node $n$.\\\\
 such that
 \begin{subequations}
@@ -315,50 +353,83 @@ such that
 \QSfbuy,\,\QSfsel,\,\QSf \quad &\geq \quad 0\nonumber\\
 \intertext{Storage capacity constraint:}
 \QSf \quad &\leq \quad \SCap&(\dh)\\
-\intertext{Balance constraint of storage over years:} 
+\intertext{Balance constraint of storage over years:}
 \intertext{For the first season $h$, if $h'$ is the last season:}
 \QSf \quad &= \quad \QSf[(y-1)h'] + \QSfbuy-\QSfsel&(\dm)
 \intertext{For other seasons:}
-\QSf \quad &= \quad \QSf[y(h-1)] + \QSfbuy-\QSfsel&(\dm)\nonumber
-\end{align} 
+\QSf \quad &= \quad \QSf[y(h-1)] + \QSfbuy-\QSfsel&(\dm)\nonumber%\\
+% \intertext{Storage operators don't have the liberty to ``choose'' the amount to sell in each adap zone. They are constrained by ratios}
+% \QSfselAdap \quad&=\quad \Phi_{zn} \QSfsel &(\du)%\\
+% \intertext{The total amount sold by storage should equal the amount sold in each adaptation zone}
+% \sum_z\QSfselAdap \quad&\leq\quad \QSfsel &(\dv)
+\end{align}
 \end{subequations}
-\subsection{KKT Conditions} 
+\subsection{KKT Conditions}
 \begin{subequations}
 \begin{align}
 \piS-\dm \quad &\geq \quad 0&(\QSfbuy)\\
-\dm-\piU \quad &\geq \quad 0&(\QSfsel)
+\dm- \piU \quad &\geq \quad 0&(\QSfsel)
 \intertext{For last season $h$, where $h'$ is the first season:}
-\CsSq\QSf + \CsSl +\dh +\dm -\dm[(y+1)h'] \quad &\geq \quad 0&(\QSf) 
+\CsSq\QSf + \CsSl +\dh +\dm -\dm[(y+1)h'] \quad &\geq \quad 0&(\QSf)
 \intertext{For other seasons:}
-\CsSq\QSf + \CsSl +\dh +\dm -\dm[y(h+1)] \quad &\geq \quad 0&(\QSf)\nonumber 
-\end{align} 
+\CsSq\QSf + \CsSl +\dh +\dm -\dm[y(h+1)] \quad &\geq \quad 0&(\QSf)\nonumber%\\
+% \du -\piUz \quad& = \quad 0 &(\QSfselAdap)
+\end{align}
+\end{subequations}
+% \pagebreak
+
+\subsection{Administrative zones to adaptation zones} % (fold)
+\label{sub:administrative_zones_to_adaptation_zones}
+These are again market clearing equations just as in Sec~\ref{sub:adaptation_zones_to_administrative_regions}. Here we are converting from administrative zone to adaptation zone instead. With the same definitions,
+% subsection administrative_zones_to_adaptation_zones (end)
+\begin{subequations}
+\begin{align}
+% \QUf \quad&=\quad \sum_n \QSfselAdap & (\piUz)%\\
+\QSfsel \quad&=\quad \sum_z \QUfnz&(\piU)
+% \piU\QSfsel \quad&=\quad \sum_z\Psi_{nz}\piUz\QUf &(\piU)
+\end{align}
 \end{subequations}
 % \pagebreak
 
 
 
 
-\section{Market Clearing} 
+
+\section{Consumers}
+Consumers consume food!
+\subsection{Problem} % (fold)
+\begin{align}
+	\Max \quad &: \quad \sum_{\substack{y\in\Y\\h\in\Se\\ f\in \F}}  \left\{  \sum_n \left( \piU\QUfnz \right) - \DemInt \QUf + \frac{1}{2}\DemSlope\QUf^2 \right\}
+\end{align}
+such that
 \begin{subequations}
 \begin{align}
-\intertext{Food supply from crop producer and livestock producer should equal to the quantity bought by distributor (demand of distributor):}
-\QFf \quad &= \quad  \QDbf&(\piF)\\
-\intertext{Ultimate/utility price of $f$ selling to the customer is a function of supply quantity of $f$ and the price of other products $i$ (own elasticity and cross elasticity):}
-\piU \quad &= \quad \DemInt - \DemSlope\QSfsel + \sum_{i\in\F}\DemCross \piU[i]&(\piU)\\
-\intertext{The quantity storage manager bought in (demand) equals to the quantity sold from the distributor (supply): }
-\QSfbuy \quad &= \quad \QDsf&(\piS)
-\end{align} 
-\end{subequations}\\
-
+\QUf,\,\QUfnz \quad&\geq\quad 0\nonumber\\
+\intertext{There could be an export ban or limit where this constraint can become active.}
+\QUf \quad&\leq\quad \QUlim&(\dx)\\
+\intertext{Total amount consumed is at most what is purchased from each node}
+\QUf \quad&\leq\quad \sum_n\QUfnz&(\dv)\\
+\intertext{Consumers have to purchase at least $\Psi$ fraction of their consumption from every corresponding node}
+\QUfnz \quad&\geq\quad \Psi_{nz}\QUf&(\du)
+% \piUz \quad &= \quad \DemInt - \DemSlope\QUf + \sum_{i\in\F}\DemCross \piUz[i]&(\QUf)
+\end{align}
+\end{subequations}
+\subsection{KKT Conditions} % (fold)
+\begin{subequations}
+	\begin{align}
+		\piU - \dv - \du \quad&\geq\quad 0 &(\QUfnz)\\
+		\DemSlope\QUf - \DemInt + \dv + \dx + \sum_n\Psi_{nz}\du \quad&\geq\quad 0 &(\QUf)
+	\end{align}
+\end{subequations}
 
 
 \section{Electricity}
-\subsection{Problem} 
-We model electricity with a single operator. A subset of nodes can have production facilities. The production facilities have a minimum and maximum production capabilities. All nodes are connected by transmission lines, with a cost of transmission along each line. They have transmission capacities too. There is currently no possibility of expansion. The cost is minimized in the model. 
+\subsection{Problem}
+We model electricity with a single operator. A subset of nodes can have production facilities. The production facilities have a minimum and maximum production capabilities. All nodes are connected by transmission lines, with a cost of transmission along each line. They have transmission capacities too. There is currently no possibility of expansion. The cost is minimized in the model.
 \begin{align}
 	\Min \quad &: \quad  \sum_{\substack{y\in\Y\\n\in\N}} \left( \CsEl\QE+\frac{1}{2}\CsEq\QE^2 \right) + \sum_{\substack{y\in\Y\\ r\in\R}}\CsER\QEr
 \end{align}
-where $E-gen$ in superscript stands for electricity generation; $\CsEl$, $\CsEq$, and $\CsER$ are linear cost of generating electricity, quadratic cost of generating electricity, and distribution cost ($R$ stands for road), respectively.\\\\  
+where $E-gen$ in superscript stands for electricity generation; $\CsEl$, $\CsEq$, and $\CsER$ are linear cost of generating electricity, quadratic cost of generating electricity, and distribution cost ($R$ stands for road), respectively.\\\\
 such that
 \begin{subequations}
 \begin{align}
@@ -369,7 +440,7 @@ such that
 \QE+ \sum_{r\in \R_{\text{in}}} \QEr \left( 1-\LEr \right)  \quad &\geq \quad \QEDem + \sum_{r\in \R_{\text{out}}} \QEr&(\ds)\\
 \intertext{Transmission capacity}
 \QEr \quad &\leq \quad \QErmax&(\dq)
-\end{align} 
+\end{align}
 \end{subequations}
 \subsection{KKT conditions}
 \begin{subequations}
